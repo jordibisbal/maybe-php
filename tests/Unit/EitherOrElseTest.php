@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \j45l\either\Deferred
  * @covers \j45l\either\Succeed
  */
-final class EitherElseTest extends TestCase
+final class EitherOrElseTest extends TestCase
 {
     public function testSomeReturnsItsValue(): void
     {
