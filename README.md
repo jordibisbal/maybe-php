@@ -38,13 +38,13 @@ Forces an optional to be resolved, return itself but on Deferred an *Either* fro
 
 ```php
 Either::do(function($customer) use ($em) { $em->insert($customer)})->with($customer)
-    // The context ($customer) is passed to the orElse(), so does not need to be
-    // provided again, although you could override that by using a second with()         
+    // The parameters/context ($customer) is passed to orElse(), so does not need to
+    // be provided again, although you could override that by using a second with().         
     ->orElse(function($customer) use ($me) { $em->update})
     ->resolve()
 ;
 ```
-If *resolve()* were not caller, neither of the closures would be called (they are lazy).
+If *resolve()* were not caller, the second closure would not be called (lazy).
 
 #### context(): Context
 
