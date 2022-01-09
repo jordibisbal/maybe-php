@@ -1,0 +1,7 @@
+/.idea
+/vendor/
+/build/infection
+/build/cache
+/.phpunit.result.cache
+/.php-cs-fixer.cache
+/.phpcs-cache

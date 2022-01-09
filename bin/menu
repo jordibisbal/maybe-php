@@ -1,0 +1,116 @@
+#!/bin/bash
+# Install dialog and lnav
+termWidth=$(tput cols)
+termHeight=$(tput lines)
+largeDialogWidth=$(( termWidth * 80 / 100 ))
+largeDialogHeight=$(( termHeight * 80 / 100 ))
+home=$(realpath "$(dirname "$0")")
+
+function enterToContinue() {
+	echo -e "\n\n"
+    read -r -p "Press enter to continue"
+}
+
+function execute() {
+	path=$1
+	cmd=$2
+
+	cd "$path" || exit
+	eval "$cmd" 2>&1
+}
+
+function progressThenTail() {
+	path=$1
+	cmd=$2
+	title=$3
+
+  cd "$path" || exit
+
+	tempFile=$(mktemp)
+
+	eval "$cmd" 2>&1 | sed -r "s/\x1B\[(([0-9]+)(;[0-9]+)*)?[m,K,H,f,J]//g" | tee "$tempFile" | dialog --title " $title " --progressbox $largeDialogHeight	$largeDialogWidth
+	dialog --colors --title " $title " --textbox "$tempFile" $largeDialogHeight $largeDialogWidth
+	rm "$tempFile"
+}
+
+function testUnit() {
+  echo -e "\nUnitary tests...\n"
+  execute "$home/.." "bin/phpunit"
+}
+
+function testMutant() {
+  echo -e "\nMutant tests...\n"
+  execute "$home/.." "bin/infection"
+}
+
+function tests() {
+	while true
+	do
+		choice=$(dialog --menu "Tests" 11 40 $largeDialogHeight \
+			1 "Unitary" \
+			2 "Mutant (Infection)" \
+		2>&1 >/dev/tty)
+		case $choice in
+			1)  clear
+			    testUnit
+			    enterToContinue
+			    ;;
+			2)  clear
+			    testMutant
+			    enterToContinue
+			    ;;
+			*)  return
+				;;
+		esac
+	done
+}
+
+function codeQuality() {
+	while true
+	do
+		choice=$(dialog --menu "Code quality" 12 60 $largeDialogHeight \
+			1 "phpMd Mess detector" \
+			2 "phpMd Mess detector (tests)" \
+			3 "phpcs Code sniffer" \
+			4 "phpcs Code sniffer - fix automatically" \
+		2>&1 >/dev/tty)
+		case $choice in
+			1)  execute "$home/.." "clear; vendor/bin/phpmd src ansi phpmdRules.xml" "Running phpMd - Mess Detector"
+			    enterToContinue
+			    ;;
+            2)  execute "$home/.." "clear; vendor/bin/phpmd tests ansi phpmdRulesTests.xml" "Running phpMd - Mess Detector"
+                enterToContinue
+                ;;
+			3)  progressThenTail "$home/.." "vendor/bin/phpcs -p --cache=build/cache/phpcs_cache --no-colors src tests" "Running phpcs - Code sniffer"
+			    ;;
+			4)  progressThenTail "$home/.." "vendor/bin/phpcbf  --cache=build/cache/phpcs_cache src tests" "Running phpcbf - Code Beautifier and Fixer"
+			    ;;
+			*)  return
+				  ;;
+		esac
+	done
+}
+
+function main() {
+    while true
+    do
+        choice=$(dialog --no-cancel --menu "Menu" 11 40 $largeDialogHeight \
+            1 "Tests" \
+            2 "Code quality" \
+            0 "bye!" \
+            2>&1 >/dev/tty)
+        case $choice in
+            1)  tests
+                ;;
+            2) codeQuality
+                ;;
+            0)  return
+                ;;
+        esac
+    done
+}
+
+pushd .
+main
+popd || exit
+clear

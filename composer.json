@@ -1,0 +1,48 @@
+{
+    "name": "j45l/either-php",
+    "description": "Either for PHP",
+    "version": "0.1",
+    "keywords": [
+        "optional", "either", "maybe"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jordi Bisbal",
+            "email": "jordi.bisbal+j45l@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/j45l/either"
+        }
+    ],
+    "require": {
+        "php": "^7.1|~8",
+        "jordibisbal/functional-php": "@dev"
+    },
+    "require-dev": {
+        "slevomat/coding-standard": "^7.0",
+        "roave/security-advisories": "dev-latest",
+        "squizlabs/php_codesniffer": "~3.0",
+        "friendsofphp/php-cs-fixer": "~3.0",
+        "jetbrains/phpstorm-attributes": "^1.0",
+        "infection/infection": "^0.23.0",
+        "phpunit/phpunit": "^9.5",
+        "phpmd/phpmd": "^2.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "j45l\\either\\Test\\": "tests",
+            "j45l\\either\\": "src"
+        }
+    },
+    "autoload-dev": {
+    },
+    "scripts": {
+        "tests": "vendor/bin/phpunit",
+        "coding-style": "vendor/bin/phpcs && vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php_cs.dist",
+        "clear": "rm -rf vendor/"
+    }
+}
