@@ -115,9 +115,9 @@ Absence of value, equivalent to null (but without messing with the interface)
 
 ### Some
 
-An *Either* with a value.
+An *Either*(*Success*) with a value.
 
-When cloned, if the value is an object it is also cloned (not a deep clone, if desired, the value itself should do so)
+When cloned, if the value is an object, it is also cloned (not a deep clone, if desired, the value itself should do so)
 
 #### from($value): Some
 
