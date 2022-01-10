@@ -3,7 +3,7 @@
     "description": "Either for PHP",
     "version": "0.1",
     "keywords": [
-        "optional", "either", "maybe"
+        "optional", "option", "either", "maybe"
     ],
     "license": "MIT",
     "authors": [
