@@ -7,14 +7,14 @@ namespace j45l\either\Test\Unit;
 use j45l\either\Either;
 use j45l\either\None;
 use j45l\either\Some;
-use j45l\either\Succeed;
+use j45l\either\Success;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \j45l\either\Either
  * @covers \j45l\either\None
  * @covers \j45l\either\Failed
- * @covers \j45l\either\Succeed
+ * @covers \j45l\either\Success
  */
 final class EitherNextTest extends TestCase
 {
@@ -30,9 +30,9 @@ final class EitherNextTest extends TestCase
         self::assertEquals(42, $either->value());
     }
 
-    public function testSucceedReturnsLastValue(): void
+    public function testSuccessReturnsLastValue(): void
     {
-        $either = Succeed::create()
+        $either = Success::create()
             ->next(function (): Either {
                 return Some::from(42);
             })->resolve()

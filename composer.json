@@ -12,15 +12,8 @@
             "email": "jordi.bisbal+j45l@gmail.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/j45l/either"
-        }
-    ],
     "require": {
-        "php": "^7.1|~8",
-        "jordibisbal/functional-php": "@dev"
+        "php": "^7.1|~8"
     },
     "require-dev": {
         "slevomat/coding-standard": "^7.0",

@@ -1,7 +1,7 @@
 # Why
 
 Either (inspired by the functional thing), helps to:
-* Get rid of exceptions (Succeed/Failure).
+* Get rid of exceptions (Success/Failure).
 * Discourage the use of null (None/Some).
 * Simplify the control flow on errors.
 * Build failsafe code
@@ -14,7 +14,7 @@ Every either must be created using its appropriate class:
 * None::create()
 * Some::from($value)
 * Either::do(Closure $closure)
-* Succeed::create()
+* Success::create()
 * Failed::create()
 
 *Either::next*, *Either::orElse*, *Either::pipe*, *Either::then* and *Deferred::resolve* methods will guess the *Either* kind to be created, by the following rules:
@@ -41,7 +41,9 @@ Either::do(function($customer) use ($em) { $em->insert($customer)})->with($custo
     // The parameters/context ($customer) is passed to orElse(), so does not need to
     // be provided again, although you could override that by using a second with().         
     ->orElse(function($customer) use ($me) { $em->update})
+    // The value is Deferred or a Success
     ->resolve()
+    // The value Either a Failure or a Success
 ;
 ```
 If *resolve()* were not caller, the second closure would not be called (lazy).
@@ -50,9 +52,14 @@ If *resolve()* were not caller, the second closure would not be called (lazy).
 
 Returns the context of the *Either*, i.e. its trail and parameters
 
-#### do(Closure $closure): Deferred
+#### static do(Closure $closure): Deferred
 
 Returns a *Deferred* from *$closure* (with the current context).
+
+#### map(Closure $closure): Functor
+
+Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).
+Mapping a *None* results in a *None* and the *closure* is not evaluated.
 
 #### next($nextValue): Either
 
@@ -87,7 +94,8 @@ Returns a clone of the *Either* changing the parameters on its context
 
 ### Deferred
 
-A deferred *Either*, that is an *Either* that must be resolved in order to its *Closure* to be evaluated (called), a new *Either* from the *Closure* return is returned
+A deferred *Either* that must be resolved in order to its *Closure* to be evaluated (called), 
+a new *Either* from the *Closure* return is returned.
 
 ### Failed
 
@@ -119,6 +127,6 @@ Returns a new *Some* from the *$value*, never modifies nor evaluates *$value*.
 
 Return the value
 
-### Succeed
+### Success
 
 An *Either* to signal successful operations 

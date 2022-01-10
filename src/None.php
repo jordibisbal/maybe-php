@@ -29,4 +29,10 @@ class None extends Either
     {
         return $this;
     }
+
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+    public function map(Closure $closure): Functor
+    {
+        return $this;
+    }
 }

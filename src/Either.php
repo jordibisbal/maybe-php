@@ -6,7 +6,7 @@ namespace j45l\either;
 
 use Closure;
 
-abstract class Either
+abstract class Either implements Functor
 {
     protected $context;
 
@@ -19,6 +19,11 @@ abstract class Either
     public static function do(Closure $closure): Deferred
     {
         return new Deferred($closure, Context::create());
+    }
+
+    public function map(Closure $closure): Functor
+    {
+        return new Deferred($closure, Context::create()->withParameters($this));
     }
 
     protected static function buildFailed(ThrowableReason $throwable, Context $context): Failed

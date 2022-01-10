@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
-class Some extends Either
+class Some extends Success
 {
     /** @var mixed */
     private $value;
