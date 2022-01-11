@@ -26,7 +26,7 @@ abstract class Either implements Functor
         return new Deferred($closure, Context::fromParameters(Parameters::create($this)));
     }
 
-    protected static function buildFailed(ThrowableReason $throwable, Context $context): Failure
+    protected static function buildFailure(ThrowableReason $throwable, Context $context): Failure
     {
         return new Failure($context, $throwable);
     }

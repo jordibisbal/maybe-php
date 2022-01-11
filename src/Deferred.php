@@ -30,7 +30,7 @@ class Deferred extends Either
                 $this->context
             );
         } catch (Throwable $throwable) {
-            return Either::buildFailed(
+            return Either::buildFailure(
                 ThrowableReason::fromThrowable($throwable),
                 $this->context->push($this)
             );
