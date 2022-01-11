@@ -6,7 +6,6 @@ namespace j45l\either;
 
 final class Parameters
 {
-
     private $parameters;
 
     private function __construct(array $parameters)

@@ -5,19 +5,22 @@ declare(strict_types=1);
 namespace j45l\either\Test\Unit;
 
 use j45l\either\Either;
-use j45l\either\Failed;
+use j45l\either\Failure;
 use j45l\either\Parameters;
 use j45l\either\Reason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-final class FailedTest extends TestCase
+/**
+ * @covers \j45l\either\Failure
+ */
+final class FailureTest extends TestCase
 {
     public function testCanBeCreatedFromFailure(): void
     {
-        $failed = Failed::from(Reason::from('reason'));
+        $failure = Failure::from(Reason::from('reason'));
 
-        self::assertEquals('reason', $failed->reason()->asString());
+        self::assertEquals('reason', $failure->reason()->asString());
     }
 
     public function testAFailureMaintainsContext(): void
@@ -32,7 +35,7 @@ final class FailedTest extends TestCase
 
         $failure = Either::do($succeeding)->with(1, 2, 3)->then($failing)->resolve();
 
-        self::assertInstanceOf(Failed::class, $failure);
+        self::assertInstanceOf(Failure::class, $failure);
         self::assertEquals(Parameters::create(1, 2, 3), $failure->context()->parameters());
     }
 }

@@ -23,12 +23,12 @@ abstract class Either implements Functor
 
     public function map(Closure $closure): Functor
     {
-        return new Deferred($closure, Context::create()->withParameters($this));
+        return new Deferred($closure, Context::fromParameters(Parameters::create($this)));
     }
 
-    protected static function buildFailed(ThrowableReason $throwable, Context $context): Failed
+    protected static function buildFailed(ThrowableReason $throwable, Context $context): Failure
     {
-        return new Failed($context, $throwable);
+        return new Failure($context, $throwable);
     }
 
     public function trail(): Trail

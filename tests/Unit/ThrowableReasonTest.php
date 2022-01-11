@@ -10,6 +10,7 @@ use RuntimeException;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringStartsWith;
 
+/** @covers \j45l\either\ThrowableReason */
 final class ThrowableReasonTest extends TestCase
 {
     public function testCanBeCreatedFromAnString(): void

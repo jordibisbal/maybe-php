@@ -36,14 +36,14 @@ final class Trail implements Countable
         return $this->trail;
     }
 
-    /** @return Failed[] */
+    /** @return Failure[] */
     public function failed(): array
     {
         return array_values(
             select(
                 $this->trail,
                 function (Either $either) {
-                    return $either instanceof Failed;
+                    return $either instanceof Failure;
                 }
             )
         );
@@ -69,7 +69,7 @@ final class Trail implements Countable
         };
     }
 
-    public function isEmpty(): bool
+    public function empty(): bool
     {
         /** @infection-ignore-all */
         return $this->count() === 0;
@@ -84,6 +84,15 @@ final class Trail implements Countable
     {
         $new = clone $this;
         $new->trail = array_slice($new->trail, 0, count($new->trail) - 1);
+
+        return $new;
+    }
+
+    public function justLast(): Trail
+    {
+        $new = self::create();
+        /** @infection-ignore-all */
+        $new->trail = array_slice($this->trail, -1, 1);
 
         return $new;
     }

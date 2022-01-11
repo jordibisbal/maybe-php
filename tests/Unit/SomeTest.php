@@ -8,6 +8,7 @@ use j45l\either\Some;
 use j45l\either\Test\Unit\Stubs\MutableInteger;
 use PHPUnit\Framework\TestCase;
 
+/** @covers \j45l\either\Some */
 final class SomeTest extends TestCase
 {
     public function testResolvesToItself(): void

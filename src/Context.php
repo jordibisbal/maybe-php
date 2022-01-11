@@ -20,6 +20,11 @@ final class Context
         return new self(Parameters::create(), Trail::create());
     }
 
+    public static function fromParameters(Parameters $parameters): Context
+    {
+        return new self($parameters, Trail::create());
+    }
+
     public function withParameters(...$parameters): Context
     {
         return new self(Parameters::create(...$parameters), $this->trail());

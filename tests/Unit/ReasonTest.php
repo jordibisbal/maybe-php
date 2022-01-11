@@ -8,6 +8,7 @@ use j45l\either\Reason;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 
+/** @covers \j45l\either\Reason */
 final class ReasonTest extends TestCase
 {
     public function testCanBeCreatedFromAnString(): void

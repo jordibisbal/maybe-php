@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \j45l\either\Either
  * @covers \j45l\either\None
- * @covers \j45l\either\Failed
+ * @covers \j45l\either\Failure
  * @covers \j45l\either\Success
  */
 final class EitherNextTest extends TestCase

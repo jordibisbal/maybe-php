@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace j45l\either\Test\Unit;
 
-use j45l\either\Failed;
+use j45l\either\Failure;
 use j45l\either\None;
 use j45l\either\Reason;
 use j45l\either\Some;
 use j45l\either\Trail;
 use PHPUnit\Framework\TestCase;
 
+/** @covers \j45l\either\Trail */
 final class TrailTest extends TestCase
 {
     public function testPushingToATrailDoesNotModifyIt(): void
@@ -44,6 +45,22 @@ final class TrailTest extends TestCase
         self::assertEquals([1, 2], $trail->butLast()->getValues());
     }
 
+    public function testGettingLastReturnsLastOne(): void
+    {
+        $trail = (Trail::create())
+            ->push(Some::from(1))
+            ->push(Some::from(2))
+            ->push(Some::from(3))
+        ;
+
+        self::assertEquals([Some::from(3)], $trail->justLast()->asArray());
+    }
+
+    public function testGettingLastFromEmptyTrailReturnsEmptyTrail(): void
+    {
+        self::assertTrue(Trail::create()->justLast()->empty());
+    }
+
     public function testButLastDoesNotModifyTrail(): void
     {
         $trail = (Trail::create())
@@ -56,12 +73,12 @@ final class TrailTest extends TestCase
         self::assertEquals([1, 2, 3], $trail->getValues());
     }
 
-    public function testGettingFailedDoesNotReturnOtherEither(): void
+    public function testGettingFailureDoesNotReturnOtherEither(): void
     {
         $trail = (Trail::create())
             ->push(Some::from(1))
             ->push(None::create())
-            ->push(Failed::from(Reason::from('failed')))
+            ->push(Failure::from(Reason::from('failed')))
         ;
 
         self::assertCount(1, $trail->failed());
@@ -77,6 +94,6 @@ final class TrailTest extends TestCase
 
     public function testCanBeCheckForEmptiness(): void
     {
-        self::assertTrue(Trail::create()->isEmpty());
+        self::assertTrue(Trail::create()->empty());
     }
 }

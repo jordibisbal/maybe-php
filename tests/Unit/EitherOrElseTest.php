@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace j45l\either\Test\Unit;
 
 use j45l\either\Either;
-use j45l\either\Failed;
+use j45l\either\Failure;
 use j45l\either\None;
 use j45l\either\Some;
 use j45l\either\Success;
@@ -15,10 +15,9 @@ use RuntimeException;
 /**
  * @covers \j45l\either\Either
  * @covers \j45l\either\None
- * @covers \j45l\either\Failed
+ * @covers \j45l\either\Failure
  * @covers \j45l\either\Deferred
  * @covers \j45l\either\Success
- *
  */
 final class EitherOrElseTest extends TestCase
 {
@@ -86,7 +85,7 @@ final class EitherOrElseTest extends TestCase
         $either = $either->resolve();
 
         self::assertInstanceOf(None::class, $either);
-        self::assertNotInstanceOf(Failed::class, $either);
+        self::assertNotInstanceOf(Failure::class, $either);
     }
 
     /** @noinspection PhpUnusedParameterInspection */
@@ -103,7 +102,7 @@ final class EitherOrElseTest extends TestCase
         $either = $either->resolve();
 
         self::assertInstanceOf(None::class, $either);
-        self::assertNotInstanceOf(Failed::class, $either);
+        self::assertNotInstanceOf(Failure::class, $either);
     }
 
     public function testDeferredNoneReturnsDefaultValue(): void

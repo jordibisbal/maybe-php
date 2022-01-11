@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
-class Failed extends None
+class Failure extends None
 {
     /** @var Reason */
     public $reason;
@@ -16,7 +16,7 @@ class Failed extends None
         parent::__construct($context);
     }
 
-    public static function from(Reason $reason = null): Failed
+    public static function from(Reason $reason = null): Failure
     {
         return new self(Context::create(), $reason);
     }

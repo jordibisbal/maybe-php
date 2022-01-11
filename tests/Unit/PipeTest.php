@@ -7,12 +7,17 @@ namespace j45l\either\Test\Unit;
 use Closure;
 use j45l\either\Deferred;
 use j45l\either\Either;
-use j45l\either\Failed;
+use j45l\either\Failure;
 use j45l\either\None;
 use j45l\either\Some;
+use j45l\either\Success;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+/**
+ * @covers \j45l\either\Either
+ * @covers \j45l\either\Deferred
+ */
 final class PipeTest extends TestCase
 {
     public function testResultIsPassToNextOne(): void
@@ -90,8 +95,18 @@ final class PipeTest extends TestCase
         $either = $either->resolve();
 
         self::assertInstanceOf(None::class, $either);
-        self::assertInstanceOf(Failed::class, $either);
+        self::assertInstanceOf(Failure::class, $either);
         self::assertFalse($called);
+    }
+
+    public function testDeferredResolvesOnPipe(): void
+    {
+        $assertIsSome = Some::from(1)
+            ->pipe($this->identity())
+            ->pipe($this->isSome())
+        ;
+
+        self::assertInstanceOf(Success::class, $assertIsSome->resolve());
     }
 
     /**
@@ -102,6 +117,20 @@ final class PipeTest extends TestCase
     {
         return static function (Either $either): Either {
             throw new RuntimeException();
+        };
+    }
+
+    private function identity(): Closure
+    {
+        return static function ($value) {
+            return $value;
+        };
+    }
+
+    private function isSome(): Closure
+    {
+        return static function ($value) {
+            return $value instanceof Some ? Success::create() : Failure::create();
         };
     }
 }
