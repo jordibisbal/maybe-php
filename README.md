@@ -15,7 +15,7 @@ Every either must be created using its appropriate class:
 * Some::from($value)
 * Either::do(Closure $closure)
 * Success::create()
-* Failed::create()
+* Failure::create()
 
 *Either::next*, *Either::orElse*, *Either::pipe*, *Either::then* and *Deferred::resolve* methods will guess the *Either* kind to be created, by the following rules:
 
@@ -76,7 +76,7 @@ Returns a *Deferred* from *closure* using current Either as context parameters a
 
 #### resolve(): Either
 
-On *Deferred*, its closure is evaluated and an *Either* from the evaluation result is returned. If the closure throws a *Throwable*, a *Failed* with the *Throwable* as reason is returned
+On *Deferred*, its closure is evaluated and an *Either* from the evaluation result is returned. If the closure throws a *Throwable*, a *Failure* with the *Throwable* as reason is returned
 
 #### then($nextValue): Either
 
@@ -97,17 +97,17 @@ Returns a clone of the *Either* changing the parameters on its context
 A deferred *Either* that must be resolved in order to its *Closure* to be evaluated (called), 
 a new *Either* from the *Closure* return is returned.
 
-### Failed
+### Failure
 
-A *Failed* is a *None* used for failed operations
+A *Failure* is a *None* used for failed operations
 
-#### from(Reason $reason = null): Failed
+#### from(Reason $reason = null): Failure
 
-Returns a *Failed* with the given *$reason*
+Returns a *Failure* with the given *$reason*
 
 #### reason(): Reason
 
-Returns the *Failed* reason
+Returns the *Failure* reason
 
 ### None
 
