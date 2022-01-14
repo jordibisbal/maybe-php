@@ -1,7 +1,6 @@
 {
     "name": "j45l/either-php",
     "description": "Either for PHP",
-    "version": "0.1",
     "keywords": [
         "optional", "option", "either", "maybe"
     ],
