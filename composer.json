@@ -27,11 +27,13 @@
     },
     "autoload": {
         "psr-4": {
-            "j45l\\either\\Test\\": "tests",
             "j45l\\either\\": "src"
         }
     },
     "autoload-dev": {
+        "psr-4": {
+            "j45l\\either\\Test\\": "tests"
+        }
     },
     "scripts": {
         "tests": "vendor/bin/phpunit",
