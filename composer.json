@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "php": "^7.1|~8"
+        "php": "^7.1|~8",
+        "lstrojny/functional-php": "^1.17"
     },
     "require-dev": {
         "slevomat/coding-standard": "^7.0",
