@@ -4,8 +4,66 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfbfb4e502696cc68b3814a978656c3a",
+    "content-hash": "80579c011632bc06999ac9878ee30c55",
     "packages": [
+        {
+            "name": "j45l/functional-php",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jordibisbal/functional-php.git",
+                "reference": "78043fa1f868da894cab33f4a07f055b2c248317"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/78043fa1f868da894cab33f4a07f055b2c248317",
+                "reference": "78043fa1f868da894cab33f4a07f055b2c248317",
+                "shasum": ""
+            },
+            "require": {
+                "lstrojny/functional-php": "^1.17",
+                "php": "^7.1|~8"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~3.0",
+                "infection/infection": "^0.23.0",
+                "jetbrains/phpstorm-attributes": "^1.0",
+                "phpmd/phpmd": "^2.11",
+                "phpstan/phpstan": "^1.4",
+                "phpunit/phpunit": "^9.5",
+                "roave/security-advisories": "dev-latest",
+                "slevomat/coding-standard": "^7.0",
+                "squizlabs/php_codesniffer": "~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "j45l\\functional\\": "src"
+                },
+                "files": [
+                    "src/reduce.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Bisbal",
+                    "email": "jordi.bisbal+functional@gmail.com"
+                }
+            ],
+            "description": "Functional primitives for PHP",
+            "keywords": [
+                "functional"
+            ],
+            "support": {
+                "issues": "https://github.com/jordibisbal/functional-php/issues",
+                "source": "https://github.com/jordibisbal/functional-php/tree/0.1.0"
+            },
+            "time": "2022-01-15T10:26:40+00:00"
+        },
         {
             "name": "lstrojny/functional-php",
             "version": "1.17.0",

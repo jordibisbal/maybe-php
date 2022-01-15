@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\either;
 
 use Closure;
+use j45l\functional\Functor;
 
 abstract class Either implements Functor
 {

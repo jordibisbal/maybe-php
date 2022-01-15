@@ -37,7 +37,7 @@ final class DeferredTest extends TestCase
                     return null;
                 }
             )
-                ->resolve()
+            ->resolve()
         ;
 
         self::assertInstanceOf(None::class, $none);
