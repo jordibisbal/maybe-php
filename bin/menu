@@ -24,7 +24,7 @@ function progressThenTail() {
 	cmd=$2
 	title=$3
 
-  cd "$path" || exit
+    cd "$path" || exit
 
 	tempFile=$(mktemp)
 
@@ -34,13 +34,13 @@ function progressThenTail() {
 }
 
 function testUnit() {
-  echo -e "\nUnitary tests...\n"
-  execute "$home/.." "bin/phpunit"
+    echo -e "\nUnitary tests...\n"
+    execute "$home/.." "bin/phpunit"
 }
 
 function testMutant() {
-  echo -e "\nMutant tests...\n"
-  execute "$home/.." "bin/infection"
+    echo -e "\nMutant tests...\n"
+    execute "$home/.." "bin/infection"
 }
 
 function tests() {
@@ -66,15 +66,24 @@ function tests() {
 }
 
 function codeQuality() {
+    phpmd="clear; echo -e 'Phpmd:\\n\\n'; vendor/bin/phpmd src ansi phpmdRules.xml"
+    phpcs="echo -e '\\nPhpcs:\\n\\n'; vendor/bin/phpcs -p --cache=build/cache/phpcs_cache --no-colors src tests"
+    phpstan="echo -e '\\nPhpstan:\\n\\n'; vendor/bin/phpstan analyze --level=9 src tests"
+
 	while true
 	do
-		choice=$(dialog --menu "Code quality" 12 60 $largeDialogHeight \
+		choice=$(dialog --menu "Code quality" 14 60 $largeDialogHeight \
+		    a "Test all" \
 			1 "phpMd Mess detector" \
 			2 "phpMd Mess detector (tests)" \
 			3 "phpcs Code sniffer" \
 			4 "phpcs Code sniffer - fix automatically" \
+			5 "phpstan Static analyzer" \
 		2>&1 >/dev/tty)
 		case $choice in
+ 		    a)  execute "$home/.." "$phpmd; $phpcs; $phpstan" "Running all analyzers"
+ 		        enterToContinue
+                ;;
 			1)  execute "$home/.." "clear; vendor/bin/phpmd src ansi phpmdRules.xml" "Running phpMd - Mess Detector"
 			    enterToContinue
 			    ;;
@@ -85,8 +94,10 @@ function codeQuality() {
 			    ;;
 			4)  progressThenTail "$home/.." "vendor/bin/phpcbf  --cache=build/cache/phpcs_cache src tests" "Running phpcbf - Code Beautifier and Fixer"
 			    ;;
+			5)  progressThenTail "$home/.." "vendor/bin/phpstan analyze --level=9 src tests" "Running phpstan - Static analyzer"
+			    ;;
 			*)  return
-				  ;;
+				;;
 		esac
 	done
 }

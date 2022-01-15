@@ -35,5 +35,4 @@ class ContextTest extends TestCase
 
         self::assertSame([$some], $newContext->trail()->asArray());
     }
-
 }

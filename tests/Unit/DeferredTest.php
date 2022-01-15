@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace j45l\either\Test\Unit;
 
+use Closure;
 use j45l\either\Either;
 use j45l\either\Failure;
 use j45l\either\None;
@@ -56,9 +57,9 @@ final class DeferredTest extends TestCase
     }
 
     /**
-     * @return \Closure
+     * @return Closure
      */
-    public function identity(): \Closure
+    public function identity(): Closure
     {
         return static function ($value) {
             return $value;
@@ -73,7 +74,7 @@ final class DeferredTest extends TestCase
         self::assertEquals('Runtime !', $failure->reason()->asString());
     }
 
-    public function throwsRuntime(): \Closure
+    public function throwsRuntime(): Closure
     {
         return static function (): void {
             throw new RuntimeException('Runtime !');
