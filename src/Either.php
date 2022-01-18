@@ -9,6 +9,7 @@ use j45l\functional\Functor;
 
 abstract class Either implements Functor
 {
+    /** @var Context */
     protected $context;
 
     protected function __construct(Context $context = null)
@@ -52,16 +53,19 @@ abstract class Either implements Functor
         return $this->context;
     }
 
-    public function then($nextValue): Either
+    /** @param mixed $value */
+    public function then($value): Either
     {
-        return $this->next($nextValue);
+        return $this->next($value);
     }
 
-    public function next($nextValue): Either
+    /** @param mixed $value */
+    public function next($value): Either
     {
-        return self::build($nextValue, $this->context()->push($this));
+        return self::build($value, $this->context()->push($this));
     }
 
+    /** @param mixed $value */
     final protected static function build($value, Context $context): Either
     {
         /** @infection-ignore-all */
@@ -87,13 +91,19 @@ abstract class Either implements Functor
         return $new;
     }
 
-    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    public function orElse($defaultValue): Either
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+    * @param mixed $value
+     */
+    public function orElse($value): Either
     {
         return $this;
     }
 
-    /** @return static */
+    /**
+     * @param array<mixed> $parameters
+     * @return static
+     */
     final public function with(...$parameters): Either
     {
         return $this->cloneWith($this->context->withParameters(...$parameters));

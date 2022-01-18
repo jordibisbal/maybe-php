@@ -6,7 +6,9 @@ namespace j45l\either;
 
 final class Context
 {
+    /** @var Parameters */
     private $parameters;
+    /** @var Trail */
     private $trail;
 
     private function __construct(Parameters $parameters, Trail $trail)
@@ -25,6 +27,7 @@ final class Context
         return new self($parameters, Trail::create());
     }
 
+    /** @param array<mixed> $parameters */
     public function withParameters(...$parameters): Context
     {
         return new self(Parameters::create(...$parameters), $this->trail());

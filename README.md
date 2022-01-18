@@ -115,7 +115,7 @@ Absence of value, equivalent to null (but without messing with the interface)
 
 ### Some
 
-An *Either*(*Success*) with a value.
+An *Either* with a value.
 
 When cloned, if the value is an object, it is also cloned (not a deep clone, if desired, the value itself should do so)
 
@@ -129,4 +129,4 @@ Return the value
 
 ### Success
 
-An *Either* to signal successful operations 
+An *Either*(*Success* with true value) to signal successful operations 

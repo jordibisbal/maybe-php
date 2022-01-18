@@ -7,7 +7,7 @@ namespace j45l\either;
 class Failure extends None
 {
     /** @var Reason */
-    public $reason;
+    private $reason;
 
     protected function __construct(Context $context, Reason $failure = null)
     {

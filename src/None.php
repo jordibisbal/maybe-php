@@ -14,13 +14,14 @@ class None extends Either
         return new self();
     }
 
-    public function orElse($defaultValue): Either
+    /** @param mixed $value */
+    public function orElse($value): Either
     {
-        return self::build($defaultValue, $this->context());
+        return self::build($value, $this->context());
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    public function then($nextValue): Either
+    public function then($value): Either
     {
         return self::build($this, $this->context());
     }

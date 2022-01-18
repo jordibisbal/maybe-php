@@ -11,6 +11,7 @@ use function Functional\select;
 
 final class Trail implements Countable
 {
+    /** @var array<Either> */
     protected $trail = [];
 
     private function __construct()
@@ -49,13 +50,17 @@ final class Trail implements Countable
         );
     }
 
+    /** @return array<Either> */
     public function getValues(): array
     {
         return array_values(map($this->selectSome($this->trail), $this->pickValue()));
     }
 
-    /** @return Some[] */
-    private function selectSome($items): array
+    /**
+     * @param array<Either> $items
+     * @return array<Some>
+     */
+    private function selectSome(array $items): array
     {
         return select($items, function ($item) {
             return $item instanceof Some;

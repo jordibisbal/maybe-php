@@ -6,6 +6,7 @@ namespace j45l\either\Test\Unit\Stubs;
 
 final class MutableInteger
 {
+    /** @var int */
     private $value;
 
     public function __construct(int $value)

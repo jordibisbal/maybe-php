@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
-class Some extends Success
+class Some extends Either
 {
     /** @var mixed */
     private $value;
 
+    /** @param mixed $value */
     protected function __construct($value, Context $context)
     {
         parent::__construct($context);
@@ -16,11 +17,13 @@ class Some extends Success
         $this->value = $value;
     }
 
+    /** @param mixed $value */
     public static function from($value): Some
     {
         return new self($value, Context::create());
     }
 
+    /** @return mixed $value */
     public function value()
     {
         return $this->value;

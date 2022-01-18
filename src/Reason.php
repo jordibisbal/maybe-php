@@ -6,6 +6,7 @@ namespace j45l\either;
 
 class Reason
 {
+    /** @var string */
     private $reason;
 
     public function __construct(string $reason)

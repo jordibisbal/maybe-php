@@ -39,7 +39,7 @@ final class PipeTest extends TestCase
     private function addOne(): Closure
     {
         /** @param Some $either */
-        return static function (Either $either): Either {
+        return static function (Some $either): Some {
             return Some::from($either->value() + 1);
         };
     }

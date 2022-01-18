@@ -9,6 +9,7 @@ use Throwable;
 
 final class ThrowableReason extends Reason
 {
+    /** @var Throwable */
     private $throwable;
 
     public function __construct(string $reason, Throwable $throwable)

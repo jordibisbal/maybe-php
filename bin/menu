@@ -68,7 +68,7 @@ function tests() {
 function codeQuality() {
     phpmd="clear; echo -e 'Phpmd:\\n\\n'; vendor/bin/phpmd src ansi phpmdRules.xml"
     phpcs="echo -e '\\nPhpcs:\\n\\n'; vendor/bin/phpcs -p --cache=build/cache/phpcs_cache --no-colors src tests"
-    phpstan="echo -e '\\nPhpstan:\\n\\n'; vendor/bin/phpstan analyze --level=9 src tests"
+    phpstan="echo -e '\\nPhpstan:\\n\\n'; vendor/bin/phpstan analyze -c phpstan.neon"
 
 	while true
 	do
@@ -94,7 +94,7 @@ function codeQuality() {
 			    ;;
 			4)  progressThenTail "$home/.." "vendor/bin/phpcbf  --cache=build/cache/phpcs_cache src tests" "Running phpcbf - Code Beautifier and Fixer"
 			    ;;
-			5)  progressThenTail "$home/.." "vendor/bin/phpstan analyze --level=9 src tests" "Running phpstan - Static analyzer"
+			5)  progressThenTail "$home/.." "$phpstan" "Running phpstan - Static analyzer"
 			    ;;
 			*)  return
 				;;

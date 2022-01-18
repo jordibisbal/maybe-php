@@ -25,7 +25,7 @@ class ContextTest extends TestCase
 
     public function testAnEitherCanBePushIntoAContextTailAsNewContext(): void
     {
-        $some = Some::create();
+        $some = Some::from(null);
         $context = Context::create();
 
         $newContext = $context->push($some);
