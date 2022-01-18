@@ -10,27 +10,35 @@ final class Context
     private $parameters;
     /** @var Trail */
     private $trail;
+    /** @var Tag */
+    private $tag;
 
-    private function __construct(Parameters $parameters, Trail $trail)
+    private function __construct(Parameters $parameters, Trail $trail, Tag $tag)
     {
         $this->parameters = $parameters;
         $this->trail = $trail;
+        $this->tag = $tag;
     }
 
     public static function create(): Context
     {
-        return new self(Parameters::create(), Trail::create());
+        return new self(Parameters::create(), Trail::create(), Tag::untagged());
     }
 
     public static function fromParameters(Parameters $parameters): Context
     {
-        return new self($parameters, Trail::create());
+        return new self($parameters, Trail::create(), Tag::untagged());
     }
 
     /** @param array<mixed> $parameters */
     public function withParameters(...$parameters): Context
     {
-        return new self(Parameters::create(...$parameters), $this->trail());
+        return new self(Parameters::create(...$parameters), $this->trail(), $this->tag);
+    }
+
+    public function withTag(Tag $tag): Context
+    {
+        return new self($this->parameters, $this->trail(), $tag);
     }
 
     public function trail(): Trail
@@ -40,7 +48,7 @@ final class Context
 
     public function push(Either $either): Context
     {
-        return new self($this->parameters(), $this->trail()->push($either));
+        return new self($this->parameters(), $this->trail()->push($either, $this->tag), $this->tag);
     }
 
     public function parameters(): Parameters
