@@ -34,7 +34,7 @@ A new *Either* with new *Parameters* can be changed by *Either::with* method, *T
 
 #### resolve(): Either
 
-Forces an optional to be resolved, return itself but on Deferred an *Either* from its closure execution return value is returned.
+Forces an optional to be resolved, return itself but on Deferred, an *Either* from its closure execution return value is returned.
 
 ```php
 Either::do(function($customer) use ($em) { $em->insert($customer)})->with($customer)
@@ -130,3 +130,5 @@ Return the value
 ### Success
 
 An *Either*(*Success* with true value) to signal successful operations 
+
+ ![Class diagram](classDiagram.png)
