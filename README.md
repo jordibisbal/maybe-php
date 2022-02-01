@@ -7,6 +7,18 @@ Either (inspired by the functional thing), helps to:
 * Build failsafe code
 * Improve testability.
 
+## Either
+
+Is a supercharged version on the either monad from functional programing.
+
+Some literature about, google for more:
+
+https://www.thoughtworks.com/en-es/insights/blog/either-data-type-alternative-throwing-exceptions
+
+https://itnext.io/either-monad-a-functional-approach-to-error-handling-in-js-ffdc2917ab2
+
+https://functionalprogramming.medium.com/either-is-a-common-type-in-functional-languages-94b86eea325c
+
 ## Creating
 
 Every either must be created using its appropriate class:
@@ -38,7 +50,7 @@ A new *Either* with new *Parameters* can be build by *Either::with* method, *Tra
 
 ![](resources/documentation/TagReasonClassDiagram.png)
 
-#### resolve(): Either
+### resolve(): Either
 
 Forces an optional to be resolved, return itself but on Deferred, an *Either* from its closure execution return value is returned.
 
@@ -60,7 +72,7 @@ $either =
 ```
 If *resolve()* were not caller, the second closure would not be called (lazy).
 
-#### context(): Context
+### context(): Context
 
 Returns the context of the *Either*, i.e. its trail and parameters
 ```php
@@ -82,7 +94,7 @@ Returns the context of the *Either*, i.e. its trail and parameters
 ```
 
 Be aware that while Either::context()->trail does not include the Either itself, Either::trail() does.
-#### static do(Closure $closure): Deferred
+### static do(Closure $closure): Deferred
 
 Returns a *Deferred* from *$closure* (with the current context).
 
@@ -103,7 +115,7 @@ $either =
 ;
 ```
 
-#### map(Closure $closure): Deferred
+### map(Closure $closure): Deferred
 
 Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).
 
