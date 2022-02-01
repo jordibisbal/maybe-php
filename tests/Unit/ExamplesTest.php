@@ -1,0 +1,107 @@
+<?php
+
+declare(strict_types=1);
+
+namespace j45l\either\Test\Unit;
+
+use Closure;
+use j45l\either\Either;
+use j45l\either\Failure;
+use j45l\either\None;
+use j45l\either\Some;
+use j45l\either\Success;
+use j45l\either\Test\Unit\Stubs\EntityManagerStub;
+use j45l\either\ThrowableReason;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
+
+/** @coversNothing */
+class ExamplesTest extends TestCase
+{
+    public function testDo(): void
+    {
+        $customer = Some::from('customer');
+        $entityManager = new EntityManagerStub();
+
+        $either =
+            Either::do($this->insertCustomer($entityManager))->with($customer)
+            ->orElse($this->updateCustomer($entityManager))
+            ->resolve()
+        ;
+
+        $this->assertInstanceOf(Some::class, $entityManager->insertInvokedWith);
+        $this->assertInstanceOf(None::class, $entityManager->updateInvokedWith);
+        $this->assertEquals($customer, $entityManager->insertInvokedWith);
+        $this->assertInstanceOf(Success::class, $either);
+        $this->assertCount(0, $either->trail()->failed());
+    }
+
+    /**
+     * @param EntityManagerStub $entityManager
+     * @return Closure
+     */
+    private function insertCustomer(EntityManagerStub $entityManager): Closure
+    {
+        return static function ($customer) use ($entityManager): Success {
+            $entityManager->insert($customer);
+            return Success::create();
+        };
+    }
+
+    /**
+     * @param EntityManagerStub $entityManager
+     * @return Closure
+     */
+    private function updateCustomer(EntityManagerStub $entityManager): Closure
+    {
+        return static function ($customer) use ($entityManager): Success {
+            $entityManager->update($customer);
+            return Success::create();
+        };
+    }
+
+    public function testDoOrElse(): void
+    {
+        $customer = Some::from('customer');
+        $entityManager = new EntityManagerStub();
+        $entityManager->insertWillFail = true;
+
+        $either =
+            Either::do($this->insertCustomer($entityManager))->with($customer)
+                ->orElse($this->updateCustomer($entityManager))
+                ->resolve()
+        ;
+
+        $this->assertInstanceOf(Some::class, $entityManager->insertInvokedWith);
+        $this->assertInstanceOf(Some::class, $entityManager->updateInvokedWith);
+        $this->assertEquals($customer, $entityManager->insertInvokedWith);
+        $this->assertEquals($customer, $entityManager->updateInvokedWith);
+        $this->assertInstanceOf(Success::class, $either);
+        $this->assertCount(0, $either->trail()->failed());
+    }
+
+    public function testDoOrElseFails(): void
+    {
+        $customer = Some::from('customer');
+        $entityManager = new EntityManagerStub();
+        $entityManager->insertWillFail = true;
+        $entityManager->updateWillFail = true;
+
+        $either =
+            Either::do($this->insertCustomer($entityManager))->with($customer)
+                ->orElse($this->updateCustomer($entityManager))
+                ->resolve();
+
+        $this->assertInstanceOf(Some::class, $entityManager->insertInvokedWith);
+        $this->assertInstanceOf(Some::class, $entityManager->updateInvokedWith);
+        $this->assertEquals($customer, $entityManager->insertInvokedWith);
+        $this->assertEquals($customer, $entityManager->updateInvokedWith);
+        $this->assertInstanceOf(Failure::class, $either);
+        $this->assertCount(1, $either->trail()->failed());
+
+        $reason = $either->trail()->failed()[0]->reason();
+        $this->assertInstanceOf(ThrowableReason::class, $reason);
+        $this->assertEquals(new RuntimeException('Failed to update'), $reason->throwable());
+        $this->assertEquals($reason, $either->reason());
+    }
+}

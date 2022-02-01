@@ -13,7 +13,11 @@
 
     <rule ref="PSR12"/>
 
-    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations " value="true"/>
+        </properties>
+    </rule>>
 
     <file>bin/</file>
     <file>config/</file>

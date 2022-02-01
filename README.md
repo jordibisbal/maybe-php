@@ -24,13 +24,19 @@ Every either must be created using its appropriate class:
 * *null*: *None*
 * Otherwise: *Some*
 
+![](resources/documentation/EitherClassDiagram.png)
+
 ## Either
 
 Base class for all *Either*s
 
-An *Either* as a *Context* that contains the *Parameters* that will use to call *Deferred* closures (if any) and a *Trail* of the evaluated *Either*s.
+An *Either* has a *Context* that contains the *Parameters* that will use to call *Deferred* closures (if any) and a *Trail* of the evaluated *Either*s.
 
 A new *Either* with new *Parameters* can be changed by *Either::with* method, *Trail* is readonly.
+
+![](resources/documentation/ContextClassDiagram.png)
+
+![](resources/documentation/TagReasonClassDiagram.png)
 
 #### resolve(): Either
 
@@ -56,10 +62,37 @@ Returns the context of the *Either*, i.e. its trail and parameters
 
 Returns a *Deferred* from *$closure* (with the current context).
 
-#### map(Closure $closure): Functor
+```php
+// \j45l\either\Test\Unit\ExamplesTest::testDo
+// \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
+// \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
+$either =
+            Either::do($this->insertCustomer($em))->with($customer)
+            // The parameters/context ($customer) is passed to orElse(), so does not need to
+            // be provided again, although you could override that by using a second with().
+            ->orElse($this->updateCustomer($em))
+            // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
+            // on resolve() only when do() returns a none/failure
+            ->resolve()
+            // The value, either a Failure or a Success
+        ;
+;
+```
+
+#### map(Closure $closure): Deferred
 
 Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).
-Mapping a *None* results in a *None* and the *closure* is not evaluated.
+When mapping a *None* results in a *None*, being the *closure* is not evaluated.
+
+```php
+$increment = function(Some $number) { return Some::from($number->value + 1); }; 
+$either = Some::from(41)->map($increment);
+// $either is a deferred
+$either = $either->resolve();
+//  $either is a Some with value 42
+$either->value();
+// 42
+```
 
 #### next($nextValue): Either
 
