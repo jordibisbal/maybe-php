@@ -23,6 +23,7 @@ abstract class Either implements Functor
         return new Deferred($closure, Context::create());
     }
 
+    /** @phpstan-return Either */
     public function map(Closure $closure): Functor
     {
         return new Deferred($closure, Context::fromParameters(Parameters::create($this)));
@@ -45,7 +46,7 @@ abstract class Either implements Functor
 
     public function pipe(Closure $closure): Either
     {
-        return new Deferred($closure, $this->context()->withParameters($this->resolve()));
+        return new Deferred($closure, $this->context()->push($this)->withParameters($this->resolve()));
     }
 
     public function context(): Context

@@ -32,7 +32,7 @@ Base class for all *Either*s
 
 An *Either* has a *Context* that contains the *Parameters* that will use to call *Deferred* closures (if any) and a *Trail* of the evaluated *Either*s.
 
-A new *Either* with new *Parameters* can be changed by *Either::with* method, *Trail* is readonly.
+A new *Either* with new *Parameters* can be build by *Either::with* method, *Trail* is readonly.
 
 ![](resources/documentation/ContextClassDiagram.png)
 
@@ -63,7 +63,25 @@ If *resolve()* were not caller, the second closure would not be called (lazy).
 #### context(): Context
 
 Returns the context of the *Either*, i.e. its trail and parameters
+```php
+// \j45l\either\Test\Unit\ExamplesTest::testGetContext
+        $increment = static function (Some $some): Some {
+            return Some::from($some->value() + 1);
+        };
 
+        $either = Some::from(42)->pipe($increment)->pipe($increment);
+
+        $firstContextParameter = first($either->context()->parameters()->asArray());
+
+        $this->assertInstanceOf(Some::class, $firstContextParameter);
+        $this->assertEquals(43, $firstContextParameter->value());
+
+        $this->assertCount(2, $either->context()->trail());
+        $this->assertEquals([42, 43], $either->context()->trail()->getValues());
+        $this->assertEquals([42, 43, 44], $either->trail()->getValues());
+```
+
+Be aware that while Either::context()->trail does not include the Either itself, Either::trail() does.
 #### static do(Closure $closure): Deferred
 
 Returns a *Deferred* from *$closure* (with the current context).
@@ -88,17 +106,31 @@ $either =
 #### map(Closure $closure): Deferred
 
 Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).
-When mapping a *None* results in a *None*, being the *closure* is not evaluated.
+
+Mapping a *None* results in a *None*, being the *closure* not evaluated.
+
+Maps is from Functor, so it returns a Functor, that could be confusing when dealing with the result,
+do some type assessment prior to its use, to ensure the expected type is the returned one.  
 
 ```php
-$increment = function(Some $number) { return Some::from($number->value + 1); }; 
-$either = Some::from(41)->map($increment);
-// $either is a deferred
-$either = $either->resolve();
-//  $either is a Some with value 42
-$either->value();
-// 42
+// \j45l\either\Test\Unit\ExamplesTest::testMap
+        $sideEffect = false;
+        $increment = function (Some $number) use (&$sideEffect) {
+            $sideEffect = true;
+            return Some::from($number->value() + 1);
+        };
+        $either = Some::from(41)->map($increment); 
+        
+        $this->assertFalse($sideEffect); $this->assertInstanceOf(Deferred::class, $either);
+         
+        $either = $either->resolve(); $this->assertTrue($sideEffect);
+
+        $this->assertInstanceOf(Some::class, $either); 
+        $this->assertEquals(42, $either->value());
 ```
+
+Until Either::resolve() is called, the close $increment is not invoked, so neither the value gets changed nor
+the side effect occurs.
 
 #### next($nextValue): Either
 

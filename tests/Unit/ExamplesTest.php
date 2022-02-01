@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\either\Test\Unit;
 
 use Closure;
+use j45l\either\Deferred;
 use j45l\either\Either;
 use j45l\either\Failure;
 use j45l\either\None;
@@ -14,6 +15,7 @@ use j45l\either\Test\Unit\Stubs\EntityManagerStub;
 use j45l\either\ThrowableReason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use function Functional\first;
 
 /** @coversNothing */
 class ExamplesTest extends TestCase
@@ -103,5 +105,46 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(ThrowableReason::class, $reason);
         $this->assertEquals(new RuntimeException('Failed to update'), $reason->throwable());
         $this->assertEquals($reason, $either->reason());
+    }
+
+    public function testGetContext(): void
+    {
+        $increment = static function (Some $some): Some {
+            return Some::from($some->value() + 1);
+        };
+
+        $either = Some::from(42)
+            ->pipe($increment)
+            ->pipe($increment)
+        ;
+
+        $firstContextParameter = first($either->context()->parameters()->asArray());
+
+        $this->assertInstanceOf(Some::class, $firstContextParameter);
+        $this->assertEquals(43, $firstContextParameter->value());
+
+        $this->assertCount(2, $either->context()->trail());
+        $this->assertEquals([42, 43], $either->context()->trail()->getValues());
+        $this->assertEquals([42, 43, 44], $either->trail()->getValues());
+    }
+
+    public function testMap(): void
+    {
+        $sideEffect = false;
+        $increment = function (Some $number) use (&$sideEffect) {
+            $sideEffect = true;
+            return Some::from($number->value() + 1);
+        };
+
+        $either = Some::from(41)->map($increment);
+        $this->assertFalse($sideEffect);
+
+        $this->assertInstanceOf(Deferred::class, $either);
+
+        $either = $either->resolve();
+        $this->assertTrue($sideEffect);
+
+        $this->assertInstanceOf(Some::class, $either);
+        $this->assertEquals(42, $either->value());
     }
 }
