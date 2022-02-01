@@ -43,13 +43,19 @@ A new *Either* with new *Parameters* can be changed by *Either::with* method, *T
 Forces an optional to be resolved, return itself but on Deferred, an *Either* from its closure execution return value is returned.
 
 ```php
-Either::do(function($customer) use ($em) { $em->insert($customer)})->with($customer)
-    // The parameters/context ($customer) is passed to orElse(), so does not need to
-    // be provided again, although you could override that by using a second with().         
-    ->orElse(function($customer) use ($me) { $em->update})
-    // The value is Deferred or a Success
-    ->resolve()
-    // The value Either a Failure or a Success
+// \j45l\either\Test\Unit\ExamplesTest::testDo
+// \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
+// \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
+$either =
+            Either::do($this->insertCustomer($em))->with($customer)
+            // The parameters/context ($customer) is passed to orElse(), so does not need to
+            // be provided again, although you could override that by using a second with().
+            ->orElse($this->updateCustomer($em))
+            // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
+            // on resolve() only when do() returns a none/failure
+            ->resolve()
+            // The value, either a Failure or a Success
+        ;
 ;
 ```
 If *resolve()* were not caller, the second closure would not be called (lazy).
