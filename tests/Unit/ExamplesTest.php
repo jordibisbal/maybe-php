@@ -16,6 +16,7 @@ use j45l\either\ThrowableReason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use function Functional\first;
+use function Functional\invoke;
 
 /** @coversNothing */
 class ExamplesTest extends TestCase
@@ -26,7 +27,7 @@ class ExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
 
         $either =
-            Either::do($this->insertCustomer($entityManager))->with($customer)
+            Either::start()->next($this->insertCustomer($entityManager))->with($customer)
             ->orElse($this->updateCustomer($entityManager))
             ->resolve()
         ;
@@ -69,7 +70,7 @@ class ExamplesTest extends TestCase
         $entityManager->insertWillFail = true;
 
         $either =
-            Either::do($this->insertCustomer($entityManager))->with($customer)
+            Either::start()->next($this->insertCustomer($entityManager))->with($customer)
                 ->orElse($this->updateCustomer($entityManager))
                 ->resolve()
         ;
@@ -90,7 +91,7 @@ class ExamplesTest extends TestCase
         $entityManager->updateWillFail = true;
 
         $either =
-            Either::do($this->insertCustomer($entityManager))->with($customer)
+            Either::start()->next($this->insertCustomer($entityManager))->with($customer)
                 ->orElse($this->updateCustomer($entityManager))
                 ->resolve();
 
@@ -146,5 +147,32 @@ class ExamplesTest extends TestCase
 
         $this->assertInstanceOf(Some::class, $either);
         $this->assertEquals(42, $either->value());
+    }
+
+    public function testTag(): void
+    {
+        $name = static function (): void {
+            throw new RuntimeException('Unable to get name');
+        };
+        $id = static function (): int {
+            return 123;
+        };
+        $email = static function (): string {
+            return 'email@test.com';
+        };
+
+        $chain = Either::start()
+            ->withTag('id')->next($id)
+            ->withTag('name')->next($name)
+            ->withTag('email')->next($email)
+        ;
+
+        $trail = $chain->trail();
+
+        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->getTaggedValues());
+        $this->assertEquals(
+            ['name' => 'Unable to get name'],
+            invoke($trail->getTaggedFailureReasons(), 'asString')
+        );
     }
 }

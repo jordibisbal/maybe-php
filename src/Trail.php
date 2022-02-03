@@ -6,6 +6,7 @@ namespace j45l\either;
 
 use Closure;
 use Countable;
+use function Functional\invoke;
 use function Functional\map;
 use function Functional\select;
 
@@ -71,6 +72,17 @@ final class Trail implements Countable
         });
     }
 
+    /**
+     * @param array<Either> $items
+     * @return array<Some>
+     */
+    private function selectFailures(array $items): array
+    {
+        return select($items, function ($item) {
+            return $item instanceof Failure;
+        });
+    }
+
     private function pickValue(): Closure
     {
         return static function (Some $some) {
@@ -122,7 +134,13 @@ final class Trail implements Countable
     /** @return array<string, Some> */
     public function getTaggedValues(): array
     {
-        return map($this->selectSome($this->taggedTrail), $this->pickValue());
+        return invoke($this->selectSome($this->taggedTrail), 'value');
+    }
+
+    /** @return array<string, Reason> */
+    public function getTaggedFailureReasons(): array
+    {
+        return invoke($this->selectFailures($this->taggedTrail), 'reason');
     }
 
     /** @return array<string, Either> */

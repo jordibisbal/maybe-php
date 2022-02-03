@@ -55,4 +55,9 @@ final class Context
     {
         return $this->parameters;
     }
+
+    public function tag(): Tag
+    {
+        return $this->tag;
+    }
 }

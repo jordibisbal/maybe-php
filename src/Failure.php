@@ -9,11 +9,17 @@ class Failure extends None
     /** @var Reason */
     private $reason;
 
-    protected function __construct(Context $context, Reason $failure = null)
+    protected function __construct(Context $context = null, Reason $reason = null)
     {
-        $this->reason = $failure ?? new Reason('Unspecified reason');
+        $this->reason = $reason ?? new Reason('Unspecified reason');
 
         parent::__construct($context);
+    }
+
+    /** @return Failure */
+    public static function create(): None
+    {
+        return new self();
     }
 
     public static function from(Reason $reason = null): Failure

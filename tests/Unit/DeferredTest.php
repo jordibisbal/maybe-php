@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\either\Test\Unit;
 
 use Closure;
+use j45l\either\Deferred;
 use j45l\either\Either;
 use j45l\either\Failure;
 use j45l\either\None;
@@ -21,7 +22,7 @@ final class DeferredTest extends TestCase
     public function testRetainsParametersAfterEvaluation(): void
     {
         $either =
-            Either::do($this->identity())
+            Deferred::create($this->identity())
             ->with(123)
             ->resolve()
         ;
@@ -33,7 +34,7 @@ final class DeferredTest extends TestCase
     public function testEvaluationWithNullResultReturnsANone(): void
     {
         $none =
-            Either::do(
+            Either::start()->next(
                 static function () {
                     return null;
                 }
@@ -46,7 +47,7 @@ final class DeferredTest extends TestCase
 
     public function testThenCausesEvaluation(): void
     {
-        $either = Either::do($this->identity())->with(123)
+        $either = Either::start()->next($this->identity())->with(123)
             ->then($this->identity())->with(456)
         ;
 
@@ -68,7 +69,7 @@ final class DeferredTest extends TestCase
 
     public function testEvaluatingAThrowingClosureResultsInAFailure(): void
     {
-        $failure = Either::do($this->throwsRuntime())->resolve();
+        $failure = Either::start()->next($this->throwsRuntime())->resolve();
         self::assertInstanceOf(Failure::class, $failure);
 
         self::assertEquals('Runtime !', $failure->reason()->asString());

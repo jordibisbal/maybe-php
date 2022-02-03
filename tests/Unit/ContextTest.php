@@ -58,5 +58,6 @@ class ContextTest extends TestCase
         ;
 
         self::assertEquals(['tag 43' => 43, 'tag 44' => 44], $context->trail()->getTaggedValues());
+        self::assertEquals(Tag::from('tag 44'), $context->tag());
     }
 }

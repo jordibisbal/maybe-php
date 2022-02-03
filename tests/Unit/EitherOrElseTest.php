@@ -50,7 +50,7 @@ final class EitherOrElseTest extends TestCase
             return Some::from(42);
         };
 
-        $either = Either::do($fortyTwo)->OrElse(None::create());
+        $either = Either::start()->next($fortyTwo)->OrElse(None::create());
 
         self::assertInstanceOf(Some::class, $either);
         self::assertEquals(42, $either->value());
@@ -111,7 +111,7 @@ final class EitherOrElseTest extends TestCase
             return None::create();
         };
 
-        $either = Either::do($none)->OrElse(Some::from(42));
+        $either = Either::start()->next($none)->OrElse(Some::from(42));
 
         self::assertInstanceOf(Some::class, $either);
         self::assertEquals(42, $either->value());

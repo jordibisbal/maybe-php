@@ -18,7 +18,11 @@ class Deferred extends Either
         $this->closure = $value;
     }
 
-    /** @param mixed $value */
+    public static function create(Closure $value): Deferred
+    {
+        return new self($value, Context::create());
+    }
+
     public function orElse($value): Either
     {
         return $this->resolve()->orElse($value);

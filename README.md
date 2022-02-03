@@ -25,7 +25,7 @@ Every either must be created using its appropriate class:
 
 * None::create()
 * Some::from($value)
-* Either::do(Closure $closure)
+* Either::start()->next(Closure $closure)
 * Success::create()
 * Failure::create()
 
@@ -59,7 +59,7 @@ Forces an optional to be resolved, return itself but on Deferred, an *Either* fr
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
 $either =
-            Either::do($this->insertCustomer($em))->with($customer)
+            Either::start()->next($this->insertCustomer($em))->with($customer)
             // The parameters/context ($customer) is passed to orElse(), so does not need to
             // be provided again, although you could override that by using a second with().
             ->orElse($this->updateCustomer($em))
@@ -103,7 +103,7 @@ Returns a *Deferred* from *$closure* (with the current context).
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
 $either =
-            Either::do($this->insertCustomer($em))->with($customer)
+            Either::start()->next($this->insertCustomer($em))->with($customer)
             // The parameters/context ($customer) is passed to orElse(), so does not need to
             // be provided again, although you could override that by using a second with().
             ->orElse($this->updateCustomer($em))

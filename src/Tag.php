@@ -4,11 +4,17 @@ namespace j45l\either;
 
 class Tag
 {
-    public static function from(string $tag): Tag
+    private function __construct()
     {
-        /** @noinspection DegradedSwitchInspection */
+    }
+
+    /** @param Tag | string $tag */
+    public static function from($tag): Tag
+    {
         /** @infection-ignore-all */
         switch (true) {
+            case $tag instanceof self:
+                return $tag;
             /** @infection-ignore-all */
             case (trim($tag) !== ''):
                 return new StringTag($tag);

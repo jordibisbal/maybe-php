@@ -66,9 +66,10 @@ function tests() {
 }
 
 function codeQuality() {
-    phpmd="clear; echo -e 'Phpmd:\\n\\n'; vendor/bin/phpmd src ansi phpmdRules.xml"
+    phpmd="echo -e '\\nPhpmd:\\n\\n'; vendor/bin/phpmd src ansi phpmdRules.xml"
     phpcs="echo -e '\\nPhpcs:\\n\\n'; vendor/bin/phpcs -p --cache=build/cache/phpcs_cache --no-colors src tests"
     phpstan="echo -e '\\nPhpstan:\\n\\n'; vendor/bin/phpstan analyze -c phpstan.neon"
+    phpmdTest="echo -e '\\nPhpmd tests:\\n\\n'; vendor/bin/phpmd tests ansi phpmdRulesTests.xml"
 
 	while true
 	do
@@ -81,16 +82,16 @@ function codeQuality() {
 			5 "phpstan Static analyzer" \
 		2>&1 >/dev/tty)
 		case $choice in
- 		    a)  execute "$home/.." "$phpmd; $phpcs; $phpstan" "Running all analyzers"
+ 		    a)  execute "$home/.." "clear; $phpmd; $phpmdTest; $phpcs; $phpstan" "Running all analyzers"
  		        enterToContinue
                 ;;
-			1)  execute "$home/.." "clear; vendor/bin/phpmd src ansi phpmdRules.xml" "Running phpMd - Mess Detector"
+			1)  execute "$home/.." "clear; $phpmd" "Running phpMd - Mess Detector"
 			    enterToContinue
 			    ;;
-            2)  execute "$home/.." "clear; vendor/bin/phpmd tests ansi phpmdRulesTests.xml" "Running phpMd - Mess Detector"
+            2)  execute "$home/.." "clear; $phpmdTest" "Running phpMd - Mess Detector"
                 enterToContinue
                 ;;
-			3)  progressThenTail "$home/.." "vendor/bin/phpcs -p --cache=build/cache/phpcs_cache --no-colors src tests" "Running phpcs - Code sniffer"
+			3)  progressThenTail "$home/.." "$phpcs" "Running phpcs - Code sniffer"
 			    ;;
 			4)  progressThenTail "$home/.." "vendor/bin/phpcbf  --cache=build/cache/phpcs_cache src tests" "Running phpcbf - Code Beautifier and Fixer"
 			    ;;

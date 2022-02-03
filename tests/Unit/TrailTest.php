@@ -11,6 +11,7 @@ use j45l\either\Some;
 use j45l\either\Tag;
 use j45l\either\Trail;
 use PHPUnit\Framework\TestCase;
+use function Functional\invoke;
 
 /** @covers \j45l\either\Trail */
 final class TrailTest extends TestCase
@@ -118,5 +119,22 @@ final class TrailTest extends TestCase
 
         self::assertEquals(['42' => 42], $trail->getTaggedValues());
         self::assertEquals(['42' => Some::from('42'), '43' => None::create()], $trail->getTagged());
+    }
+
+    public function testTaggedFailuresValuesJustForFailures(): void
+    {
+        $trail = Trail::create()
+            ->push(Some::from(42), Tag::from('42'))
+            ->push(Failure::from(Reason::from('because failed')), Tag::from('43'))
+        ;
+
+        self::assertEquals(
+            ['43' => 'because failed'],
+            invoke($trail->getTaggedFailureReasons(), 'asString')
+        );
+        self::assertEquals(
+            ['42' => Some::from('42'), '43' => Failure::from(Reason::from('because failed'))],
+            $trail->getTagged()
+        );
     }
 }

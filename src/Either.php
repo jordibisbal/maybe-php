@@ -17,10 +17,9 @@ abstract class Either implements Functor
         $this->context = $context ?? Context::create();
     }
 
-    /** @SuppressWarnings(PHPMD.ShortMethodName) */
-    public static function do(Closure $closure): Deferred
+    public static function start(): Success
     {
-        return new Deferred($closure, Context::create());
+        return Success::create();
     }
 
     /** @phpstan-return Either */
@@ -36,7 +35,7 @@ abstract class Either implements Functor
 
     public function trail(): Trail
     {
-        return $this->context->trail()->push($this->resolve());
+        return $this->context->push($this->resolve())->trail();
     }
 
     public function resolve(): Either
@@ -63,7 +62,7 @@ abstract class Either implements Functor
     /** @param mixed $value */
     public function next($value): Either
     {
-        return self::build($value, $this->context()->push($this));
+        return self::build($value, $this->context()->push($this->resolve()));
     }
 
     /** @param mixed $value */
@@ -108,5 +107,11 @@ abstract class Either implements Functor
     final public function with(...$parameters): Either
     {
         return $this->cloneWith($this->context->withParameters(...$parameters));
+    }
+
+    /** @param Tag|string $tag */
+    public function withTag($tag): Either
+    {
+        return $this->resolve()->cloneWith($this->context()->push($this->resolve())->withTag(Tag::from($tag)));
     }
 }

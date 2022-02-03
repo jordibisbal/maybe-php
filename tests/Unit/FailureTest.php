@@ -33,7 +33,7 @@ final class FailureTest extends TestCase
             throw new RuntimeException();
         };
 
-        $failure = Either::do($succeeding)->with(1, 2, 3)->then($failing)->resolve();
+        $failure = Either::start()->next($succeeding)->with(1, 2, 3)->then($failing)->resolve();
 
         self::assertInstanceOf(Failure::class, $failure);
         self::assertEquals(Parameters::create(1, 2, 3), $failure->context()->parameters());

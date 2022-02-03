@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace j45l\either\Test\Unit;
 
+use j45l\either\Either;
 use j45l\either\None;
 use j45l\either\Some;
+use j45l\either\Tag;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,5 +46,12 @@ final class EitherTest extends TestCase
         $either = $either->next(None::create());
 
         self::assertEquals($trail->butLast(), $either->trail()->butLast()->butLast());
+    }
+
+    public function testTrailWithNewTagIsSet(): void
+    {
+        $either = Either::start()->withTag('tag');
+
+        $this->assertEquals(Tag::from('tag'), $either->context()->tag());
     }
 }

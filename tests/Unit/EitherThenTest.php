@@ -52,7 +52,7 @@ final class EitherThenTest extends TestCase
     public function testDeferredSomeReturnsNextValue(): void
     {
         $either =
-            Either::do(static function (): Either {
+            Either::start()->next(static function (): Either {
                 return Some::from(42);
             })
             ->then(None::create())
@@ -64,7 +64,7 @@ final class EitherThenTest extends TestCase
     public function testDeferredNoneReturnsNoneValue(): void
     {
         $either =
-            Either::do(static function (): Either {
+            Either::start()->next(static function (): Either {
                 return None::create();
             })
             ->then(Some::from(42))
