@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace j45l\either;
 
 use Closure;
+use j45l\either\Context\Context;
+use j45l\either\Context\Parameters;
+use j45l\either\Context\Trail;
+use j45l\either\Tags\Tag;
 use j45l\functional\Functor;
 
 abstract class Either implements Functor
@@ -109,9 +113,12 @@ abstract class Either implements Functor
         return $this->cloneWith($this->context->withParameters(...$parameters));
     }
 
-    /** @param Tag|string $tag */
+    /** @param Tag | int | string $tag */
     public function withTag($tag): Either
     {
-        return $this->resolve()->cloneWith($this->context()->push($this->resolve())->withTag(Tag::from($tag)));
+        return $this->resolve()->cloneWith(
+            $this->context()->push($this->resolve())
+                ->withTag(TagCreator::from($tag))
+        );
     }
 }

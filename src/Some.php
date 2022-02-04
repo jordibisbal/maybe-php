@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
+use j45l\either\Context\Context;
+
 class Some extends Either
 {
     /** @var mixed */

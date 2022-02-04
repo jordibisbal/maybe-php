@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace j45l\either\Test\Unit;
 
+use j45l\either\Context\Parameters;
 use j45l\either\Either;
 use j45l\either\Failure;
-use j45l\either\Parameters;
 use j45l\either\Reason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -22,6 +22,14 @@ final class FailureTest extends TestCase
 
         self::assertEquals('reason', $failure->reason()->asString());
     }
+
+    public function testCanBeCreatedFromFailureWithOutReason(): void
+    {
+        $failure = Failure::create();
+
+        self::assertEquals('Unspecified reason', $failure->reason()->asString());
+    }
+
 
     public function testAFailureMaintainsContext(): void
     {

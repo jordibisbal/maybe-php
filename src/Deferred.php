@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\either;
 
 use Closure;
+use j45l\either\Context\Context;
 use Throwable;
 
 class Deferred extends Either

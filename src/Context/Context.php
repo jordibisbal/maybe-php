@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\either\Context;
+
+use j45l\either\Either;
+use j45l\either\Tags\Tag;
+use j45l\either\Tags\Untagged;
 
 final class Context
 {
@@ -22,12 +26,12 @@ final class Context
 
     public static function create(): Context
     {
-        return new self(Parameters::create(), Trail::create(), Tag::untagged());
+        return new self(Parameters::create(), Trail::create(), new Untagged());
     }
 
     public static function fromParameters(Parameters $parameters): Context
     {
-        return new self($parameters, Trail::create(), Tag::untagged());
+        return new self($parameters, Trail::create(), new Untagged());
     }
 
     /** @param array<mixed> $parameters */

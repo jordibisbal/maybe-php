@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\either\Context;
 
 final class Parameters
 {

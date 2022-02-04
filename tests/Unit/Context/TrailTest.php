@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit;
+namespace j45l\either\Test\Unit\Context;
 
+use j45l\either\Context\Trail;
 use j45l\either\Failure;
 use j45l\either\None;
 use j45l\either\Reason;
 use j45l\either\Some;
-use j45l\either\Tag;
-use j45l\either\Trail;
 use PHPUnit\Framework\TestCase;
-use function Functional\invoke;
 
-/** @covers \j45l\either\Trail */
+/** @covers \j45l\either\Context\Trail */
 final class TrailTest extends TestCase
 {
     public function testPushingToATrailDoesNotModifyIt(): void
@@ -97,44 +95,5 @@ final class TrailTest extends TestCase
     public function testCanBeCheckForEmptiness(): void
     {
         self::assertTrue(Trail::create()->empty());
-    }
-
-    public function testCanPushEitherTagged(): void
-    {
-        $trail = Trail::create()
-            ->push(Some::from(42), Tag::from('42'))
-            ->push(Some::from(43), Tag::from('43'))
-        ;
-
-        self::assertEquals(['42' => 42, '43' => 43], $trail->getTaggedValues());
-        self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->getTagged());
-    }
-
-    public function testTaggedValuesJustForSome(): void
-    {
-        $trail = Trail::create()
-            ->push(Some::from(42), Tag::from('42'))
-            ->push(None::create(), Tag::from('43'))
-        ;
-
-        self::assertEquals(['42' => 42], $trail->getTaggedValues());
-        self::assertEquals(['42' => Some::from('42'), '43' => None::create()], $trail->getTagged());
-    }
-
-    public function testTaggedFailuresValuesJustForFailures(): void
-    {
-        $trail = Trail::create()
-            ->push(Some::from(42), Tag::from('42'))
-            ->push(Failure::from(Reason::from('because failed')), Tag::from('43'))
-        ;
-
-        self::assertEquals(
-            ['43' => 'because failed'],
-            invoke($trail->getTaggedFailureReasons(), 'asString')
-        );
-        self::assertEquals(
-            ['42' => Some::from('42'), '43' => Failure::from(Reason::from('because failed'))],
-            $trail->getTagged()
-        );
     }
 }

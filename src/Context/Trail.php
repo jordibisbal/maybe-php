@@ -2,10 +2,17 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\either\Context;
 
 use Closure;
 use Countable;
+use j45l\either\Either;
+use j45l\either\Failure;
+use j45l\either\Reason;
+use j45l\either\Some;
+use j45l\either\Tags\StringTag;
+use j45l\either\Tags\Tag;
+use j45l\either\Tags\Untagged;
 use function Functional\invoke;
 use function Functional\map;
 use function Functional\select;
@@ -31,7 +38,7 @@ final class Trail implements Countable
     {
         $new = clone $this;
         $new->trail[] = $either;
-        $new->taggedTrail = $this->pushWithTag($either, $tag ?? Tag::untagged());
+        $new->taggedTrail = $this->pushWithTag($either, $tag ?? Untagged::create());
 
         return $new;
     }
