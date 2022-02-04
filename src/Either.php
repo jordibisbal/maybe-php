@@ -21,6 +21,22 @@ abstract class Either implements Functor
         $this->context = $context ?? Context::create();
     }
 
+    /** @param mixed $value */
+    final protected static function build($value, Context $context): Either
+    {
+        /** @infection-ignore-all */
+        switch (true) {
+            case $value instanceof self:
+                return $value->cloneWith($context);
+            case $value instanceof Closure:
+                return new Deferred($value, $context);
+            case is_null($value):
+                return new None($context);
+            default:
+                return new Some($value, $context);
+        }
+    }
+
     public static function start(): Success
     {
         return Success::create();
@@ -69,20 +85,13 @@ abstract class Either implements Functor
         return self::build($value, $this->context()->push($this->resolve()));
     }
 
-    /** @param mixed $value */
-    final protected static function build($value, Context $context): Either
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param mixed $value
+     */
+    public function orElse($value): Either
     {
-        /** @infection-ignore-all */
-        switch (true) {
-            case $value instanceof self:
-                return $value->cloneWith($context);
-            case $value instanceof Closure:
-                return new Deferred($value, $context);
-            case is_null($value):
-                return new None($context);
-            default:
-                return new Some($value, $context);
-        }
+        return $this;
     }
 
     /** @return static */
@@ -96,15 +105,6 @@ abstract class Either implements Functor
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-    * @param mixed $value
-     */
-    public function orElse($value): Either
-    {
-        return $this;
-    }
-
-    /**
      * @param array<mixed> $parameters
      * @return static
      */
@@ -114,7 +114,7 @@ abstract class Either implements Functor
     }
 
     /** @param Tag | int | string $tag */
-    public function withTag($tag): Either
+    final public function withTag($tag): Either
     {
         return $this->resolve()->cloneWith(
             $this->context()->push($this->resolve())

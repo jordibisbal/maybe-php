@@ -17,4 +17,12 @@ final class SuccessTest extends TestCase
         self::assertIsBool($some->value());
         self::assertTrue($some->value());
     }
+
+    public function testIgnoresValueWhenCreateUsingFrom(): void
+    {
+        $some = Success::from(42);
+
+        self::assertIsBool($some->value());
+        self::assertTrue($some->value());
+    }
 }

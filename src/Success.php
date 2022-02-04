@@ -12,4 +12,14 @@ class Success extends Some
     {
         return new self(true, Context::create());
     }
+
+    /**
+     * @param mixed $value
+     * @return Success
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public static function from($value): Some
+    {
+        return static::create();
+    }
 }
