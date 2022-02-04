@@ -9,6 +9,7 @@ use j45l\either\Context\Context;
 use j45l\either\Context\Parameters;
 use j45l\either\Context\Trail;
 use j45l\either\Tags\Tag;
+use j45l\either\Tags\TagCreator;
 use j45l\functional\Functor;
 
 abstract class Either implements Functor

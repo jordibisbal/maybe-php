@@ -5,7 +5,7 @@ namespace j45l\either\Test\Unit\Context;
 use j45l\either\Context\Context;
 use j45l\either\Context\Parameters;
 use j45l\either\Some;
-use j45l\either\TagCreator;
+use j45l\either\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
 
 /** @covers \j45l\either\Context\Context */

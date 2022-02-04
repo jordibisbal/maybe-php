@@ -1,10 +1,6 @@
 <?php
 
-namespace j45l\either;
-
-use j45l\either\Tags\StringTag;
-use j45l\either\Tags\Tag;
-use j45l\either\Tags\Untagged;
+namespace j45l\either\Tags;
 
 class TagCreator
 {

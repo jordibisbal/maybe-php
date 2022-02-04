@@ -7,7 +7,7 @@ namespace j45l\either\Test\Unit;
 use j45l\either\Either;
 use j45l\either\None;
 use j45l\either\Some;
-use j45l\either\TagCreator;
+use j45l\either\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
 
 /**

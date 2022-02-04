@@ -9,7 +9,7 @@ use j45l\either\Failure;
 use j45l\either\None;
 use j45l\either\Reason;
 use j45l\either\Some;
-use j45l\either\TagCreator;
+use j45l\either\Tags\TagCreator;
 use j45l\either\Tags\Untagged;
 use PHPUnit\Framework\TestCase;
 use function Functional\invoke;
