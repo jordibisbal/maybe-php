@@ -103,7 +103,7 @@ final class Trail implements Countable
         return $this->count() === 0;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->trail);
     }
