@@ -13,6 +13,7 @@ use j45l\either\Some;
 use j45l\either\Tags\StringTag;
 use j45l\either\Tags\Tag;
 use j45l\either\Tags\Untagged;
+
 use function Functional\invoke;
 use function Functional\map;
 use function Functional\select;
