@@ -7,6 +7,7 @@ namespace j45l\either\Test\Unit;
 use j45l\either\ThrowableReason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringStartsWith;
 

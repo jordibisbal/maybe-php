@@ -15,6 +15,7 @@ use j45l\either\Test\Unit\Stubs\EntityManagerStub;
 use j45l\either\ThrowableReason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
 use function Functional\first;
 use function Functional\invoke;
 

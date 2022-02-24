@@ -6,6 +6,10 @@ namespace j45l\either;
 
 use j45l\either\Context\Context;
 
+/**
+ * @template T
+ * @extends Either<T>
+ */
 class Some extends Either
 {
     /** @var mixed */

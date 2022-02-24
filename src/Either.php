@@ -12,6 +12,7 @@ use j45l\either\Tags\Tag;
 use j45l\either\Tags\TagCreator;
 use j45l\functional\Functor;
 
+/** @template T */
 abstract class Either implements Functor
 {
     /** @var Context */
