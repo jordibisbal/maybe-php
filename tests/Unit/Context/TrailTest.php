@@ -31,7 +31,7 @@ final class TrailTest extends TestCase
             ->push(Some::from(2))
         ;
 
-        self::assertEquals([1, 2], $trail->getValues());
+        self::assertEquals([1, 2], $trail->values());
     }
 
     public function testGettingButLastDoesNotReturnLastEither(): void
@@ -42,7 +42,7 @@ final class TrailTest extends TestCase
             ->push(Some::from(3))
         ;
 
-        self::assertEquals([1, 2], $trail->butLast()->getValues());
+        self::assertEquals([1, 2], $trail->butLast()->values());
     }
 
     public function testGettingLastReturnsLastOne(): void
@@ -53,12 +53,12 @@ final class TrailTest extends TestCase
             ->push(Some::from(3))
         ;
 
-        self::assertEquals([Some::from(3)], $trail->justLast()->asArray());
+        self::assertEquals([Some::from(3)], $trail->last()->asArray());
     }
 
     public function testGettingLastFromEmptyTrailReturnsEmptyTrail(): void
     {
-        self::assertTrue(Trail::create()->justLast()->empty());
+        self::assertTrue(Trail::create()->last()->empty());
     }
 
     public function testButLastDoesNotModifyTrail(): void
@@ -69,8 +69,8 @@ final class TrailTest extends TestCase
             ->push(Some::from(3))
         ;
 
-        self::assertEquals([1, 2], $trail->butLast()->getValues());
-        self::assertEquals([1, 2, 3], $trail->getValues());
+        self::assertEquals([1, 2], $trail->butLast()->values());
+        self::assertEquals([1, 2, 3], $trail->values());
     }
 
     public function testGettingFailureDoesNotReturnOtherEither(): void

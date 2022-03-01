@@ -7,32 +7,44 @@ namespace j45l\either;
 use Closure;
 use j45l\functional\Functor;
 
+/**
+ * @template T
+ * @extends Either<T>
+ */
 class None extends Either
 {
-    public static function create(): self
+    /** @return None<T> */
+    public static function create(): None
     {
         return new self();
     }
 
-    /** @param mixed $value */
+    /**
+     * @param T $value
+     * @return Either<T>
+     */
     public function orElse($value): Either
     {
         return self::build($value, $this->context());
     }
 
-    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+    /**
+     * @param T $value
+     * @return Either<T>
+     */
     public function then($value): Either
     {
         return self::build($this, $this->context());
     }
 
-    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+    /**
+     * @return Either<T>
+     */
     public function pipe(Closure $closure): Either
     {
         return $this;
     }
 
-    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
     public function map(Closure $closure): Functor
     {
         return $this;

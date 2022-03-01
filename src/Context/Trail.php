@@ -18,23 +18,33 @@ use function Functional\invoke;
 use function Functional\map;
 use function Functional\select;
 
+/**
+ * @template T
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 final class Trail implements Countable
 {
-    /** @var array<Either> */
+    /** @var array<Either<T>> */
     protected $trail = [];
 
-    /** @var array<Either> */
+    /** @var array<Either<T>> */
     private $taggedTrail = [];
 
     private function __construct()
     {
     }
 
+    /** @return Trail<T> */
     public static function create(): Trail
     {
         return new self();
     }
 
+    /**
+     * @param Either<T> $either
+     * @param Tag|null $tag
+     * @return Trail<T>
+     */
     public function push(Either $either, Tag $tag = null): Trail
     {
         $new = clone $this;
@@ -44,13 +54,13 @@ final class Trail implements Countable
         return $new;
     }
 
-    /** @return Either[] */
+    /** @return Either<T>[] */
     public function asArray(): array
     {
         return $this->trail;
     }
 
-    /** @return Failure[] */
+    /** @return Failure<T>[] */
     public function failed(): array
     {
         return array_values(
@@ -63,15 +73,15 @@ final class Trail implements Countable
         );
     }
 
-    /** @return array<Either> */
-    public function getValues(): array
+    /** @return mixed[] */
+    public function values(): array
     {
         return array_values(map($this->selectSome($this->trail), $this->pickValue()));
     }
 
     /**
-     * @param array<Either> $items
-     * @return array<Some>
+     * @param array<Either<T>> $items
+     * @return array<Some<T>>
      */
     private function selectSome(array $items): array
     {
@@ -81,8 +91,8 @@ final class Trail implements Countable
     }
 
     /**
-     * @param array<Either> $items
-     * @return array<Some>
+     * @param array<Either<T>> $items
+     * @return array<Failure<T>>
      */
     private function selectFailures(array $items): array
     {
@@ -109,6 +119,9 @@ final class Trail implements Countable
         return count($this->trail);
     }
 
+    /**
+     * @return Trail<T>
+     */
     public function butLast(): Trail
     {
         $new = clone $this;
@@ -117,7 +130,10 @@ final class Trail implements Countable
         return $new;
     }
 
-    public function justLast(): Trail
+    /**
+     * @return Trail<T>
+     */
+    public function last(): Trail
     {
         $new = self::create();
         /** @infection-ignore-all */
@@ -126,7 +142,10 @@ final class Trail implements Countable
         return $new;
     }
 
-    /** @return array<Either> */
+    /**
+     * @param Either<T> $either
+     * @return array<Either<T>>
+     */
     private function pushWithTag(Either $either, Tag $tag): array
     {
         /** @noinspection DegradedSwitchInspection */
@@ -139,20 +158,20 @@ final class Trail implements Countable
         }
     }
 
-    /** @return array<string, Some> */
-    public function getTaggedValues(): array
+    /** @return array<string, Some<T>> */
+    public function taggedValues(): array
     {
         return invoke($this->selectSome($this->taggedTrail), 'value');
     }
 
     /** @return array<string, Reason> */
-    public function getTaggedFailureReasons(): array
+    public function taggedFailureReasons(): array
     {
         return invoke($this->selectFailures($this->taggedTrail), 'reason');
     }
 
-    /** @return array<string, Either> */
-    public function getTagged(): array
+    /** @return array<string, Either<T>> */
+    public function tagged(): array
     {
         return $this->taggedTrail;
     }

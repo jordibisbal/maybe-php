@@ -41,7 +41,7 @@ class ExamplesTest extends TestCase
     }
 
     /**
-     * @param EntityManagerStub $entityManager
+     * @param EntityManagerStub<string> $entityManager
      * @return Closure
      */
     private function insertCustomer(EntityManagerStub $entityManager): Closure
@@ -53,7 +53,7 @@ class ExamplesTest extends TestCase
     }
 
     /**
-     * @param EntityManagerStub $entityManager
+     * @param EntityManagerStub<string> $entityManager
      * @return Closure
      */
     private function updateCustomer(EntityManagerStub $entityManager): Closure
@@ -126,8 +126,8 @@ class ExamplesTest extends TestCase
         $this->assertEquals(43, $firstContextParameter->value());
 
         $this->assertCount(2, $either->context()->trail());
-        $this->assertEquals([42, 43], $either->context()->trail()->getValues());
-        $this->assertEquals([42, 43, 44], $either->trail()->getValues());
+        $this->assertEquals([42, 43], $either->context()->trail()->values());
+        $this->assertEquals([42, 43, 44], $either->trail()->values());
     }
 
     public function testMap(): void
@@ -170,10 +170,33 @@ class ExamplesTest extends TestCase
 
         $trail = $chain->trail();
 
-        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->getTaggedValues());
+        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->taggedValues());
         $this->assertEquals(
             ['name' => 'Unable to get name'],
-            invoke($trail->getTaggedFailureReasons(), 'asString')
+            invoke($trail->taggedFailureReasons(), 'asString')
         );
+    }
+
+    public function testNext(): void
+    {
+        $noneNext = None::create()->next(42);
+        $someNext = Some::from(1)->next(42);
+
+        $this->assertInstanceOf(Some::class, $noneNext);
+        $this->assertInstanceOf(Some::class, $someNext);
+        $this->assertEquals(42, $noneNext->value());
+        $this->assertEquals(42, $someNext->value());
+        $this->assertEquals([1, 42], $someNext->trail()->values());
+    }
+
+    public function testOrElse(): void
+    {
+        $noneNext = None::create()->orElse(42);
+        $someNext = Some::from(1)->orElse(42);
+
+        $this->assertInstanceOf(Some::class, $noneNext);
+        $this->assertInstanceOf(Some::class, $someNext);
+        $this->assertEquals(42, $noneNext->value());
+        $this->assertEquals(1, $someNext->value());
     }
 }

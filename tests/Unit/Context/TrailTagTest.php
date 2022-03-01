@@ -29,8 +29,8 @@ final class TrailTagTest extends TestCase
             ->push(Some::from(43), TagCreator::from('43'))
         ;
 
-        self::assertEquals(['42' => 42, '43' => 43], $trail->getTaggedValues());
-        self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->getTagged());
+        self::assertEquals(['42' => 42, '43' => 43], $trail->taggedValues());
+        self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->tagged());
     }
 
     public function testCanPushEitherUnTagged(): void
@@ -41,8 +41,8 @@ final class TrailTagTest extends TestCase
             ->push(Some::from(44), new Untagged())
         ;
 
-        self::assertEquals(['42' => 42, '43' => 43], $trail->getTaggedValues());
-        self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->getTagged());
+        self::assertEquals(['42' => 42, '43' => 43], $trail->taggedValues());
+        self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->tagged());
     }
 
     public function testTaggedValuesJustForSome(): void
@@ -52,8 +52,8 @@ final class TrailTagTest extends TestCase
             ->push(None::create(), TagCreator::from('43'))
         ;
 
-        self::assertEquals(['42' => 42], $trail->getTaggedValues());
-        self::assertEquals(['42' => Some::from('42'), '43' => None::create()], $trail->getTagged());
+        self::assertEquals(['42' => 42], $trail->taggedValues());
+        self::assertEquals(['42' => Some::from('42'), '43' => None::create()], $trail->tagged());
     }
 
     public function testCreatingAnEmptyTagResultsInAnUntagged(): void
@@ -68,8 +68,8 @@ final class TrailTagTest extends TestCase
             ->push(Some::from(43), TagCreator::from('43'))
         ;
 
-        self::assertEquals(['42' => 42, '43' => 43], $trail->getTaggedValues());
-        self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->getTagged());
+        self::assertEquals(['42' => 42, '43' => 43], $trail->taggedValues());
+        self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->tagged());
     }
 
     public function testTaggedFailuresValuesJustForFailures(): void
@@ -81,11 +81,11 @@ final class TrailTagTest extends TestCase
 
         self::assertEquals(
             ['43' => 'because failed'],
-            invoke($trail->getTaggedFailureReasons(), 'asString')
+            invoke($trail->taggedFailureReasons(), 'asString')
         );
         self::assertEquals(
             ['42' => Some::from('42'), '43' => Failure::from(Reason::from('because failed'))],
-            $trail->getTagged()
+            $trail->tagged()
         );
     }
 }

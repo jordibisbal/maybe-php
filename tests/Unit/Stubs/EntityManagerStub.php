@@ -7,11 +7,14 @@ use j45l\either\None;
 use j45l\either\Some;
 use RuntimeException;
 
+/**
+ * @template T
+ */
 class EntityManagerStub
 {
-    /** @var Either */
+    /** @var Either<T> */
     public $insertInvokedWith;
-    /** @var Either */
+    /** @var Either<T> */
     public $updateInvokedWith;
 
     /** @var bool */
@@ -28,6 +31,9 @@ class EntityManagerStub
         $this->updateWillFail = false;
     }
 
+    /**
+     * @param Some<T> $some
+     */
     public function insert(Some $some): void
     {
         $this->insertInvokedWith = $some;
@@ -37,6 +43,9 @@ class EntityManagerStub
         }
     }
 
+    /**
+     * @param Some<T> $some
+     */
     public function update(Some $some): void
     {
         $this->updateInvokedWith = $some;

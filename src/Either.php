@@ -15,15 +15,20 @@ use j45l\functional\Functor;
 /** @template T */
 abstract class Either implements Functor
 {
-    /** @var Context */
+    /** @var Context<T> */
     protected $context;
 
+    /** @param Context<T>|null $context */
     protected function __construct(Context $context = null)
     {
         $this->context = $context ?? Context::create();
     }
 
-    /** @param mixed $value */
+    /**
+     * @param mixed $value
+     * @param Context<T> $context
+     * @return Either<T>
+     */
     final protected static function build($value, Context $context): Either
     {
         /** @infection-ignore-all */
@@ -39,49 +44,72 @@ abstract class Either implements Functor
         }
     }
 
+    /** @return Success<T> */
     public static function start(): Success
     {
         return Success::create();
     }
 
-    /** @phpstan-return Either */
+    /** @return Either<T> */
     public function map(Closure $closure): Functor
     {
         return new Deferred($closure, Context::fromParameters(Parameters::create($this)));
     }
 
+    /**
+     * @param Context<T> $context
+     * @return Failure<T>
+     */
     protected static function buildFailure(ThrowableReason $throwable, Context $context): Failure
     {
         return new Failure($context, $throwable);
     }
 
+    /**
+     * @return Trail<T>
+     */
     public function trail(): Trail
     {
         return $this->context->push($this->resolve())->trail();
     }
 
+    /**
+     * @return Either<T>
+     */
     public function resolve(): Either
     {
         return $this;
     }
 
+    /**
+     * @return Deferred<T>
+     */
     public function pipe(Closure $closure): Either
     {
         return new Deferred($closure, $this->context()->push($this)->withParameters($this->resolve()));
     }
 
+    /**
+     * @return Context<T>
+     */
     public function context(): Context
     {
         return $this->context;
     }
 
-    /** @param mixed $value */
+    /**
+     * @param mixed $value
+     * @return Either<T>
+     */
     public function then($value): Either
     {
         return $this->next($value);
     }
 
-    /** @param mixed $value */
+    /**
+     * @param mixed $value
+     * @return Either<T>
+     */
     public function next($value): Either
     {
         return self::build($value, $this->context()->push($this->resolve()));
@@ -90,13 +118,17 @@ abstract class Either implements Functor
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param mixed $value
+     * @return Either<T>
      */
     public function orElse($value): Either
     {
         return $this;
     }
 
-    /** @return static */
+    /**
+     * @param Context<T>|null $context
+     * @return static<T>
+     */
     final protected function cloneWith(Context $context = null): self
     {
         $new = clone $this;
@@ -108,14 +140,17 @@ abstract class Either implements Functor
 
     /**
      * @param array<mixed> $parameters
-     * @return static
+     * @return static<T>
      */
     final public function with(...$parameters): Either
     {
         return $this->cloneWith($this->context->withParameters(...$parameters));
     }
 
-    /** @param Tag | int | string $tag */
+    /**
+     * @param Tag | int | string $tag
+     * @return Either<T>
+     */
     final public function withTag($tag): Either
     {
         return $this->resolve()->cloneWith(

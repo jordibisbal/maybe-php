@@ -6,6 +6,10 @@ namespace j45l\either;
 
 use j45l\either\Context\Context;
 
+/**
+ * @template T
+ * @extends None<T>
+ */
 class Failure extends None
 {
     /** @var Reason */
@@ -18,12 +22,13 @@ class Failure extends None
         parent::__construct($context);
     }
 
-    /** @return Failure */
+    /** @return Failure<T> */
     public static function create(): None
     {
         return new self();
     }
 
+    /** @return Failure<T> */
     public static function from(Reason $reason = null): Failure
     {
         return new self(Context::create(), $reason);

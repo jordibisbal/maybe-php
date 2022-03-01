@@ -44,7 +44,7 @@ class ContextTest extends TestCase
             ->push(Some::from(42))
         ;
 
-        self::assertEquals(['tag' => 42], $context->trail()->getTaggedValues());
+        self::assertEquals(['tag' => 42], $context->trail()->taggedValues());
     }
 
     public function testAContextCanApplyATagVariousTimeToTrail(): void
@@ -57,7 +57,7 @@ class ContextTest extends TestCase
             ->push(Some::from(44))
         ;
 
-        self::assertEquals(['tag 43' => 43, 'tag 44' => 44], $context->trail()->getTaggedValues());
+        self::assertEquals(['tag 43' => 43, 'tag 44' => 44], $context->trail()->taggedValues());
         self::assertEquals(TagCreator::from('tag 44'), $context->tag());
     }
 }

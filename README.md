@@ -9,7 +9,8 @@ Either (inspired by the functional thing), helps to:
 
 ## Either
 
-Is a supercharged version on the either monad from functional programing.
+Is a supercharged version on the Either from functional programing, it provides functionality
+present in such languages along some extra to solve some common use cases in php.
 
 Some literature about, google for more:
 
@@ -59,15 +60,14 @@ Forces an optional to be resolved, return itself but on Deferred, an *Either* fr
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
 $either =
-            Either::start()->next($this->insertCustomer($em))->with($customer)
-            // The parameters/context ($customer) is passed to orElse(), so does not need to
-            // be provided again, although you could override that by using a second with().
-            ->orElse($this->updateCustomer($em))
-            // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
-            // on resolve() only when do() returns a none/failure
-            ->resolve()
-            // The value, either a Failure or a Success
-        ;
+    Either::start()->next($this->insertCustomer($em))->with($customer)
+    // The parameters/context ($customer) is passed to orElse(), so does not need to
+    // be provided again, although you could override that by using a second with().
+    ->orElse($this->updateCustomer($em))
+    // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
+    // on resolve() only when do() returns a none/failure
+    ->resolve()
+    // The value, either a Failure or a Success
 ;
 ```
 If *resolve()* were not caller, the second closure would not be called (lazy).
@@ -77,20 +77,20 @@ If *resolve()* were not caller, the second closure would not be called (lazy).
 Returns the context of the *Either*, i.e. its trail and parameters
 ```php
 // \j45l\either\Test\Unit\ExamplesTest::testGetContext
-        $increment = static function (Some $some): Some {
-            return Some::from($some->value() + 1);
-        };
+$increment = static function (Some $some): Some {
+    return Some::from($some->value() + 1);
+};
 
-        $either = Some::from(42)->pipe($increment)->pipe($increment);
+$either = Some::from(42)->pipe($increment)->pipe($increment);
 
-        $firstContextParameter = first($either->context()->parameters()->asArray());
+$firstContextParameter = first($either->context()->parameters()->asArray());
 
-        $this->assertInstanceOf(Some::class, $firstContextParameter);
-        $this->assertEquals(43, $firstContextParameter->value());
+$this->assertInstanceOf(Some::class, $firstContextParameter);
+$this->assertEquals(43, $firstContextParameter->value());
 
-        $this->assertCount(2, $either->context()->trail());
-        $this->assertEquals([42, 43], $either->context()->trail()->getValues());
-        $this->assertEquals([42, 43, 44], $either->trail()->getValues());
+$this->assertCount(2, $either->context()->trail());
+$this->assertEquals([42, 43], $either->context()->trail()->values());
+$this->assertEquals([42, 43, 44], $either->trail()->values());
 ```
 
 Be aware that while Either::context()->trail does not include the Either itself, Either::trail() does.
@@ -103,15 +103,14 @@ Returns a *Deferred* from *$closure* (with the current context).
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
 // \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
 $either =
-            Either::start()->next($this->insertCustomer($em))->with($customer)
-            // The parameters/context ($customer) is passed to orElse(), so does not need to
-            // be provided again, although you could override that by using a second with().
-            ->orElse($this->updateCustomer($em))
-            // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
-            // on resolve() only when do() returns a none/failure
-            ->resolve()
-            // The value, either a Failure or a Success
-        ;
+    Either::start()->next($this->insertCustomer($em))->with($customer)
+    // The parameters/context ($customer) is passed to orElse(), so does not need to
+    // be provided again, although you could override that by using a second with().
+    ->orElse($this->updateCustomer($em))
+    // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
+    // on resolve() only when do() returns a none/failure
+    ->resolve()
+    // The value, either a Failure or a Success
 ;
 ```
 
@@ -126,32 +125,56 @@ do some type assessment prior to its use, to ensure the expected type is the ret
 
 ```php
 // \j45l\either\Test\Unit\ExamplesTest::testMap
-        $sideEffect = false;
-        $increment = function (Some $number) use (&$sideEffect) {
-            $sideEffect = true;
-            return Some::from($number->value() + 1);
-        };
-        $either = Some::from(41)->map($increment); 
-        
-        $this->assertFalse($sideEffect); $this->assertInstanceOf(Deferred::class, $either);
-         
-        $either = $either->resolve(); $this->assertTrue($sideEffect);
+$sideEffect = false;
+$increment = function (Some $number) use (&$sideEffect) {
+    $sideEffect = true;
+    return Some::from($number->value() + 1);
+};
+$either = Some::from(41)->map($increment); 
 
-        $this->assertInstanceOf(Some::class, $either); 
-        $this->assertEquals(42, $either->value());
+$this->assertFalse($sideEffect); $this->assertInstanceOf(Deferred::class, $either);
+ 
+$either = $either->resolve(); $this->assertTrue($sideEffect);
+
+$this->assertInstanceOf(Some::class, $either); 
+$this->assertEquals(42, $either->value());
+
+// Until Either::resolve() is called, the close $increment is not invoked, so neither
+// the value gets changed nor the side effect occurs.
 ```
-
-Until Either::resolve() is called, the close $increment is not invoked, so neither the value gets changed nor
-the side effect occurs.
 
 #### next($nextValue): Either
 
 Returns an *Either* from *$nextValue* (with the current context).
+$nextValue is always evaluated either the *Either* is a *None*, a *Some* or a *Deferred* (in which 
+case is resolved) 
+
+```php
+//\j45l\either\Test\Unit\ExamplesTest::testNext
+$noneNext = None::create()->next(42);
+$someNext = Some::from(1)->next(42);
+
+$this->assertInstanceOf(Some::class, $noneNext);
+$this->assertInstanceOf(Some::class, $someNext);
+$this->assertEquals(42, $noneNext->value());
+$this->assertEquals(42, $someNext->value());
+```
 
 #### orElse($defaultValue): Either
 
 Returns an *Either* from *$nextValue* (with the current context) if current Either is a *None*,
  otherwise returns itself.
+
+```php
+//\j45l\either\Test\Unit\ExamplesTest::testOrElse
+$noneNext = None::create()->orElse(42);
+$someNext = Some::from(1)->orElse(42);
+
+$this->assertInstanceOf(Some::class, $noneNext);
+$this->assertInstanceOf(Some::class, $someNext);
+$this->assertEquals(42, $noneNext->value());
+$this->assertEquals(1, $someNext->value());
+```
 
 #### pipe(Closure $closure): Either
 

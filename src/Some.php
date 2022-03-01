@@ -15,7 +15,10 @@ class Some extends Either
     /** @var mixed */
     private $value;
 
-    /** @param mixed $value */
+    /**
+     * @param T $value
+     * @param Context<T> $context
+     */
     protected function __construct($value, Context $context)
     {
         parent::__construct($context);
@@ -23,7 +26,10 @@ class Some extends Either
         $this->value = $value;
     }
 
-    /** @param mixed $value */
+    /**
+     * @param mixed $value
+     * @return Some<T>
+     */
     public static function from($value): Some
     {
         return new self($value, Context::create());
