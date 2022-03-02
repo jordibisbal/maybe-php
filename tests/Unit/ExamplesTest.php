@@ -19,7 +19,10 @@ use RuntimeException;
 use function Functional\first;
 use function Functional\invoke;
 
-/** @coversNothing */
+/**
+ * @coversNothing
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class ExamplesTest extends TestCase
 {
     public function testDo(): void
@@ -179,14 +182,22 @@ class ExamplesTest extends TestCase
 
     public function testNext(): void
     {
+        $fortyTwo = function (): int {
+            return 42;
+        };
+        $failure = function (): void {
+            throw new RuntimeException('42!');
+        };
+
         $noneNext = None::create()->next(42);
-        $someNext = Some::from(1)->next(42);
+        $someNext = Some::from(1)->next(42)->next($failure)->next($fortyTwo)->resolve();
 
         $this->assertInstanceOf(Some::class, $noneNext);
         $this->assertInstanceOf(Some::class, $someNext);
         $this->assertEquals(42, $noneNext->value());
         $this->assertEquals(42, $someNext->value());
-        $this->assertEquals([1, 42], $someNext->trail()->values());
+        $this->assertEquals([1, 42, 42], $someNext->trail()->values());
+        $this->assertEquals([ThrowableReason::from('42!')], $someNext->trail()->failureReasons());
     }
 
     public function testOrElse(): void
@@ -198,5 +209,92 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(Some::class, $someNext);
         $this->assertEquals(42, $noneNext->value());
         $this->assertEquals(1, $someNext->value());
+    }
+
+    public function testPipe(): void
+    {
+        $increment = /** @param Some<int> $some */ function (Some $some): int {
+            return $some->value() + 1;
+        };
+
+        $pipe = Some::from(42)->pipe($increment)->pipe($increment)->pipe($increment)->resolve();
+
+        $this->assertInstanceOf(Some::class, $pipe);
+        $this->assertEquals(45, $pipe->value());
+    }
+
+    public function testPipeWithNone(): void
+    {
+        $called = false;
+        $increment = function () use (&$called) {
+            $called = true;
+        };
+        $failure = function () {
+            throw new RuntimeException();
+        };
+
+        $pipe = Some::from(42)->pipe($failure)->pipe($increment)->pipe($increment)->resolve();
+
+        $this->assertInstanceOf(Failure::class, $pipe);
+        $this->assertFalse($called);
+    }
+
+    public function testResolve(): void
+    {
+        $callable = function (): int {
+            return 42;
+        };
+        $deferred = Deferred::create($callable);
+
+        $this->assertInstanceOf(Deferred::class, $deferred);
+        $deferred = $deferred->resolve();
+        $this->assertInstanceOf(Some::class, $deferred);
+        $this->assertEquals(42, $deferred->value());
+    }
+
+    public function testFailingResolve(): void
+    {
+        $callable = function (): int {
+            throw new RuntimeException('42!');
+        };
+        $deferred = Deferred::create($callable);
+
+        $this->assertInstanceOf(Deferred::class, $deferred);
+        $deferred = $deferred->resolve();
+        $this->assertInstanceOf(Failure::class, $deferred);
+        $this->assertEquals('42!', $deferred->reason()->asString());
+    }
+
+    public function testThen(): void
+    {
+        $increment = function (int $value): int {
+            return $value + 1;
+        };
+
+        $either = Either::start()->with(41)->then($increment);
+
+        $this->assertInstanceOf(Deferred::class, $either);
+
+        $some = $either->resolve();
+
+        $this->assertInstanceOf(Some::class, $some);
+        $this->assertEquals(42, $some->value());
+    }
+
+    public function testThenWithNone(): void
+    {
+        $called = false;
+        $increment = function () use (&$called) {
+            $called = true;
+        };
+        $failure = function () {
+            throw new RuntimeException('42!');
+        };
+
+        $failure = Either::start()->then($failure)->then($increment);
+
+        $this->assertInstanceOf(Failure::class, $failure);
+        $this->assertEquals('42!', $failure->reason()->asString());
+        $this->assertFalse($called);
     }
 }

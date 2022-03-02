@@ -72,7 +72,7 @@ final class TrailTagTest extends TestCase
         self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->tagged());
     }
 
-    public function testTaggedFailuresValuesJustForFailures(): void
+    public function testTaggedFailuresReasons(): void
     {
         $trail = Trail::create()
             ->push(Some::from(42), TagCreator::from('42'))

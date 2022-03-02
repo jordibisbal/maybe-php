@@ -17,6 +17,7 @@ use j45l\either\Tags\Untagged;
 use function Functional\invoke;
 use function Functional\map;
 use function Functional\select;
+use function j45l\functional\unindex;
 
 /**
  * @template T
@@ -168,6 +169,12 @@ final class Trail implements Countable
     public function taggedFailureReasons(): array
     {
         return invoke($this->selectFailures($this->taggedTrail), 'reason');
+    }
+
+    /** @return array<Reason> */
+    public function failureReasons(): array
+    {
+        return unindex(invoke($this->selectFailures($this->trail), 'reason'));
     }
 
     /** @return array<string, Either<T>> */

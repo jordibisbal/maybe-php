@@ -30,7 +30,6 @@ final class FailureTest extends TestCase
         self::assertEquals('Unspecified reason', $failure->reason()->asString());
     }
 
-
     public function testAFailureMaintainsContext(): void
     {
         $succeeding = static function (): int {

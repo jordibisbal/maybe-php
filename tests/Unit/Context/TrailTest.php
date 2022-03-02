@@ -11,6 +11,8 @@ use j45l\either\Reason;
 use j45l\either\Some;
 use PHPUnit\Framework\TestCase;
 
+use function Functional\invoke;
+
 /** @covers \j45l\either\Context\Trail */
 final class TrailTest extends TestCase
 {
@@ -95,5 +97,18 @@ final class TrailTest extends TestCase
     public function testCanBeCheckForEmptiness(): void
     {
         self::assertTrue(Trail::create()->empty());
+    }
+
+    public function testFailuresReasons(): void
+    {
+        $trail = Trail::create()
+            ->push(Some::from(42))
+            ->push(Failure::from(Reason::from('because failed')))
+        ;
+
+        self::assertEquals(
+            ['because failed'],
+            invoke($trail->failureReasons(), 'asString')
+        );
     }
 }

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "j45l/functional-php",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordibisbal/functional-php.git",
-                "reference": "2afe4b245140f1a530176a1553b3c1f555e29617"
+                "reference": "c82e835c10921202f7bb70378c6b73fa91b68590"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/2afe4b245140f1a530176a1553b3c1f555e29617",
-                "reference": "2afe4b245140f1a530176a1553b3c1f555e29617",
+                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/c82e835c10921202f7bb70378c6b73fa91b68590",
+                "reference": "c82e835c10921202f7bb70378c6b73fa91b68590",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +39,8 @@
             "autoload": {
                 "files": [
                     "src/Reduce.php",
-                    "src/RepeatPipe.php"
+                    "src/RepeatPipe.php",
+                    "src/Unindex.php"
                 ],
                 "psr-4": {
                     "j45l\\functional\\": "src"
@@ -61,9 +62,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jordibisbal/functional-php/issues",
-                "source": "https://github.com/jordibisbal/functional-php/tree/2.0.0"
+                "source": "https://github.com/jordibisbal/functional-php/tree/1.1.0"
             },
-            "time": "2022-03-01T04:35:09+00:00"
+            "time": "2022-03-02T05:20:51+00:00"
         },
         {
             "name": "lstrojny/functional-php",
