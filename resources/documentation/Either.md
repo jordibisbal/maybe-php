@@ -1,4 +1,4 @@
-## Creating
+# Creating
 
 Every either must be created using its appropriate class:
 
@@ -17,7 +17,7 @@ Every either must be created using its appropriate class:
 
 ![](EitherClassDiagram.png)
 
-## Either
+# Either
 
 Base class for all *Either*s
 
@@ -29,7 +29,7 @@ A new *Either* with new *Parameters* can be build by *Either::with* method, *Tra
 
 ![](TagReasonClassDiagram.png)
 
-### resolve(): Either
+## resolve(): Either
 
 Forces an optional to be resolved, return itself but on Deferred, an *Either* from its closure execution return value is returned.
 
@@ -50,7 +50,7 @@ $either =
 ```
 If *resolve()* were not caller, the second closure would not be called (lazy).
 
-### context(): Context
+## context(): Context
 
 Returns the context of the *Either*, i.e. its trail and parameters
 ```php
@@ -72,7 +72,7 @@ $this->assertEquals([42, 43, 44], $either->trail()->values());
 ```
 
 Be aware that while Either::context()->trail does not include the Either itself, Either::trail() does.
-### static do(Closure $closure): Deferred
+## static do(Closure $closure): Deferred
 
 Returns a *Deferred* from *$closure* (with the current context).
 
@@ -92,7 +92,7 @@ $either =
 ;
 ```
 
-### map(Closure $closure): Deferred
+## map(Closure $closure): Deferred
 
 Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).
 
@@ -121,7 +121,7 @@ $this->assertEquals(42, $either->value());
 // the value gets changed nor the side effect occurs.
 ```
 
-#### next($nextValue): Either
+## next($nextValue): Either
 
 Returns an *Either* from *$nextValue* (with the current context).
 $nextValue is always evaluated either the *Either* where a *None*, a *Some* or a *Deferred* (in which
@@ -138,7 +138,7 @@ $this->assertEquals(42, $noneNext->value());
 $this->assertEquals(42, $someNext->value());
 ```
 
-#### orElse($defaultValue): Either
+## orElse($defaultValue): Either
 
 Returns an *Either* from *$nextValue* (with the current context) if current Either is a *None*,
 otherwise returns itself.
@@ -154,7 +154,7 @@ $this->assertEquals(42, $noneNext->value());
 $this->assertEquals(1, $someNext->value());
 ```
 
-#### pipe(Closure $closure): Either
+## pipe(Closure $closure): Either
 
 Returns a *Deferred* from *closure* using current Either as context parameters and using curren trail.
 
@@ -184,7 +184,7 @@ $this->assertInstanceOf(Failure::class, $pipe);
 $this->assertFalse($called); 
 ```
 
-#### resolve(): Either
+## resolve(): Either
 
 On *Deferred*, its closure is evaluated and an *Either* from the evaluation result is returned. If the closure
 throws a *Throwable*, a *Failure* with the *Throwable* as reason is returned.
@@ -210,7 +210,7 @@ $deferred = $deferred->resolve();
 $this->assertInstanceOf(Failure::class, $deferred);
 $this->assertEquals('42!', $deferred->reason()->asString());
 ```
-#### then($nextValue): Either
+## then($nextValue): Either
 
 Returns an *Either* from *$nextValue* (with the current context) if the current *Either* is not a *None*, 
 otherwise returns itself (i.e. the *None*).
@@ -242,52 +242,52 @@ $this->assertEquals('42!', $failure->reason()->asString());
 $this->assertFalse($called);
 ```
 
-#### trail(): Trail
+## trail(): Trail
 
 Return the trail of *Either* adding itself at the end.
 
-#### with(...$parameters): Either
+## with(...$parameters): Either
 
 Returns a clone of the *Either* changing the parameters on its context
 
-## Other classes
+# Other classes
 
-### Deferred
+## Deferred
 
 A deferred *Either* that must be resolved in order to its *Closure* to be evaluated (called),
 a new *Either* from the *Closure* return is returned.
 
-### Failure
+## Failure
 
 A *Failure* is a *None* used for failed operations
 
-#### from(Reason $reason = null): Failure
+## from(Reason $reason = null): Failure
 
 Returns a *Failure* with the given *$reason*
 
-#### reason(): Reason
+## reason(): Reason
 
 Returns the *Failure* reason
 
-### None
+## None
 
 Absence of value, equivalent to null (but without messing with the interface)
 
-### Some
+## Some
 
 An *Either* with a value.
 
 When cloned, if the value is an object, it is also cloned (not a deep clone, if desired, the value itself should do so)
 
-#### from($value): Some
+## from($value): Some
 
 Returns a new *Some* from the *$value*, never modifies nor evaluates *$value*.
 
-#### value()
+## value()
 
 Return the value
 
-### Success
+## Success
 
 An *Either*(*Success* with true value) to signal successful operations
 
