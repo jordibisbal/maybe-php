@@ -21,9 +21,13 @@ Every either must be created using its appropriate class:
 
 Base class for all *Either*s
 
-An *Either* has a *Context* that contains the *Parameters* that will use to call *Deferred* closures (if any) and a *Trail* of the evaluated *Either*s.
+An *Either* has a *Context* that contains the *Parameters* that will use to call *Deferred* closures (if any) and a 
+*Trail* of the evaluated *Either*s.
 
-A new *Either* with new *Parameters* can be build by *Either::with* method, *Trail* is readonly.
+A new *Either* with new *Parameters* can be build by *Either::with* method.
+
+Even when most of the classes are open for extension, the uso of pseudoGeneric (via phpstan/phpstorm/whatever) is 
+advised. On extension vs generics vs as-is, each has its tradeoffs.
 
 ![](ContextClassDiagram.png)
 
@@ -291,4 +295,4 @@ Return the value
 
 An *Either*(*Success* with true value) to signal successful operations
 
-![Class diagram](classDiagram.png)
+![Class diagram](DetailedClassDiagram.png)

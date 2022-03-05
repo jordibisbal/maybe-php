@@ -12,8 +12,7 @@ class TagCreator
             case $tag instanceof Tag:
                 return $tag;
             /** @infection-ignore-all */
-            case is_int($tag)
-                || (is_string($tag) && trim($tag) !== ''):
+            case is_int($tag) || (is_string($tag) && (trim($tag) !== '')):
                 return StringTag::create((string) $tag);
             default:
                 return new Untagged();

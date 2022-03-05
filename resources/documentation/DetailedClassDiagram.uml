@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>PHP</ID>
+  <OriginalElement>\j45l\either\Either</OriginalElement>
+  <nodes>
+    <node x="128.0" y="0.0">\j45l\functional\Functor</node>
+    <node x="788.6103896103896" y="601.0566706021255">\j45l\either\Tags\TagCreator</node>
+    <node x="592.4616292798111" y="103.0">\j45l\either\Context\Parameters</node>
+    <node x="701.1180637544272" y="719.8205430932705">\j45l\either\Tags\Untagged</node>
+    <node x="276.36009445100353" y="431.0">\j45l\either\Deferred</node>
+    <node x="128.0" y="431.0">\j45l\either\None</node>
+    <node x="319.4132231404959" y="103.0">\j45l\either\Context\Context</node>
+    <node x="71.5" y="927.2278630460447">\j45l\either\ThrowableReason</node>
+    <node x="129.0" y="622.0">\j45l\either\Failure</node>
+    <node x="571.1180637544272" y="708.8205430932705">\j45l\either\Tags\StringTag</node>
+    <node x="578.4616292798111" y="226.9822904368359">\j45l\either\Context\Trail</node>
+    <node x="106.0" y="779.2278630460447">\j45l\either\Reason</node>
+    <node x="-9.360094451003533" y="611.0">\j45l\either\Success</node>
+    <node x="660.1180637544272" y="601.0566706021255">\j45l\either\Tags\Tag</node>
+    <node x="-9.360094451003533" y="431.0">\j45l\either\Some</node>
+    <node x="116.0" y="103.0">\j45l\either\Either</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="\j45l\either\ThrowableReason" target="\j45l\either\Reason" relationship="GENERALIZATION">
+      <point x="0.0" y="-60.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="\j45l\either\Deferred" target="\j45l\either\Either" relationship="GENERALIZATION">
+      <point x="0.0" y="-70.5" />
+      <point x="335.86009445100353" y="404.75" />
+      <point x="187.5" y="404.75" />
+      <point x="0.0" y="139.0" />
+    </edge>
+    <edge source="\j45l\either\Some" target="\j45l\either\Either" relationship="GENERALIZATION">
+      <point x="0.0" y="-48.5" />
+      <point x="44.63990554899647" y="406.0" />
+      <point x="187.5" y="406.0" />
+      <point x="0.0" y="139.0" />
+    </edge>
+    <edge source="\j45l\either\Either" target="\j45l\functional\Functor" relationship="REALIZATION">
+      <point x="0.0" y="-139.0" />
+      <point x="0.0" y="26.5" />
+    </edge>
+    <edge source="\j45l\either\Tags\StringTag" target="\j45l\either\Tags\Tag" relationship="REALIZATION">
+      <point x="0.0" y="-37.5" />
+      <point x="626.1180637544272" y="674.438606847698" />
+      <point x="691.1180637544272" y="674.438606847698" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="\j45l\either\Failure" target="\j45l\either\None" relationship="GENERALIZATION">
+      <point x="0.0" y="-48.5" />
+      <point x="0.0" y="70.5" />
+    </edge>
+    <edge source="\j45l\either\Success" target="\j45l\either\Some" relationship="GENERALIZATION">
+      <point x="0.0" y="-37.5" />
+      <point x="0.0" y="48.5" />
+    </edge>
+    <edge source="\j45l\either\None" target="\j45l\either\Either" relationship="GENERALIZATION">
+      <point x="0.0" y="-70.5" />
+      <point x="0.0" y="139.0" />
+    </edge>
+    <edge source="\j45l\either\Tags\Untagged" target="\j45l\either\Tags\Tag" relationship="REALIZATION">
+      <point x="0.0" y="-26.5" />
+      <point x="757.6180637544272" y="674.438606847698" />
+      <point x="691.1180637544272" y="674.438606847698" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.8546922300706358" showDependencies="false" x="446.0" y="485.0" />
+  <SelectedNodes>
+    <node>\j45l\either\Tags\TagCreator</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+
