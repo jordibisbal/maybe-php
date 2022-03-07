@@ -43,10 +43,7 @@ class ExamplesTest extends TestCase
         $this->assertCount(0, $either->trail()->failed());
     }
 
-    /**
-     * @param EntityManagerStub<string> $entityManager
-     * @return Closure
-     */
+    /** @param EntityManagerStub<string> $entityManager */
     private function insertCustomer(EntityManagerStub $entityManager): Closure
     {
         return static function ($customer) use ($entityManager): Success {
@@ -55,10 +52,7 @@ class ExamplesTest extends TestCase
         };
     }
 
-    /**
-     * @param EntityManagerStub<string> $entityManager
-     * @return Closure
-     */
+    /** @param EntityManagerStub<string> $entityManager */
     private function updateCustomer(EntityManagerStub $entityManager): Closure
     {
         return static function ($customer) use ($entityManager): Success {
@@ -241,10 +235,10 @@ class ExamplesTest extends TestCase
 
     public function testResolve(): void
     {
-        $callable = function (): int {
+        $closure = function (): int {
             return 42;
         };
-        $deferred = Deferred::create($callable);
+        $deferred = Deferred::create($closure);
 
         $this->assertInstanceOf(Deferred::class, $deferred);
         $deferred = $deferred->resolve();
@@ -254,10 +248,10 @@ class ExamplesTest extends TestCase
 
     public function testFailingResolve(): void
     {
-        $callable = function (): int {
+        $closure = function (): int {
             throw new RuntimeException('42!');
         };
-        $deferred = Deferred::create($callable);
+        $deferred = Deferred::create($closure);
 
         $this->assertInstanceOf(Deferred::class, $deferred);
         $deferred = $deferred->resolve();

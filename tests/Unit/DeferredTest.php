@@ -57,9 +57,6 @@ final class DeferredTest extends TestCase
         self::assertInstanceOf(Some::class, $trail[1]);
     }
 
-    /**
-     * @return Closure
-     */
     public function identity(): Closure
     {
         return static function ($value) {

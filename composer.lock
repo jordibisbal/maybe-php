@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4fdd7ee76a5a310f2d48b660a563c26e",
+    "content-hash": "f6b1d1d990dfde27f5fa193452218df3",
     "packages": [
         {
             "name": "j45l/functional-php",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordibisbal/functional-php.git",
-                "reference": "30d1a71bc422677c2b975126110abd1b4217473e"
+                "reference": "868c5b650a46796f7b57b1091a6e52188b363bf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/30d1a71bc422677c2b975126110abd1b4217473e",
-                "reference": "30d1a71bc422677c2b975126110abd1b4217473e",
+                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/868c5b650a46796f7b57b1091a6e52188b363bf5",
+                "reference": "868c5b650a46796f7b57b1091a6e52188b363bf5",
                 "shasum": ""
             },
             "require": {
@@ -62,9 +62,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jordibisbal/functional-php/issues",
-                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.0"
+                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.1"
             },
-            "time": "2022-03-07T05:51:52+00:00"
+            "time": "2022-03-07T06:03:15+00:00"
         },
         {
             "name": "lstrojny/functional-php",
