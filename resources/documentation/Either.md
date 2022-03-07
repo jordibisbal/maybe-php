@@ -21,7 +21,7 @@ Every either must be created using its appropriate class:
 
 Base class for all *Either*s
 
-An *Either* has a *Context* that contains the *Parameters* that will use to call *Deferred* closures (if any) and a 
+An *Either* has a *Context* that contains the *Parameters* that will use to call *Deferred* callable (if any) and a 
 *Trail* of the evaluated *Either*s.
 
 A new *Either* with new *Parameters* can be build by *Either::with* method.
@@ -35,7 +35,7 @@ advised. On extension vs generics vs as-is, each has its tradeoffs.
 
 ## resolve(): Either
 
-Forces an optional to be resolved, return itself but on Deferred, an *Either* from its closure execution return value is returned.
+Forces an optional to be resolved, return itself but on Deferred, an *Either* from its callable execution return value is returned.
 
 ```php
 // \j45l\either\Test\Unit\ExamplesTest::testDo
