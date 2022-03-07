@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace j45l\either\Context;
 
-use Closure;
 use Countable;
 use j45l\either\Either;
 use j45l\either\Failure;
@@ -102,7 +101,7 @@ final class Trail implements Countable
         });
     }
 
-    private function pickValue(): Closure
+    private function pickValue(): callable
     {
         return static function (Some $some) {
             return $some->value();

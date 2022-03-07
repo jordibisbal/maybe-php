@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
-use Closure;
 use j45l\either\Context\Context;
 use Throwable;
 
@@ -14,20 +13,20 @@ use Throwable;
  */
 class Deferred extends Either
 {
-    /** @var Closure */
-    protected $closure;
+    /** @var callable */
+    protected $callable;
 
     /** @param Context<T> $context */
-    protected function __construct(Closure $value, Context $context)
+    protected function __construct(callable $value, Context $context)
     {
         parent::__construct($context);
-        $this->closure = $value;
+        $this->callable = $value;
     }
 
     /**
      * @return Deferred<T>
      */
-    public static function create(Closure $value): Deferred
+    public static function create(callable $value): Deferred
     {
         return new self($value, Context::create());
     }
@@ -48,7 +47,7 @@ class Deferred extends Either
     {
         try {
             return Either::build(
-                ($this->closure)(...$this->context->parameters()->asArray()),
+                ($this->callable)(...$this->context->parameters()->asArray()),
                 $this->context
             );
         } catch (Throwable $throwable) {
@@ -71,8 +70,8 @@ class Deferred extends Either
     /**
      * @return Either<T>
      */
-    public function pipe(Closure $closure): Either
+    public function pipe(callable $callable): Either
     {
-        return $this->resolve()->pipe($closure);
+        return $this->resolve()->pipe($callable);
     }
 }

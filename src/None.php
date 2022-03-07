@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
-use Closure;
 use j45l\functional\Functor;
 
 /**
@@ -40,12 +39,12 @@ class None extends Either
     /**
      * @return Either<T>
      */
-    public function pipe(Closure $closure): Either
+    public function pipe(callable $callable): Either
     {
         return $this;
     }
 
-    public function map(Closure $closure): Functor
+    public function map(callable $callable): Functor
     {
         return $this;
     }

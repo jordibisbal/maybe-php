@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
-use Closure;
 use j45l\either\Context\Context;
 use j45l\either\Context\Parameters;
 use j45l\either\Context\Trail;
@@ -35,7 +34,7 @@ abstract class Either implements Functor
         switch (true) {
             case $value instanceof self:
                 return $value->cloneWith($context);
-            case $value instanceof Closure:
+            case is_callable($value):
                 return new Deferred($value, $context);
             case is_null($value):
                 return new None($context);
@@ -51,9 +50,9 @@ abstract class Either implements Functor
     }
 
     /** @return Either<T> */
-    public function map(Closure $closure): Functor
+    public function map(callable $callable): Functor
     {
-        return new Deferred($closure, Context::fromParameters(Parameters::create($this)));
+        return new Deferred($callable, Context::fromParameters(Parameters::create($this)));
     }
 
     /**
@@ -84,9 +83,9 @@ abstract class Either implements Functor
     /**
      * @return Deferred<T>
      */
-    public function pipe(Closure $closure): Either
+    public function pipe(callable $callable): Either
     {
-        return new Deferred($closure, $this->context()->push($this)->withParameters($this->resolve()));
+        return new Deferred($callable, $this->context()->push($this)->withParameters($this->resolve()));
     }
 
     /**
