@@ -109,7 +109,7 @@ class ExamplesTest extends TestCase
     public function testGetContext(): void
     {
         $increment = static function (Some $some): Some {
-            return Some::from($some->value() + 1);
+            return Some::from($some->get() + 1);
         };
 
         $either = Some::from(42)
@@ -120,7 +120,7 @@ class ExamplesTest extends TestCase
         $firstContextParameter = first($either->context()->parameters()->asArray());
 
         $this->assertInstanceOf(Some::class, $firstContextParameter);
-        $this->assertEquals(43, $firstContextParameter->value());
+        $this->assertEquals(43, $firstContextParameter->get());
 
         $this->assertCount(2, $either->context()->trail());
         $this->assertEquals([42, 43], $either->context()->trail()->values());
@@ -132,7 +132,7 @@ class ExamplesTest extends TestCase
         $sideEffect = false;
         $increment = function (Some $number) use (&$sideEffect) {
             $sideEffect = true;
-            return Some::from($number->value() + 1);
+            return Some::from($number->get() + 1);
         };
 
         $either = Some::from(41)->map($increment);
@@ -144,7 +144,7 @@ class ExamplesTest extends TestCase
         $this->assertTrue($sideEffect);
 
         $this->assertInstanceOf(Some::class, $either);
-        $this->assertEquals(42, $either->value());
+        $this->assertEquals(42, $either->get());
     }
 
     public function testTag(): void
@@ -188,8 +188,8 @@ class ExamplesTest extends TestCase
 
         $this->assertInstanceOf(Some::class, $noneNext);
         $this->assertInstanceOf(Some::class, $someNext);
-        $this->assertEquals(42, $noneNext->value());
-        $this->assertEquals(42, $someNext->value());
+        $this->assertEquals(42, $noneNext->get());
+        $this->assertEquals(42, $someNext->get());
         $this->assertEquals([1, 42, 42], $someNext->trail()->values());
         $this->assertEquals([ThrowableReason::from('42!')], $someNext->trail()->failureReasons());
     }
@@ -201,20 +201,20 @@ class ExamplesTest extends TestCase
 
         $this->assertInstanceOf(Some::class, $noneNext);
         $this->assertInstanceOf(Some::class, $someNext);
-        $this->assertEquals(42, $noneNext->value());
-        $this->assertEquals(1, $someNext->value());
+        $this->assertEquals(42, $noneNext->get());
+        $this->assertEquals(1, $someNext->get());
     }
 
     public function testPipe(): void
     {
         $increment = /** @param Some<int> $some */ function (Some $some): int {
-            return $some->value() + 1;
+            return $some->get() + 1;
         };
 
         $pipe = Some::from(42)->pipe($increment)->pipe($increment)->pipe($increment)->resolve();
 
         $this->assertInstanceOf(Some::class, $pipe);
-        $this->assertEquals(45, $pipe->value());
+        $this->assertEquals(45, $pipe->get());
     }
 
     public function testPipeWithNone(): void
@@ -243,7 +243,7 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(Deferred::class, $deferred);
         $deferred = $deferred->resolve();
         $this->assertInstanceOf(Some::class, $deferred);
-        $this->assertEquals(42, $deferred->value());
+        $this->assertEquals(42, $deferred->get());
     }
 
     public function testFailingResolve(): void
@@ -272,7 +272,7 @@ class ExamplesTest extends TestCase
         $some = $either->resolve();
 
         $this->assertInstanceOf(Some::class, $some);
-        $this->assertEquals(42, $some->value());
+        $this->assertEquals(42, $some->get());
     }
 
     public function testThenWithNone(): void

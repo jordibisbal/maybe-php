@@ -14,15 +14,15 @@ final class SuccessTest extends TestCase
     {
         $some = Success::create();
 
-        self::assertIsBool($some->value());
-        self::assertTrue($some->value());
+        self::assertIsBool($some->get());
+        self::assertTrue($some->get());
     }
 
     public function testIgnoresValueWhenCreateUsingFrom(): void
     {
         $some = Success::from(42);
 
-        self::assertIsBool($some->value());
-        self::assertTrue($some->value());
+        self::assertIsBool($some->get());
+        self::assertTrue($some->get());
     }
 }

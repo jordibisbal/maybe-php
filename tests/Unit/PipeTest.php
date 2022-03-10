@@ -31,7 +31,7 @@ final class PipeTest extends TestCase
         $either = $either->resolve();
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(3, $either->value());
+        self::assertEquals(3, $either->get());
     }
 
     /** @noinspection PhpUnusedParameterInspection */
@@ -40,7 +40,7 @@ final class PipeTest extends TestCase
     {
         /** @param Some $either */
         return static function (Some $either): Some {
-            return Some::from($either->value() + 1);
+            return Some::from($either->get() + 1);
         };
     }
 

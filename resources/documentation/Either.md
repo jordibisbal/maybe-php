@@ -60,7 +60,7 @@ Returns the context of the *Either*, i.e. its trail and parameters
 ```php
 // \j45l\either\Test\Unit\ExamplesTest::testGetContext
 $increment = static function (Some $some): Some {
-    return Some::from($some->value() + 1);
+    return Some::from($some->get() + 1);
 };
 
 $either = Some::from(42)->pipe($increment)->pipe($increment);
@@ -68,7 +68,7 @@ $either = Some::from(42)->pipe($increment)->pipe($increment);
 $firstContextParameter = first($either->context()->parameters()->asArray());
 
 $this->assertInstanceOf(Some::class, $firstContextParameter);
-$this->assertEquals(43, $firstContextParameter->value());
+$this->assertEquals(43, $firstContextParameter->get());
 
 $this->assertCount(2, $either->context()->trail());
 $this->assertEquals([42, 43], $either->context()->trail()->values());
@@ -110,7 +110,7 @@ do some type assessment prior to its use, to ensure the expected type is the ret
 $sideEffect = false;
 $increment = function (Some $number) use (&$sideEffect) {
     $sideEffect = true;
-    return Some::from($number->value() + 1);
+    return Some::from($number->get() + 1);
 };
 $either = Some::from(41)->map($increment); 
 
@@ -119,7 +119,7 @@ $this->assertFalse($sideEffect); $this->assertInstanceOf(Deferred::class, $eithe
 $either = $either->resolve(); $this->assertTrue($sideEffect);
 
 $this->assertInstanceOf(Some::class, $either); 
-$this->assertEquals(42, $either->value());
+$this->assertEquals(42, $either->get());
 
 // Until Either::resolve() is called, the close $increment is not invoked, so neither
 // the value gets changed nor the side effect occurs.
@@ -138,8 +138,8 @@ $someNext = Some::from(1)->next(42);
 
 $this->assertInstanceOf(Some::class, $noneNext);
 $this->assertInstanceOf(Some::class, $someNext);
-$this->assertEquals(42, $noneNext->value());
-$this->assertEquals(42, $someNext->value());
+$this->assertEquals(42, $noneNext->get());
+$this->assertEquals(42, $someNext->get());
 ```
 
 ## orElse($defaultValue): Either
@@ -154,8 +154,8 @@ $someNext = Some::from(1)->orElse(42);
 
 $this->assertInstanceOf(Some::class, $noneNext);
 $this->assertInstanceOf(Some::class, $someNext);
-$this->assertEquals(42, $noneNext->value());
-$this->assertEquals(1, $someNext->value());
+$this->assertEquals(42, $noneNext->get());
+$this->assertEquals(1, $someNext->get());
 ```
 
 ## pipe(Closure $closure): Either
@@ -170,12 +170,12 @@ forehand so *None:pipe*.
 
 ```php
 //\j45l\either\Test\Unit\ExamplesTest::testPipe
-$adder = function (Some $some): int { return $some->value() + 1; };
+$adder = function (Some $some): int { return $some->get() + 1; };
 
 $pipe = Some::from(42)->pipe($adder)->pipe($adder)->pipe($adder)->resolve();
 
 $this->assertInstanceOf(Some::class, $pipe);
-$this->assertEquals(45, $pipe->value());
+$this->assertEquals(45, $pipe->get());
 ```
 ```php
 //\j45l\either\Test\Unit\ExamplesTest::testPipeWithNone
@@ -201,7 +201,7 @@ $deferred = Deferred::create($callable);
 $this->assertInstanceOf(Deferred::class, $deferred);
 $deferred = $deferred->resolve();
 $this->assertInstanceOf(Some::class, $deferred);
-$this->assertEquals(42, $deferred->value());
+$this->assertEquals(42, $deferred->get());
 ```
 
 ```php
@@ -232,7 +232,7 @@ $this->assertInstanceOf(Deferred::class, $either);
 $some = $either->resolve();
 
 $this->assertInstanceOf(Some::class, $some);  
-$this->assertEquals(42, $some->value());
+$this->assertEquals(42, $some->get());
 ```
 
 ```php
@@ -287,9 +287,9 @@ When cloned, if the value is an object, it is also cloned (not a deep clone, if 
 
 Returns a new *Some* from the *$value*, never modifies nor evaluates *$value*.
 
-## value()
+## get()
 
-Return the value
+Returns the value
 
 ## Success
 

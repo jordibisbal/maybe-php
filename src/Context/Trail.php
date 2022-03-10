@@ -104,7 +104,7 @@ final class Trail implements Countable
     private function pickValue(): callable
     {
         return static function (Some $some) {
-            return $some->value();
+            return $some->get();
         };
     }
 
@@ -161,7 +161,7 @@ final class Trail implements Countable
     /** @return array<string, Some<T>> */
     public function taggedValues(): array
     {
-        return invoke($this->selectSome($this->taggedTrail), 'value');
+        return invoke($this->selectSome($this->taggedTrail), 'get');
     }
 
     /** @return array<string, Reason> */

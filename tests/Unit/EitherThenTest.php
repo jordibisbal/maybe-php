@@ -27,7 +27,7 @@ final class EitherThenTest extends TestCase
         ;
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testSucceedReturnsLastValue(): void
@@ -39,7 +39,7 @@ final class EitherThenTest extends TestCase
         ;
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testNoneReturnsNoneValue(): void

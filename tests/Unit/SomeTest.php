@@ -23,8 +23,8 @@ final class SomeTest extends TestCase
         $some = Some::from(MutableInteger::fromInt(42));
         $clone = clone $some;
 
-        $value = $some->value();
-        $clonedValue = $clone->value();
+        $value = $some->get();
+        $clonedValue = $clone->get();
 
         self::assertInstanceOf(MutableInteger::class, $clonedValue);
         self::assertInstanceOf(MutableInteger::class, $value);
@@ -32,7 +32,7 @@ final class SomeTest extends TestCase
         $clonedValue->change(0);
 
         self::assertNotSame($some, $clone);
-        self::assertNotSame($some->value(), $clone->value());
+        self::assertNotSame($some->get(), $clone->get());
 
         self::assertEquals(42, $value->asInt());
         self::assertEquals(0, $clonedValue->asInt());
@@ -43,7 +43,7 @@ final class SomeTest extends TestCase
         $some = Some::from(42);
         $clone = clone $some;
 
-        self::assertEquals(42, $some->value());
-        self::assertEquals(42, $clone->value());
+        self::assertEquals(42, $some->get());
+        self::assertEquals(42, $clone->get());
     }
 }

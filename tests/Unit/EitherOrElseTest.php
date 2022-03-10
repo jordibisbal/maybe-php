@@ -26,7 +26,7 @@ final class EitherOrElseTest extends TestCase
         $either = Some::from(42)->orElse(0);
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testSucceedReturnsItself(): void
@@ -41,7 +41,7 @@ final class EitherOrElseTest extends TestCase
         $either = None::create()->OrElse(Some::from(42));
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testDeferredSomeReturnsItsValue(): void
@@ -53,13 +53,13 @@ final class EitherOrElseTest extends TestCase
         $either = Either::start()->next($fortyTwo)->OrElse(None::create());
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testMapSomeReturnsItsValueMapped(): void
     {
         $addOne = static function (Some $some): Either {
-            return Some::from($some->value() + 1);
+            return Some::from($some->get() + 1);
         };
 
         $either = Some::from(41)->map($addOne);
@@ -69,13 +69,13 @@ final class EitherOrElseTest extends TestCase
         $either = $either->resolve();
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testMapNoneReturnsNoneMapped(): void
     {
         $addOne = static function (Some $some): Either {
-            return Some::from($some->value() + 1);
+            return Some::from($some->get() + 1);
         };
 
         $either = None::create()->map($addOne);
@@ -114,6 +114,6 @@ final class EitherOrElseTest extends TestCase
         $either = Either::start()->next($none)->OrElse(Some::from(42));
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 }

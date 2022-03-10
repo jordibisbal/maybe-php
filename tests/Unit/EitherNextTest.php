@@ -27,7 +27,7 @@ final class EitherNextTest extends TestCase
         ;
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testSuccessReturnsLastValue(): void
@@ -39,7 +39,7 @@ final class EitherNextTest extends TestCase
         ;
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testNoneReturnsNextValue(): void
@@ -47,7 +47,7 @@ final class EitherNextTest extends TestCase
         $either = None::create()->next(Some::from(42));
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 
     public function testDeferredSomeReturnsNextValue(): void
@@ -72,6 +72,6 @@ final class EitherNextTest extends TestCase
         ;
 
         self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(42, $either->value());
+        self::assertEquals(42, $either->get());
     }
 }

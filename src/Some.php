@@ -36,7 +36,7 @@ class Some extends Either
     }
 
     /** @return mixed $value */
-    public function value()
+    public function get()
     {
         return $this->value;
     }
