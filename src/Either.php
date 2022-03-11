@@ -73,11 +73,12 @@ abstract class Either implements Functor
     }
 
     /**
+     * @param mixed[] $parameters
      * @return Either<T>
      */
-    public function resolve(): Either
+    public function resolve(...$parameters): Either
     {
-        return $this;
+        return $this->overrideParameters(...$parameters);
     }
 
     /**
@@ -156,5 +157,21 @@ abstract class Either implements Functor
             $this->context()->push($this->resolve())
                 ->withTag(TagCreator::from($tag))
         );
+    }
+
+    /**
+     * @param mixed[] $parameters
+     * @return Either<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function overrideParameters(...$parameters): Either
+    {
+        /** @infection-ignore-all */
+        switch (true) {
+            case count($parameters) > 0:
+                return $this->with(...$parameters);
+            default:
+                return $this;
+        }
     }
 }

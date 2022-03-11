@@ -41,19 +41,23 @@ class Deferred extends Either
     }
 
     /**
+     * @param mixed[] $parameters
      * @return Either<T>
      */
-    public function resolve(): Either
+    public function resolve(...$parameters): Either
     {
+        /** @var Deferred<T> $either */
+        $either = $this->overrideParameters(...$parameters);
+
         try {
             return Either::build(
-                ($this->callable)(...$this->context->parameters()->asArray()),
-                $this->context
+                ($either->callable)(...$either->context->parameters()->asArray()),
+                $either->context
             );
         } catch (Throwable $throwable) {
             return Either::buildFailure(
                 ThrowableReason::fromThrowable($throwable),
-                $this->context->push($this)
+                $either->context->push($either)
             );
         }
     }

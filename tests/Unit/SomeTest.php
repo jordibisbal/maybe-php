@@ -46,4 +46,17 @@ final class SomeTest extends TestCase
         self::assertEquals(42, $some->get());
         self::assertEquals(42, $clone->get());
     }
+
+    public function testCanOverrideAndRetainsParametersAfterEvaluation(): void
+    {
+        $some =
+            Some::from(42)
+                ->with(123)
+                ->resolve(124, 125)
+        ;
+
+        self::assertInstanceOf(Some::class, $some);
+        self::assertEquals(42, $some->get());
+        self::assertEquals([124, 125], $some->context()->parameters()->asArray());
+    }
 }

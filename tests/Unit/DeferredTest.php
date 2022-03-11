@@ -31,6 +31,18 @@ final class DeferredTest extends TestCase
         self::assertEquals([123], $either->context()->parameters()->asArray());
     }
 
+    public function testCanOverrideAndRetainsParametersAfterEvaluation(): void
+    {
+        $either =
+            Deferred::create($this->identity())
+                ->with(123)
+                ->resolve(42, 43)
+        ;
+
+        self::assertInstanceOf(Some::class, $either);
+        self::assertEquals([42, 43], $either->context()->parameters()->asArray());
+    }
+
     public function testEvaluationWithNullResultReturnsANone(): void
     {
         $none =

@@ -33,9 +33,17 @@ advised. On extension vs generics vs as-is, each has its tradeoffs.
 
 ![](TagReasonClassDiagram.png)
 
-## resolve(): Either
+## resolve(...$parameters): Either
 
 Forces an optional to be resolved, return itself but on Deferred, an *Either* from its callable execution return value is returned.
+
+If any *$parameter* is given, a new *Either* with such parameters is used on resolve, this is syntactic
+sugar so new two statement are equivalent.
+```
+    $deferred->with(42)->resolve();
+    $deferred->resolve(42);
+```
+This is specially handy of *Deferred*, note that always affect the trail (only with any *$parameters* is given).
 
 ```php
 // \j45l\either\Test\Unit\ExamplesTest::testDo
