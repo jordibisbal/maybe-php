@@ -19,7 +19,7 @@ final class ThrowableReasonTest extends TestCase
         $throwableReason = ThrowableReason::from('reason');
 
         self::assertInstanceOf(ThrowableReason::class, $throwableReason);
-        assertStringStartsWith('reason', $throwableReason->asString());
+        assertStringStartsWith('reason', $throwableReason->toString());
     }
 
     public function testCanBeCreatedFromAThrowable(): void
@@ -27,7 +27,7 @@ final class ThrowableReasonTest extends TestCase
         $throwable = new RuntimeException('runtime reason');
         $throwableReason = ThrowableReason::fromThrowable($throwable);
 
-        assertEquals('runtime reason', $throwableReason->asString());
+        assertEquals('runtime reason', $throwableReason->toString());
         self::assertSame($throwable, $throwableReason->throwable());
     }
 }

@@ -220,7 +220,7 @@ $deferred = Deferred::create($callable);
 $this->assertInstanceOf(Deferred::class, $deferred);
 $deferred = $deferred->resolve();
 $this->assertInstanceOf(Failure::class, $deferred);
-$this->assertEquals('42!', $deferred->reason()->asString());
+$this->assertEquals('42!', $deferred->reason()->toString());
 ```
 ## then($nextValue): Either
 
@@ -250,7 +250,7 @@ $failure = function () { throw new RuntimeException('42!'); };
 $failure = Either::start()->then($failure)->then($increment);
 
 $this->assertInstanceOf(Failure::class, $failure);
-$this->assertEquals('42!', $failure->reason()->asString());
+$this->assertEquals('42!', $failure->reason()->toString());
 $this->assertFalse($called);
 ```
 

@@ -152,7 +152,7 @@ final class Trail implements Countable
         /** @infection-ignore-all */
         switch (true) {
             case $tag instanceof StringTag:
-                return array_replace($this->taggedTrail, [$tag->asString() => $either]);
+                return array_replace($this->taggedTrail, [$tag->toString() => $either]);
             default:
                 return $this->taggedTrail;
         }

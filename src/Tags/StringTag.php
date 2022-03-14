@@ -17,7 +17,7 @@ final class StringTag implements Tag
         return new self($tag);
     }
 
-    public function asString(): string
+    public function toString(): string
     {
         return $this->tag;
     }

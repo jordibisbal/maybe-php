@@ -16,6 +16,6 @@ final class ReasonTest extends TestCase
     {
         $throwableFailure = Reason::from('reason');
 
-        assertEquals('reason', $throwableFailure->asString());
+        assertEquals('reason', $throwableFailure->toString());
     }
 }

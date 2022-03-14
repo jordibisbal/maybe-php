@@ -170,7 +170,7 @@ class ExamplesTest extends TestCase
         $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->taggedValues());
         $this->assertEquals(
             ['name' => 'Unable to get name'],
-            invoke($trail->taggedFailureReasons(), 'asString')
+            invoke($trail->taggedFailureReasons(), 'toString')
         );
     }
 
@@ -198,7 +198,7 @@ class ExamplesTest extends TestCase
         $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->taggedValues());
         $this->assertEquals(
             ['name' => 'Unable to get name'],
-            invoke($trail->taggedFailureReasons(), 'asString')
+            invoke($trail->taggedFailureReasons(), 'toString')
         );
     }
 
@@ -284,7 +284,7 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(Deferred::class, $deferred);
         $deferred = $deferred->resolve();
         $this->assertInstanceOf(Failure::class, $deferred);
-        $this->assertEquals('42!', $deferred->reason()->asString());
+        $this->assertEquals('42!', $deferred->reason()->toString());
     }
 
     public function testThen(): void
@@ -316,7 +316,7 @@ class ExamplesTest extends TestCase
         $failure = Either::start()->then($failure)->then($increment);
 
         $this->assertInstanceOf(Failure::class, $failure);
-        $this->assertEquals('42!', $failure->reason()->asString());
+        $this->assertEquals('42!', $failure->reason()->toString());
         $this->assertFalse($called);
     }
 }

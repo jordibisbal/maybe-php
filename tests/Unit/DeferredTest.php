@@ -81,7 +81,7 @@ final class DeferredTest extends TestCase
         $failure = Either::start()->next($this->throwsRuntime())->resolve();
         self::assertInstanceOf(Failure::class, $failure);
 
-        self::assertEquals('Runtime !', $failure->reason()->asString());
+        self::assertEquals('Runtime !', $failure->reason()->toString());
     }
 
     public function throwsRuntime(): Closure

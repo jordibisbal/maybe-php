@@ -19,7 +19,7 @@ class Reason
         return new self($reason);
     }
 
-    public function asString(): string
+    public function toString(): string
     {
         return $this->reason;
     }

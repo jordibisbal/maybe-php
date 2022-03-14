@@ -81,7 +81,7 @@ final class TrailTagTest extends TestCase
 
         self::assertEquals(
             ['43' => 'because failed'],
-            invoke($trail->taggedFailureReasons(), 'asString')
+            invoke($trail->taggedFailureReasons(), 'toString')
         );
         self::assertEquals(
             ['42' => Some::from('42'), '43' => Failure::from(Reason::from('because failed'))],

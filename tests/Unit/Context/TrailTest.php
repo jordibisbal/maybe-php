@@ -84,7 +84,7 @@ final class TrailTest extends TestCase
         ;
 
         self::assertCount(1, $trail->failed());
-        self::assertEquals('failed', $trail->failed()[0]->reason()->asString());
+        self::assertEquals('failed', $trail->failed()[0]->reason()->toString());
     }
 
     public function testResolvingASomeDoesNotAddsToTheTrail(): void
@@ -108,7 +108,7 @@ final class TrailTest extends TestCase
 
         self::assertEquals(
             ['because failed'],
-            invoke($trail->failureReasons(), 'asString')
+            invoke($trail->failureReasons(), 'toString')
         );
     }
 }

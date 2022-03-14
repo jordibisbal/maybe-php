@@ -20,14 +20,14 @@ final class FailureTest extends TestCase
     {
         $failure = Failure::from(Reason::from('reason'));
 
-        self::assertEquals('reason', $failure->reason()->asString());
+        self::assertEquals('reason', $failure->reason()->toString());
     }
 
     public function testCanBeCreatedFromFailureWithOutReason(): void
     {
         $failure = Failure::create();
 
-        self::assertEquals('Unspecified reason', $failure->reason()->asString());
+        self::assertEquals('Unspecified reason', $failure->reason()->toString());
     }
 
     public function testAFailureMaintainsContext(): void
