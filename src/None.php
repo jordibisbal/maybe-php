@@ -30,6 +30,7 @@ class None extends Either
     /**
      * @param T $value
      * @return Either<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function then($value): Either
     {
@@ -38,12 +39,14 @@ class None extends Either
 
     /**
      * @return Either<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function pipe(callable $callable): Either
     {
         return $this;
     }
 
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
     public function map(callable $callable): Functor
     {
         return $this;
