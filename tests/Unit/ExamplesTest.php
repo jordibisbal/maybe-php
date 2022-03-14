@@ -174,6 +174,34 @@ class ExamplesTest extends TestCase
         );
     }
 
+    public function testNextTag(): void
+    {
+        $name = static function (): void {
+            throw new RuntimeException('Unable to get name');
+        };
+        $id = static function (): int {
+            return 123;
+        };
+        $email = static function (): string {
+            return 'email@test.com';
+        };
+
+
+        $chain = Either::start()
+            ->tagNext('id', $id)
+            ->tagNext('name', $name)
+            ->tagNext('email', $email)
+        ;
+
+        $trail = $chain->trail();
+
+        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->taggedValues());
+        $this->assertEquals(
+            ['name' => 'Unable to get name'],
+            invoke($trail->taggedFailureReasons(), 'asString')
+        );
+    }
+
     public function testNext(): void
     {
         $fortyTwo = function (): int {

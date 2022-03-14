@@ -54,4 +54,13 @@ final class EitherTest extends TestCase
 
         $this->assertEquals(TagCreator::from('tag'), $either->context()->tag());
     }
+
+    public function testTrailWithTagNextIsSet(): void
+    {
+        $either = Either::start()->tagNext('tag', 42);
+
+        $this->assertEquals(TagCreator::from('tag'), $either->context()->tag());
+        $this->assertInstanceOf(Some::class, $either);
+        $this->assertEquals(42, $either->get());
+    }
 }
