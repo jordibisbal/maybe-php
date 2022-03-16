@@ -107,7 +107,7 @@ $either =
 ## getOrElse(mixed $value): mixed $value
 
 Return the *Either* value if is a *Some* or *$value$* otherwise 
-(if it is a *Deferred* first is *resolve*d and then calls *getOrElse* on the result)
+(if it is a *Deferred*, first is *resolve*d and then *getOrElse* is called on the result)
 
 ```php
 // \j45l\either\Test\Unit\SomeTest::testGetOrElse
