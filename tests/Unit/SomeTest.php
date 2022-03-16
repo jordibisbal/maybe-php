@@ -59,4 +59,9 @@ final class SomeTest extends TestCase
         self::assertEquals(42, $some->get());
         self::assertEquals([124, 125], $some->context()->parameters()->asArray());
     }
+
+    public function testGetOrElse(): void
+    {
+        self::assertEquals(42, Some::from(42)->getOrElse(null));
+    }
 }

@@ -77,4 +77,13 @@ class Deferred extends Either
     {
         return $this->resolve()->pipe($callable);
     }
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    public function getOrElse($value)
+    {
+        return $this->resolve()->getOrElse($value);
+    }
 }

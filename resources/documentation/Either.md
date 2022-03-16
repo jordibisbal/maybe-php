@@ -104,6 +104,23 @@ $either =
 ;
 ```
 
+## getOrElse(mixed $value): mixed $value
+
+Return the *Either* value if is a *Some* or *$value$* otherwise 
+(if it is a *Deferred* first is *resolve*d and then calls *getOrElse* on the result)
+
+```php
+// \j45l\either\Test\Unit\SomeTest::testGetOrElse
+self::assertEquals(42, Some::from(42)->getOrElse(null));
+
+// \j45l\either\Test\Unit\EitherTest::testGetOrElse
+self::assertEquals(42, None::create()->getOrElse(42));
+
+// \j45l\either\Test\Unit\DeferredTest::testGetOrElse
+$get42 = function () { return 42; };
+self::assertEquals(42, Deferred::create($get42)->getOrElse(null));
+```
+
 ## map(Closure $closure): Deferred
 
 Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).

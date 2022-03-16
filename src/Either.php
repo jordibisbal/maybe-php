@@ -116,6 +116,15 @@ abstract class Either implements Functor
     }
 
     /**
+     * @param mixed $value
+     * @return mixed
+     */
+    public function getOrElse($value)
+    {
+        return $value;
+    }
+
+    /**
      * @param string|Tag $tag
      * @param mixed $value
      * @return Either<T>

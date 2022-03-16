@@ -90,4 +90,13 @@ final class DeferredTest extends TestCase
             throw new RuntimeException('Runtime !');
         };
     }
+
+    public function testGetOrElse(): void
+    {
+        $get42 = function () {
+            return 42;
+        };
+
+        self::assertEquals(42, Deferred::create($get42)->getOrElse(null));
+    }
 }

@@ -63,4 +63,9 @@ final class EitherTest extends TestCase
         $this->assertInstanceOf(Some::class, $either);
         $this->assertEquals(42, $either->get());
     }
+
+    public function testGetOrElse(): void
+    {
+        self::assertEquals(42, None::create()->getOrElse(42));
+    }
 }

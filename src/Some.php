@@ -41,6 +41,16 @@ class Some extends Either
         return $this->value;
     }
 
+    /**
+     * @param mixed $value
+     * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getOrElse($value)
+    {
+        return $this->get();
+    }
+
     public function __clone()
     {
         $this->value = is_object($this->value) ? clone $this->value : $this->value;
