@@ -23,3 +23,4 @@ https://functionalprogramming.medium.com/either-is-a-common-type-in-functional-l
 ## Either Documentation
 
 [Either class](resources/documentation/Either.md)
+[Support functions](resources/documentation/Functions.md)

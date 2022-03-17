@@ -121,32 +121,6 @@ $get42 = function () { return 42; };
 self::assertEquals(42, Deferred::create($get42)->getOrElse(null));
 ```
 
-## lift(callable $callable): Either
-
-Returns a new function wrapped in an *Either*, on call the function parameters are also momentary lifted,
-if any of the parameters is *None* the lifted function will return *None* (unless any is *Failure*),
-if any of the parameters is *Failure* the lifted function will return *Failure*.
-
-```php
-    $function = function ($one, $another) {
-        return $one + $another;
-    };
-
-    $some = Either::lift($function)(41, Some::from(1));
-    self::assertInstanceOf(Some::class, $some);
-    self::assertEquals(42, $some->get());
-
-    $none = Either::lift($function)(Some::from(41), None::create());
-    self::assertInstanceOf(None::class, $none);
-    self::assertNotInstanceOf(Failure::class, $none);
-
-    $some = Either::lift($function)(Some::from(41), Failure::create());
-    self::assertInstanceOf(Failure::class, $some);
-
-    $failure = Either::lift($function)(None::create(), Failure::create());
-    self::assertInstanceOf(Failure::class, $failure);
-```
-
 ## map(callable $closure): Deferred
 
 Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).

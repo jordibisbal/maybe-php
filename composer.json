@@ -36,7 +36,10 @@
     "autoload-dev": {
         "psr-4": {
             "j45l\\either\\Test\\": "tests"
-        }
+        },
+        "files": [
+            "src/Lift.php"
+        ]
     },
     "scripts": {
         "tests": "vendor/bin/phpunit",

@@ -10,6 +10,7 @@ use j45l\either\Result\Failure;
 use j45l\either\Some;
 use j45l\either\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
+use function j45l\either\lift;
 
 /**
  * @covers \j45l\either\Either
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \j45l\either\Some
  * @covers \j45l\either\Result\Failure
  * @covers \j45l\either\Deferred
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 final class EitherTest extends TestCase
 {
@@ -76,7 +78,7 @@ final class EitherTest extends TestCase
             return $one + $another;
         };
 
-        $some = Either::lift($function)(Some::from(41), Some::from(1));
+        $some = lift($function)(Some::from(41), Some::from(1));
 
         self::assertInstanceOf(Some::class, $some);
         self::assertEquals(42, $some->get());
@@ -88,7 +90,7 @@ final class EitherTest extends TestCase
             return $one + $another;
         };
 
-        $some = Either::lift($function)(41, Some::from(1));
+        $some = lift($function)(41, Some::from(1));
 
         self::assertInstanceOf(Some::class, $some);
         self::assertEquals(42, $some->get());
@@ -100,7 +102,7 @@ final class EitherTest extends TestCase
             return $one + $another;
         };
 
-        $some = Either::lift($function)(Some::from(41), None::create());
+        $some = lift($function)(Some::from(41), None::create());
 
         self::assertInstanceOf(None::class, $some);
         self::assertNotInstanceOf(Failure::class, $some);
@@ -112,7 +114,7 @@ final class EitherTest extends TestCase
             return $one + $another;
         };
 
-        $some = Either::lift($function)(Some::from(41), Failure::create());
+        $some = lift($function)(Some::from(41), Failure::create());
 
         self::assertInstanceOf(Failure::class, $some);
     }
@@ -123,7 +125,7 @@ final class EitherTest extends TestCase
             return $one + $another;
         };
 
-        $some = Either::lift($function)(None::create(), Failure::create());
+        $some = lift($function)(None::create(), Failure::create());
 
         self::assertInstanceOf(Failure::class, $some);
     }
