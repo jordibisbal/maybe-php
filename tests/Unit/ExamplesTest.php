@@ -7,12 +7,12 @@ namespace j45l\either\Test\Unit;
 use Closure;
 use j45l\either\Deferred;
 use j45l\either\Either;
-use j45l\either\Failure;
 use j45l\either\None;
+use j45l\either\Result\Failure;
+use j45l\either\Result\Success;
+use j45l\either\Result\ThrowableReason;
 use j45l\either\Some;
-use j45l\either\Success;
 use j45l\either\Test\Unit\Stubs\EntityManagerStub;
-use j45l\either\ThrowableReason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -293,7 +293,7 @@ class ExamplesTest extends TestCase
             return $value + 1;
         };
 
-        $either = Either::start()->with(41)->then($increment);
+        $either = Either::start()->with(41)->andThen($increment);
 
         $this->assertInstanceOf(Deferred::class, $either);
 
@@ -313,7 +313,7 @@ class ExamplesTest extends TestCase
             throw new RuntimeException('42!');
         };
 
-        $failure = Either::start()->then($failure)->then($increment);
+        $failure = Either::start()->andThen($failure)->andThen($increment);
 
         $this->assertInstanceOf(Failure::class, $failure);
         $this->assertEquals('42!', $failure->reason()->toString());

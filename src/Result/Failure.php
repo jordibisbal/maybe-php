@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\either\Result;
 
 use j45l\either\Context\Context;
+use j45l\either\None;
 
 /**
  * @template T
  * @extends None<T>
  */
-class Failure extends None
+final class Failure extends None
 {
     /** @var Reason */
     private $reason;

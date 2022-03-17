@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace j45l\either\Test\Unit;
 
-use j45l\either\Success;
+use j45l\either\Result\Success;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \j45l\either\Success */
+/** @covers \j45l\either\Result\Success */
 final class SuccessTest extends TestCase
 {
     public function testHasTrueValue(): void

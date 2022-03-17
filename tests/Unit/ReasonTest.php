@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace j45l\either\Test\Unit;
 
-use j45l\either\Reason;
+use j45l\either\Result\Reason;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 
-/** @covers \j45l\either\Reason */
+/** @covers \j45l\either\Result\Reason */
 final class ReasonTest extends TestCase
 {
     public function testCanBeCreatedFromAnString(): void

@@ -32,7 +32,7 @@ class None extends Either
      * @return Either<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function then($value): Either
+    public function andThen($value): Either
     {
         return self::build($this, $this->context());
     }

@@ -6,8 +6,8 @@ namespace j45l\either\Context;
 
 use Countable;
 use j45l\either\Either;
-use j45l\either\Failure;
-use j45l\either\Reason;
+use j45l\either\Result\Failure;
+use j45l\either\Result\Reason;
 use j45l\either\Some;
 use j45l\either\Tags\StringTag;
 use j45l\either\Tags\Tag;

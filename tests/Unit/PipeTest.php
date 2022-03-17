@@ -7,10 +7,10 @@ namespace j45l\either\Test\Unit;
 use Closure;
 use j45l\either\Deferred;
 use j45l\either\Either;
-use j45l\either\Failure;
 use j45l\either\None;
+use j45l\either\Result\Failure;
+use j45l\either\Result\Success;
 use j45l\either\Some;
-use j45l\either\Success;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 

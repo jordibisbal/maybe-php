@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\either;
 
 use j45l\either\Context\Context;
+use j45l\either\Result\ThrowableReason;
 use Throwable;
 
 /**
@@ -32,15 +33,6 @@ class Deferred extends Either
     }
 
     /**
-     * @param T $value
-     * @return Either<T>
-     */
-    public function orElse($value): Either
-    {
-        return $this->resolve()->orElse($value);
-    }
-
-    /**
      * @param mixed[] $parameters
      * @return Either<T>
      */
@@ -65,9 +57,9 @@ class Deferred extends Either
      * @param T $value
      * @return Either<T>
      */
-    public function then($value): Either
+    public function andThen($value): Either
     {
-        return $this->resolve()->then($value);
+        return $this->resolve()->andThen($value);
     }
 
     /**
@@ -85,5 +77,14 @@ class Deferred extends Either
     public function getOrElse($value)
     {
         return $this->resolve()->getOrElse($value);
+    }
+
+    /**
+     * @param T $value
+     * @return Either<T>
+     */
+    public function orElse($value): Either
+    {
+        return $this->resolve()->orElse($value);
     }
 }

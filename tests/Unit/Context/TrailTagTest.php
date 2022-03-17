@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace j45l\either\Test\Unit\Context;
 
 use j45l\either\Context\Trail;
-use j45l\either\Failure;
 use j45l\either\None;
-use j45l\either\Reason;
+use j45l\either\Result\Failure;
+use j45l\either\Result\Reason;
 use j45l\either\Some;
 use j45l\either\Tags\TagCreator;
 use j45l\either\Tags\Untagged;

@@ -6,13 +6,13 @@ namespace j45l\either\Test\Unit;
 
 use j45l\either\Context\Parameters;
 use j45l\either\Either;
-use j45l\either\Failure;
-use j45l\either\Reason;
+use j45l\either\Result\Failure;
+use j45l\either\Result\Reason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \j45l\either\Failure
+ * @covers \j45l\either\Result\Failure
  */
 final class FailureTest extends TestCase
 {
@@ -40,7 +40,7 @@ final class FailureTest extends TestCase
             throw new RuntimeException();
         };
 
-        $failure = Either::start()->next($succeeding)->with(1, 2, 3)->then($failing)->resolve();
+        $failure = Either::start()->next($succeeding)->with(1, 2, 3)->andThen($failing)->resolve();
 
         self::assertInstanceOf(Failure::class, $failure);
         self::assertEquals(Parameters::create(1, 2, 3), $failure->context()->parameters());

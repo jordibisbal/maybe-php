@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\either\Result;
 
 use j45l\either\Context\Context;
+use j45l\either\Some;
 
 /**
  * @template T
  * @extends Some<T>
  */
-class Success extends Some
+final class Success extends Some
 {
     /** @return Success<T> */
     public static function create(): Success

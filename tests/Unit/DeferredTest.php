@@ -7,8 +7,8 @@ namespace j45l\either\Test\Unit;
 use Closure;
 use j45l\either\Deferred;
 use j45l\either\Either;
-use j45l\either\Failure;
 use j45l\either\None;
+use j45l\either\Result\Failure;
 use j45l\either\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -60,7 +60,7 @@ final class DeferredTest extends TestCase
     public function testThenCausesEvaluation(): void
     {
         $either = Either::start()->next($this->identity())->with(123)
-            ->then($this->identity())->with(456)
+            ->andThen($this->identity())->with(456)
         ;
 
         $trail = $either->trail()->asArray();

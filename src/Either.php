@@ -4,14 +4,25 @@ declare(strict_types=1);
 
 namespace j45l\either;
 
+use Closure;
 use j45l\either\Context\Context;
 use j45l\either\Context\Parameters;
 use j45l\either\Context\Trail;
+use j45l\either\Result\Failure;
+use j45l\either\Result\Success;
+use j45l\either\Result\ThrowableReason;
 use j45l\either\Tags\Tag;
 use j45l\either\Tags\TagCreator;
 use j45l\functional\Functor;
 
-/** @template T */
+use function Functional\invoke;
+use function Functional\map;
+use function Functional\some;
+
+/**
+ * @template T
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 abstract class Either implements Functor
 {
     /** @var Context<T> */
@@ -82,11 +93,11 @@ abstract class Either implements Functor
     }
 
     /**
-     * @return Deferred<T>
+     * @return Either<T>
      */
     public function pipe(callable $callable): Either
     {
-        return new Deferred($callable, $this->context()->push($this)->withParameters($this->resolve()));
+        return new Deferred($callable, $this->context()->push($this)->withParameters($this));
     }
 
     /**
@@ -101,7 +112,7 @@ abstract class Either implements Functor
      * @param mixed $value
      * @return Either<T>
      */
-    public function then($value): Either
+    public function andThen($value): Either
     {
         return $this->next($value);
     }
@@ -195,5 +206,38 @@ abstract class Either implements Functor
             default:
                 return $this;
         }
+    }
+
+    public static function lift(callable $callable): Closure
+    {
+        return static function (...$parameters) use ($callable) {
+            $someIsNone = static function (Either $either) {
+                return $either instanceof None;
+            };
+            $someIsFailure = static function (Either $either) {
+                return $either instanceof Failure;
+            };
+
+            $buildLifted = static function ($parameters) use ($someIsNone, $someIsFailure, $callable) {
+                /** @infection-ignore-all */
+                switch (true) {
+                    case some($parameters, $someIsFailure):
+                        return Failure::create();
+                    case some($parameters, $someIsNone):
+                        return None::create();
+                    default:
+                        return Deferred::create(static function (...$parameters) use ($callable) {
+                            return $callable(...$parameters);
+                        })->resolve(...invoke($parameters, 'get'));
+                }
+            };
+
+            return $buildLifted(invoke(
+                map($parameters, function ($parameter) {
+                    return $parameter instanceof Either ? $parameter : Some::from($parameter);
+                }),
+                'resolve'
+            ));
+        };
     }
 }

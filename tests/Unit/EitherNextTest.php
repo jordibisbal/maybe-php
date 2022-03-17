@@ -6,15 +6,15 @@ namespace j45l\either\Test\Unit;
 
 use j45l\either\Either;
 use j45l\either\None;
+use j45l\either\Result\Success;
 use j45l\either\Some;
-use j45l\either\Success;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \j45l\either\Either
  * @covers \j45l\either\None
- * @covers \j45l\either\Failure
- * @covers \j45l\either\Success
+ * @covers \j45l\either\Result\Failure
+ * @covers \j45l\either\Result\Success
  */
 final class EitherNextTest extends TestCase
 {
