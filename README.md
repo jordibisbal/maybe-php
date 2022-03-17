@@ -9,7 +9,7 @@ Either (inspired by the functional thing), helps to:
 
 ## Either
 
-Is a supercharged version on the Either from functional programing, it provides functionality
+Is a supercharged version on the Maybe/Either from functional programing, it provides functionality
 present in such languages along some extra to solve some common use cases in php.
 
 Some literature about, google for more:

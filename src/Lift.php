@@ -14,19 +14,19 @@ use function Functional\some;
 function lift(callable $callable): Closure
 {
     return static function (...$parameters) use ($callable) {
-        $someIsNone = static function (Either $either) {
+        $isNone = static function (Either $either) {
             return $either instanceof None;
         };
-        $someIsFailure = static function (Either $either) {
+        $isFailure = static function (Either $either) {
             return $either instanceof Failure;
         };
 
-        $buildLifted = static function ($parameters) use ($someIsNone, $someIsFailure, $callable) {
+        $buildLifted = static function ($parameters) use ($isNone, $isFailure, $callable) {
             /** @infection-ignore-all */
             switch (true) {
-                case some($parameters, $someIsFailure):
+                case some($parameters, $isFailure):
                     return Failure::create();
-                case some($parameters, $someIsNone):
+                case some($parameters, $isNone):
                     return None::create();
                 default:
                     return Deferred::create(static function (...$parameters) use ($callable) {
