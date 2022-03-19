@@ -136,11 +136,6 @@ class ExamplesTest extends TestCase
         };
 
         $either = Some::from(41)->map($increment);
-        $this->assertFalse($sideEffect);
-
-        $this->assertInstanceOf(Deferred::class, $either);
-
-        $either = $either->resolve();
         $this->assertTrue($sideEffect);
 
         $this->assertInstanceOf(Some::class, $either);

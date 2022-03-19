@@ -57,7 +57,10 @@ abstract class Either implements Functor
     /** @return Either<T> */
     public function map(callable $callable): Functor
     {
-        return new Deferred($callable, Context::fromParameters(Parameters::create($this)));
+        return (new Deferred(
+            $callable,
+            Context::fromParameters(Parameters::create($this))
+        ))->resolve();
     }
 
     /**
