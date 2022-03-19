@@ -10,6 +10,7 @@ use j45l\either\Result\Failure;
 use j45l\either\Some;
 use j45l\either\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
+
 use function j45l\either\lift;
 
 /**
