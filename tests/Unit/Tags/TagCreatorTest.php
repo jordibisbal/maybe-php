@@ -1,15 +1,15 @@
 <?php
 
-namespace j45l\either\Test\Unit\Tags;
+namespace j45l\maybe\Test\Unit\Tags;
 
-use j45l\either\Tags\TagCreator;
-use j45l\either\Tags\Untagged;
+use j45l\maybe\Tags\TagCreator;
+use j45l\maybe\Tags\Untagged;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \j45l\either\Tags\TagCreator
- * @covers \j45l\either\Tags\StringTag
- * @covers \j45l\either\Tags\Untagged
+ * @covers \j45l\maybe\Tags\TagCreator
+ * @covers \j45l\maybe\Tags\StringTag
+ * @covers \j45l\maybe\Tags\Untagged
  */
 class TagCreatorTest extends TestCase
 {

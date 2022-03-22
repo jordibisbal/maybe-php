@@ -1,14 +1,14 @@
 <?php
 
-namespace j45l\either\Test\Unit\Context;
+namespace j45l\maybe\Test\Unit\Context;
 
-use j45l\either\Context\Context;
-use j45l\either\Context\Parameters;
-use j45l\either\Some;
-use j45l\either\Tags\TagCreator;
+use j45l\maybe\Context\Context;
+use j45l\maybe\Context\Parameters;
+use j45l\maybe\Some;
+use j45l\maybe\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \j45l\either\Context\Context */
+/** @covers \j45l\maybe\Context\Context */
 class ContextTest extends TestCase
 {
     public function testAContextCanBeBuildFromParameters(): void
@@ -24,7 +24,7 @@ class ContextTest extends TestCase
         );
     }
 
-    public function testAnEitherCanBePushIntoAContextTailAsNewContext(): void
+    public function testAnMaybeCanBePushIntoAContextTailAsNewContext(): void
     {
         $some = Some::from(null);
         $context = Context::create();

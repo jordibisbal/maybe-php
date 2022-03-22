@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit\Stubs;
+namespace j45l\maybe\Test\Unit\Fixtures;
 
 final class MutableInteger
 {

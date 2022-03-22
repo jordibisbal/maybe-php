@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit\Context;
+namespace j45l\maybe\Test\Unit\Context;
 
-use j45l\either\Context\Trail;
-use j45l\either\None;
-use j45l\either\Result\Failure;
-use j45l\either\Result\Reason;
-use j45l\either\Some;
-use j45l\either\Tags\TagCreator;
-use j45l\either\Tags\Untagged;
+use j45l\maybe\Context\Trail;
+use j45l\maybe\None;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Result\Reason;
+use j45l\maybe\Some;
+use j45l\maybe\Tags\TagCreator;
+use j45l\maybe\Tags\Untagged;
 use PHPUnit\Framework\TestCase;
 
 use function Functional\invoke;
 
 /**
- * @covers \j45l\either\Context\Trail
- * @covers \j45l\either\Tags\StringTag
- * @covers \j45l\either\Tags\Untagged
+ * @covers \j45l\maybe\Context\Trail
+ * @covers \j45l\maybe\Tags\StringTag
+ * @covers \j45l\maybe\Tags\Untagged
  */
 final class TrailTagTest extends TestCase
 {
-    public function testCanPushEitherTagged(): void
+    public function testCanPushMaybeTagged(): void
     {
         $trail = Trail::create()
             ->push(Some::from(42), TagCreator::from('42'))
@@ -33,7 +33,7 @@ final class TrailTagTest extends TestCase
         self::assertEquals(['42' => Some::from('42'), '43' => Some::from('43')], $trail->tagged());
     }
 
-    public function testCanPushEitherUnTagged(): void
+    public function testCanPushMaybeUnTagged(): void
     {
         $trail = Trail::create()
             ->push(Some::from(42), TagCreator::from('42'))
@@ -61,7 +61,7 @@ final class TrailTagTest extends TestCase
         self::assertInstanceOf(Untagged::class, TagCreator::from(''));
     }
 
-    public function testCanPushTaggedEither(): void
+    public function testCanPushTaggedMaybe(): void
     {
         $trail = Trail::create()
             ->push(Some::from(42), TagCreator::from('42'))
@@ -76,7 +76,7 @@ final class TrailTagTest extends TestCase
     {
         $trail = Trail::create()
             ->push(Some::from(42), TagCreator::from('42'))
-            ->push(Failure::from(Reason::from('because failed')), TagCreator::from('43'))
+            ->push(Failure::from(Reason::fromString('because failed')), TagCreator::from('43'))
         ;
 
         self::assertEquals(
@@ -84,7 +84,7 @@ final class TrailTagTest extends TestCase
             invoke($trail->taggedFailureReasons(), 'toString')
         );
         self::assertEquals(
-            ['42' => Some::from('42'), '43' => Failure::from(Reason::from('because failed'))],
+            ['42' => Some::from('42'), '43' => Failure::from(Reason::fromString('because failed'))],
             $trail->tagged()
         );
     }

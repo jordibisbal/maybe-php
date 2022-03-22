@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Result;
+namespace j45l\maybe\Result;
 
-use j45l\either\Context\Context;
-use j45l\either\Some;
+use j45l\maybe\Context\Context;
+use j45l\maybe\Some;
 
 /**
  * @template T

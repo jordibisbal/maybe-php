@@ -2,51 +2,51 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit;
+namespace j45l\maybe\Test\Unit;
 
 use Closure;
-use j45l\either\Deferred;
-use j45l\either\Either;
-use j45l\either\None;
-use j45l\either\Result\Failure;
-use j45l\either\Some;
+use j45l\maybe\Deferred;
+use j45l\maybe\Maybe;
+use j45l\maybe\None;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \j45l\either\Either
- * @covers \j45l\either\Deferred
+ * @covers \j45l\maybe\Maybe
+ * @covers \j45l\maybe\Deferred
  */
 final class DeferredTest extends TestCase
 {
     public function testRetainsParametersAfterEvaluation(): void
     {
-        $either =
+        $maybe =
             Deferred::create($this->identity())
             ->with(123)
             ->resolve()
         ;
 
-        self::assertInstanceOf(Some::class, $either);
-        self::assertEquals([123], $either->context()->parameters()->asArray());
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals([123], $maybe->context()->parameters()->asArray());
     }
 
     public function testCanOverrideAndRetainsParametersAfterEvaluation(): void
     {
-        $either =
+        $maybe =
             Deferred::create($this->identity())
                 ->with(123)
                 ->resolve(42, 43)
         ;
 
-        self::assertInstanceOf(Some::class, $either);
-        self::assertEquals([42, 43], $either->context()->parameters()->asArray());
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals([42, 43], $maybe->context()->parameters()->asArray());
     }
 
     public function testEvaluationWithNullResultReturnsANone(): void
     {
         $none =
-            Either::start()->next(
+            Maybe::start()->next(
                 static function () {
                     return null;
                 }
@@ -59,11 +59,11 @@ final class DeferredTest extends TestCase
 
     public function testThenCausesEvaluation(): void
     {
-        $either = Either::start()->next($this->identity())->with(123)
+        $maybe = Maybe::start()->next($this->identity())->with(123)
             ->andThen($this->identity())->with(456)
         ;
 
-        $trail = $either->trail()->asArray();
+        $trail = $maybe->trail()->asArray();
 
         self::assertInstanceOf(Some::class, $trail[0]);
         self::assertInstanceOf(Some::class, $trail[1]);
@@ -78,7 +78,7 @@ final class DeferredTest extends TestCase
 
     public function testEvaluatingAThrowingClosureResultsInAFailure(): void
     {
-        $failure = Either::start()->next($this->throwsRuntime())->resolve();
+        $failure = Maybe::start()->next($this->throwsRuntime())->resolve();
         self::assertInstanceOf(Failure::class, $failure);
 
         self::assertEquals('Runtime !', $failure->reason()->toString());

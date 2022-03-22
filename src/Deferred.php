@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\maybe;
 
-use j45l\either\Context\Context;
-use j45l\either\Result\ThrowableReason;
+use j45l\maybe\Context\Context;
+use j45l\maybe\Result\ThrowableReason;
 use Throwable;
 
 /**
  * @template T
- * @extends Either<T>
+ * @extends Maybe<T>
  */
-class Deferred extends Either
+class Deferred extends Maybe
 {
     /** @var callable */
     protected $callable;
@@ -34,38 +34,38 @@ class Deferred extends Either
 
     /**
      * @param mixed[] $parameters
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function resolve(...$parameters): Either
+    public function resolve(...$parameters): Maybe
     {
-        /** @var Deferred<T> $either */
-        $either = $this->withParameters(...$parameters);
+        /** @var Deferred<T> $maybe */
+        $maybe = $this->withParameters(...$parameters);
         try {
-            return Either::build(
-                ($either->callable)(...$either->context()->parameters()->asArray()),
-                $either->context
+            return Maybe::build(
+                ($maybe->callable)(...$maybe->context()->parameters()->asArray()),
+                $maybe->context
             );
         } catch (Throwable $throwable) {
-            return Either::buildFailure(
+            return Maybe::buildFailure(
                 ThrowableReason::fromThrowable($throwable),
-                $either->context()->push($either)
+                $maybe->context()->push($maybe)
             );
         }
     }
 
     /**
      * @param T $value
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function andThen($value): Either
+    public function andThen($value): Maybe
     {
         return $this->resolve()->andThen($value);
     }
 
     /**
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function pipe(callable $callable): Either
+    public function pipe(callable $callable): Maybe
     {
         return $this->resolve()->pipe($callable);
     }
@@ -81,9 +81,9 @@ class Deferred extends Either
 
     /**
      * @param T $value
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function orElse($value): Either
+    public function orElse($value): Maybe
     {
         return $this->resolve()->orElse($value);
     }

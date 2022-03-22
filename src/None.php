@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\maybe;
 
 use j45l\functional\Functor;
 
 /**
  * @template T
- * @extends Either<T>
+ * @extends Maybe<T>
  */
-class None extends Either
+class None extends Maybe
 {
     /** @return None<T> */
     public static function create(): None
@@ -20,28 +20,28 @@ class None extends Either
 
     /**
      * @param T $value
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function orElse($value): Either
+    public function orElse($value): Maybe
     {
         return self::build($value, $this->context());
     }
 
     /**
      * @param T $value
-     * @return Either<T>
+     * @return Maybe<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function andThen($value): Either
+    public function andThen($value): Maybe
     {
         return self::build($this, $this->context());
     }
 
     /**
-     * @return Either<T>
+     * @return Maybe<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function pipe(callable $callable): Either
+    public function pipe(callable $callable): Maybe
     {
         return $this;
     }

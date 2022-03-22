@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\maybe;
 
-use j45l\either\Context\Context;
+use j45l\maybe\Context\Context;
 
 /**
  * @template T
- * @extends Either<T>
+ * @extends Maybe<T>
  */
-class Some extends Either
+class Some extends Maybe
 {
     /** @var mixed */
     private $value;

@@ -1,30 +1,30 @@
 # Creating
 
-Every either must be created using its appropriate class:
+A *maybe* must be created by using one of:
 
 * None::create()
 * Some::from($value)
-* Either::start()->next(Closure $closure)
+* Maybe::start()->next(Closure $closure)
 * Success::create()
 * Failure::create()
 
-*Either::next*, *Either::orElse*, *Either::pipe*, *Either::then* and *Deferred::resolve* methods will guess the *Either* kind to be created, by the following rules:
+*Maybe::next*, *Maybe::orElse*, *Maybe::pipe*, *Maybe::then* and *Deferred::resolve* methods will guess the *Maybe* kind to be created, by the following rules:
 
-* *Either*: A clone of the *Either*
+* *Maybe*: A clone of the *Maybe*
 * *Closure*: A *Deferred*
 * *null*: *None*
 * Otherwise: *Some*
 
-![](EitherClassDiagram.png)
+![](MaybeClassDiagram.png)
 
-# Either
+# Maybe
 
-Base class for all *Either*s
+Base class for all *Maybe*s
 
-An *Either* has a *Context* that contains the *Parameters* that will use to call *Deferred* callable (if any) and a 
-*Trail* of the evaluated *Either*s.
+An *Maybe* has a *Context* that contains the *Parameters* that will use to call *Deferred* callable (if any) and a 
+*Trail* of the evaluated *Maybe*s.
 
-A new *Either* with new *Parameters* can be build by *Either::with* method.
+A new *Maybe* with new *Parameters* can be build by *Maybe::with* method.
 
 Even when most of the classes are open for extension, the uso of pseudoGeneric (via phpstan/phpstorm/whatever) is 
 advised. On extension vs generics vs as-is, each has its tradeoffs.
@@ -33,11 +33,11 @@ advised. On extension vs generics vs as-is, each has its tradeoffs.
 
 ![](TagReasonClassDiagram.png)
 
-## resolve(...$parameters): Either
+## resolve(...$parameters): Maybe
 
-Forces an optional to be resolved, return itself but on Deferred, an *Either* from its callable execution return value is returned.
+Forces an optional to be resolved, return itself but on Deferred, an *Maybe* from its callable execution return value is returned.
 
-If any *$parameter* is given, a new *Either* with such parameters is used on resolve, this is syntactic
+If any *$parameter* is given, a new *Maybe* with such parameters is used on resolve, this is syntactic
 sugar so new two statement are equivalent.
 ```
     $deferred->with(42)->resolve();
@@ -46,32 +46,32 @@ sugar so new two statement are equivalent.
 This is specially handy of *Deferred*, note that always affect the trail (only with any *$parameters* is given).
 
 ```php
-// \j45l\either\Test\Unit\ExamplesTest::testDo
-// \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
-// \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
-$either =
-    Either::start()->next($this->insertCustomer($em))->with($customer)
+// \j45l\maybe\Test\Unit\ExamplesTest::testDo
+// \j45l\maybe\Test\Unit\ExamplesTest::testDoOrElse
+// \j45l\maybe\Test\Unit\ExamplesTest::testDoOrElseFails
+$maybe =
+    Maybe::start()->next($this->insertCustomer($em))->with($customer)
     // The parameters/context ($customer) is passed to orElse(), so does not need to
     // be provided again, although you could override that by using a second with().
     ->orElse($this->updateCustomer($em))
     // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
     // on resolve() only when do() returns a none/failure
     ->resolve()
-    // The value, either a Failure or a Success
+    // The value, maybe a Failure or a Success
 ;
 ```
 If *resolve()* were not caller, the second closure would not be called (lazy).
 
 ## context(): Context
 
-Returns the context of the *Either*, i.e. its trail and parameters
+Returns the context of the *Maybe*, i.e. its trail and parameters
 ```php
-// \j45l\either\Test\Unit\ExamplesTest::testGetContext
+// \j45l\maybe\Test\Unit\ExamplesTest::testGetContext
 $increment = static function (Some $some): Some {
     return Some::from($some->get() + 1);
 };
 
-$either = Some::from(42)->pipe($increment)->pipe($increment);
+$maybe = Some::from(42)->pipe($increment)->pipe($increment);
 
 $firstContextParameter = first($either->context()->parameters()->asArray());
 
@@ -89,9 +89,9 @@ Be aware that while Either::context()->trail does not include the Either itself,
 Returns a *Deferred* from *$closure* (with the current context).
 
 ```php
-// \j45l\either\Test\Unit\ExamplesTest::testDo
-// \j45l\either\Test\Unit\ExamplesTest::testDoOrElse
-// \j45l\either\Test\Unit\ExamplesTest::testDoOrElseFails
+// \j45l\maybe\Test\Unit\ExamplesTest::testDo
+// \j45l\maybe\Test\Unit\ExamplesTest::testDoOrElse
+// \j45l\maybe\Test\Unit\ExamplesTest::testDoOrElseFails
 $either =
     Either::start()->next($this->insertCustomer($em))->with($customer)
     // The parameters/context ($customer) is passed to orElse(), so does not need to
@@ -110,13 +110,13 @@ Return the *Either* value if is a *Some* or *$value$* otherwise
 (if it is a *Deferred*, first is *resolve*d and then *getOrElse* is called on the result)
 
 ```php
-// \j45l\either\Test\Unit\SomeTest::testGetOrElse
+// \j45l\maybe\Test\Unit\SomeTest::testGetOrElse
 self::assertEquals(42, Some::from(42)->getOrElse(null));
 
-// \j45l\either\Test\Unit\EitherTest::testGetOrElse
+// \j45l\maybe\Test\Unit\EitherTest::testGetOrElse
 self::assertEquals(42, None::create()->getOrElse(42));
 
-// \j45l\either\Test\Unit\DeferredTest::testGetOrElse
+// \j45l\maybe\Test\Unit\DeferredTest::testGetOrElse
 $get42 = function () { return 42; };
 self::assertEquals(42, Deferred::create($get42)->getOrElse(null));
 ```
@@ -131,7 +131,7 @@ Maps is from Functor, so it returns a Functor, that could be confusing when deal
 do some type assessment prior to its use, to ensure the expected type is the returned one.
 
 ```php
-// \j45l\either\Test\Unit\ExamplesTest::testMap
+// \j45l\maybe\Test\Unit\ExamplesTest::testMap
 $sideEffect = false;
 $increment = function (Some $number) use (&$sideEffect) {
     $sideEffect = true;
@@ -146,7 +146,7 @@ $either = $either->resolve(); $this->assertTrue($sideEffect);
 $this->assertInstanceOf(Some::class, $either); 
 $this->assertEquals(42, $either->get());
 
-// Until Either::resolve() is called, the close $increment is not invoked, so neither
+// Until Maybe::resolve() is called, the close $increment is not invoked, so neither
 // the value gets changed nor the side effect occurs.
 ```
 
@@ -157,7 +157,7 @@ $nextValue is always evaluated either the *Either* where a *None*, a *Some* or a
 case is resolved)
 
 ```php
-//\j45l\either\Test\Unit\ExamplesTest::testNext
+//\j45l\maybe\Test\Unit\ExamplesTest::testNext
 $noneNext = None::create()->next(42);
 $someNext = Some::from(1)->next(42);
 
@@ -173,7 +173,7 @@ Returns an *Either* from *$nextValue* (with the current context) if current Eith
 otherwise returns itself.
 
 ```php
-//\j45l\either\Test\Unit\ExamplesTest::testOrElse
+//\j45l\maybe\Test\Unit\ExamplesTest::testOrElse
 $noneNext = None::create()->orElse(42);
 $someNext = Some::from(1)->orElse(42);
 
@@ -194,7 +194,7 @@ Is warrantied that the given closure is never called with a *None*, as *Deferred
 forehand so *None:pipe*.
 
 ```php
-//\j45l\either\Test\Unit\ExamplesTest::testPipe
+//\j45l\maybe\Test\Unit\ExamplesTest::testPipe
 $adder = function (Some $some): int { return $some->get() + 1; };
 
 $pipe = Some::from(42)->pipe($adder)->pipe($adder)->pipe($adder)->resolve();
@@ -203,7 +203,7 @@ $this->assertInstanceOf(Some::class, $pipe);
 $this->assertEquals(45, $pipe->get());
 ```
 ```php
-//\j45l\either\Test\Unit\ExamplesTest::testPipeWithNone
+//\j45l\maybe\Test\Unit\ExamplesTest::testPipeWithNone
 $called = false; $adder = function () use (&$called) { $called = true; };
 $failure = function () { throw new RuntimeException(); };
 
@@ -219,7 +219,7 @@ On *Deferred*, its closure is evaluated and an *Either* from the evaluation resu
 throws a *Throwable*, a *Failure* with the *Throwable* as reason is returned.
 
 ```php
-//\j45l\either\Test\Unit\ExamplesTest::testFailingResolve
+//\j45l\maybe\Test\Unit\ExamplesTest::testFailingResolve
 $callable = function (): int { return 42; };
 $deferred = Deferred::create($callable);
 
@@ -230,7 +230,7 @@ $this->assertEquals(42, $deferred->get());
 ```
 
 ```php
-//\j45l\either\Test\Unit\ExamplesTest::testFailingResolve
+//\j45l\maybe\Test\Unit\ExamplesTest::testFailingResolve
 $callable = function (): int { throw new RuntimeException('42!'); };
 $deferred = Deferred::create($callable);
 
@@ -247,7 +247,7 @@ otherwise returns itself (i.e. the *None*).
 Contrary to pipe, *nextValue* is a *callable* is feed with parameters from the current context.
 
 ```php
-\j45l\either\Test\Unit\ExamplesTest::testThen
+//\j45l\maybe\Test\Unit\ExamplesTest::testThen
 $increment = function (int $value): int {return $value + 1; };
 
 $either = Either::start()->with(41)->then($increment);

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit;
+namespace j45l\maybe\Test\Unit;
 
 use Closure;
-use j45l\either\Deferred;
-use j45l\either\Either;
-use j45l\either\None;
-use j45l\either\Result\Failure;
-use j45l\either\Result\Success;
-use j45l\either\Result\ThrowableReason;
-use j45l\either\Some;
-use j45l\either\Test\Unit\Stubs\EntityManagerStub;
+use j45l\maybe\Deferred;
+use j45l\maybe\Maybe;
+use j45l\maybe\None;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Result\Success;
+use j45l\maybe\Result\ThrowableReason;
+use j45l\maybe\Some;
+use j45l\maybe\Test\Unit\Fixtures\EntityManagerStub;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -30,8 +30,8 @@ class ExamplesTest extends TestCase
         $customer = Some::from('customer');
         $entityManager = new EntityManagerStub();
 
-        $either =
-            Either::start()->next($this->insertCustomer($entityManager))->with($customer)
+        $maybe =
+            Maybe::start()->next($this->insertCustomer($entityManager))->with($customer)
             ->orElse($this->updateCustomer($entityManager))
             ->resolve()
         ;
@@ -39,8 +39,8 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(Some::class, $entityManager->insertInvokedWith);
         $this->assertInstanceOf(None::class, $entityManager->updateInvokedWith);
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
-        $this->assertInstanceOf(Success::class, $either);
-        $this->assertCount(0, $either->trail()->failed());
+        $this->assertInstanceOf(Success::class, $maybe);
+        $this->assertCount(0, $maybe->trail()->failed());
     }
 
     /** @param EntityManagerStub<string> $entityManager */
@@ -67,8 +67,8 @@ class ExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
         $entityManager->insertWillFail = true;
 
-        $either =
-            Either::start()->next($this->insertCustomer($entityManager))->with($customer)
+        $maybe =
+            Maybe::start()->next($this->insertCustomer($entityManager))->with($customer)
                 ->orElse($this->updateCustomer($entityManager))
                 ->resolve()
         ;
@@ -77,8 +77,8 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(Some::class, $entityManager->updateInvokedWith);
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
         $this->assertEquals($customer, $entityManager->updateInvokedWith);
-        $this->assertInstanceOf(Success::class, $either);
-        $this->assertCount(0, $either->trail()->failed());
+        $this->assertInstanceOf(Success::class, $maybe);
+        $this->assertCount(0, $maybe->trail()->failed());
     }
 
     public function testDoOrElseFails(): void
@@ -88,8 +88,8 @@ class ExamplesTest extends TestCase
         $entityManager->insertWillFail = true;
         $entityManager->updateWillFail = true;
 
-        $either =
-            Either::start()->next($this->insertCustomer($entityManager))->with($customer)
+        $maybe =
+            Maybe::start()->next($this->insertCustomer($entityManager))->with($customer)
                 ->orElse($this->updateCustomer($entityManager))
                 ->resolve();
 
@@ -97,13 +97,13 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(Some::class, $entityManager->updateInvokedWith);
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
         $this->assertEquals($customer, $entityManager->updateInvokedWith);
-        $this->assertInstanceOf(Failure::class, $either);
-        $this->assertCount(1, $either->trail()->failed());
+        $this->assertInstanceOf(Failure::class, $maybe);
+        $this->assertCount(1, $maybe->trail()->failed());
 
-        $reason = $either->trail()->failed()[0]->reason();
+        $reason = $maybe->trail()->failed()[0]->reason();
         $this->assertInstanceOf(ThrowableReason::class, $reason);
         $this->assertEquals(new RuntimeException('Failed to update'), $reason->throwable());
-        $this->assertEquals($reason, $either->reason());
+        $this->assertEquals($reason, $maybe->reason());
     }
 
     public function testGetContext(): void
@@ -112,19 +112,19 @@ class ExamplesTest extends TestCase
             return Some::from($some->get() + 1);
         };
 
-        $either = Some::from(42)
+        $maybe = Some::from(42)
             ->pipe($increment)
             ->pipe($increment)
         ;
 
-        $firstContextParameter = first($either->context()->parameters()->asArray());
+        $firstContextParameter = first($maybe->context()->parameters()->asArray());
 
         $this->assertInstanceOf(Some::class, $firstContextParameter);
         $this->assertEquals(43, $firstContextParameter->get());
 
-        $this->assertCount(2, $either->context()->trail());
-        $this->assertEquals([42, 43], $either->context()->trail()->values());
-        $this->assertEquals([42, 43, 44], $either->trail()->values());
+        $this->assertCount(2, $maybe->context()->trail());
+        $this->assertEquals([42, 43], $maybe->context()->trail()->values());
+        $this->assertEquals([42, 43, 44], $maybe->trail()->values());
     }
 
     public function testMap(): void
@@ -135,11 +135,11 @@ class ExamplesTest extends TestCase
             return Some::from($number->get() + 1);
         };
 
-        $either = Some::from(41)->map($increment);
+        $maybe = Some::from(41)->map($increment);
         $this->assertTrue($sideEffect);
 
-        $this->assertInstanceOf(Some::class, $either);
-        $this->assertEquals(42, $either->get());
+        $this->assertInstanceOf(Some::class, $maybe);
+        $this->assertEquals(42, $maybe->get());
     }
 
     public function testTag(): void
@@ -154,7 +154,7 @@ class ExamplesTest extends TestCase
             return 'email@test.com';
         };
 
-        $chain = Either::start()
+        $chain = Maybe::start()
             ->withTag('id')->next($id)
             ->withTag('name')->next($name)
             ->withTag('email')->next($email)
@@ -182,7 +182,7 @@ class ExamplesTest extends TestCase
         };
 
 
-        $chain = Either::start()
+        $chain = Maybe::start()
             ->tagNext('id', $id)
             ->tagNext('name', $name)
             ->tagNext('email', $email)
@@ -214,7 +214,7 @@ class ExamplesTest extends TestCase
         $this->assertEquals(42, $noneNext->get());
         $this->assertEquals(42, $someNext->get());
         $this->assertEquals([1, 42, 42], $someNext->trail()->values());
-        $this->assertEquals([ThrowableReason::from('42!')], $someNext->trail()->failureReasons());
+        $this->assertEquals([ThrowableReason::fromString('42!')], $someNext->trail()->failureReasons());
     }
 
     public function testOrElse(): void
@@ -288,11 +288,11 @@ class ExamplesTest extends TestCase
             return $value + 1;
         };
 
-        $either = Either::start()->with(41)->andThen($increment);
+        $maybe = Maybe::start()->with(41)->andThen($increment);
 
-        $this->assertInstanceOf(Deferred::class, $either);
+        $this->assertInstanceOf(Deferred::class, $maybe);
 
-        $some = $either->resolve();
+        $some = $maybe->resolve();
 
         $this->assertInstanceOf(Some::class, $some);
         $this->assertEquals(42, $some->get());
@@ -308,7 +308,7 @@ class ExamplesTest extends TestCase
             throw new RuntimeException('42!');
         };
 
-        $failure = Either::start()->andThen($failure)->andThen($increment);
+        $failure = Maybe::start()->andThen($failure)->andThen($increment);
 
         $this->assertInstanceOf(Failure::class, $failure);
         $this->assertEquals('42!', $failure->reason()->toString());

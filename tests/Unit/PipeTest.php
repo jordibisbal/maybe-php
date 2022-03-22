@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit;
+namespace j45l\maybe\Test\Unit;
 
 use Closure;
-use j45l\either\Deferred;
-use j45l\either\Either;
-use j45l\either\None;
-use j45l\either\Result\Failure;
-use j45l\either\Result\Success;
-use j45l\either\Some;
+use j45l\maybe\Deferred;
+use j45l\maybe\Maybe;
+use j45l\maybe\None;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Result\Success;
+use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \j45l\either\Either
- * @covers \j45l\either\Deferred
+ * @covers \j45l\maybe\Maybe
+ * @covers \j45l\maybe\Deferred
  */
 final class PipeTest extends TestCase
 {
@@ -24,23 +24,23 @@ final class PipeTest extends TestCase
     {
         $addOne = $this->addOne();
 
-        $either = Some::from(1)->pipe($addOne)->pipe($addOne);
+        $maybe = Some::from(1)->pipe($addOne)->pipe($addOne);
 
-        self::assertInstanceOf(Deferred::class, $either);
+        self::assertInstanceOf(Deferred::class, $maybe);
 
-        $either = $either->resolve();
+        $maybe = $maybe->resolve();
 
-        self::assertInstanceOf(Some::class, $either);
-        self::assertEquals(3, $either->get());
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(3, $maybe->get());
     }
 
     /** @noinspection PhpUnusedParameterInspection */
 
     private function addOne(): Closure
     {
-        /** @param Some $either */
-        return static function (Some $either): Some {
-            return Some::from($either->get() + 1);
+        /** @param Some $maybe */
+        return static function (Some $maybe): Some {
+            return Some::from($maybe->get() + 1);
         };
     }
 
@@ -52,10 +52,10 @@ final class PipeTest extends TestCase
         $called = false;
         $notCalled = $this->notCalled($called);
 
-        $either = Some::from(1)->pipe($addOne)->pipe($none)->pipe($notCalled);
-        $either = $either->resolve();
+        $maybe = Some::from(1)->pipe($addOne)->pipe($none)->pipe($notCalled);
+        $maybe = $maybe->resolve();
 
-        self::assertInstanceOf(None::class, $either);
+        self::assertInstanceOf(None::class, $maybe);
         self::assertFalse($called);
     }
 
@@ -65,7 +65,7 @@ final class PipeTest extends TestCase
      */
     private function none(): Closure
     {
-        return static function (Either $either): Either {
+        return static function (Maybe $maybe): Maybe {
             return None::create();
         };
     }
@@ -76,7 +76,7 @@ final class PipeTest extends TestCase
      */
     private function notCalled(bool &$called): Closure
     {
-        return static function (Either $either) use (&$called): Either {
+        return static function (Maybe $maybe) use (&$called): Maybe {
             $called = true;
 
             return None::create();
@@ -91,11 +91,11 @@ final class PipeTest extends TestCase
         $called = false;
         $notCalled = $this->notCalled($called);
 
-        $either = Some::from(1)->pipe($addOne)->pipe($fails)->pipe($notCalled);
-        $either = $either->resolve();
+        $maybe = Some::from(1)->pipe($addOne)->pipe($fails)->pipe($notCalled);
+        $maybe = $maybe->resolve();
 
-        self::assertInstanceOf(None::class, $either);
-        self::assertInstanceOf(Failure::class, $either);
+        self::assertInstanceOf(None::class, $maybe);
+        self::assertInstanceOf(Failure::class, $maybe);
         self::assertFalse($called);
     }
 
@@ -115,7 +115,7 @@ final class PipeTest extends TestCase
      */
     private function fails(): Closure
     {
-        return static function (Either $either): Either {
+        return static function (Maybe $maybe): Maybe {
             throw new RuntimeException();
         };
     }

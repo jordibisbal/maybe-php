@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit\Context;
+namespace j45l\maybe\Test\Unit\Context;
 
-use j45l\either\Context\Trail;
-use j45l\either\None;
-use j45l\either\Result\Failure;
-use j45l\either\Result\Reason;
-use j45l\either\Some;
+use j45l\maybe\Context\Trail;
+use j45l\maybe\None;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Result\Reason;
+use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
 
 use function Functional\invoke;
 
-/** @covers \j45l\either\Context\Trail */
+/** @covers \j45l\maybe\Context\Trail */
 final class TrailTest extends TestCase
 {
     public function testPushingToATrailDoesNotModifyIt(): void
@@ -25,7 +25,7 @@ final class TrailTest extends TestCase
         self::assertCount(1, $secondTrail->asArray());
     }
 
-    public function testGettingAllDoesNotReturnNoneEither(): void
+    public function testGettingAllDoesNotReturnNoneMaybe(): void
     {
         $trail = (Trail::create())
             ->push(Some::from(1))
@@ -36,7 +36,7 @@ final class TrailTest extends TestCase
         self::assertEquals([1, 2], $trail->values());
     }
 
-    public function testGettingButLastDoesNotReturnLastEither(): void
+    public function testGettingButLastDoesNotReturnLastMaybe(): void
     {
         $trail = (Trail::create())
             ->push(Some::from(1))
@@ -75,12 +75,12 @@ final class TrailTest extends TestCase
         self::assertEquals([1, 2, 3], $trail->values());
     }
 
-    public function testGettingFailureDoesNotReturnOtherEither(): void
+    public function testGettingFailureDoesNotReturnOtherMaybe(): void
     {
         $trail = (Trail::create())
             ->push(Some::from(1))
             ->push(None::create())
-            ->push(Failure::from(Reason::from('failed')))
+            ->push(Failure::from(Reason::fromString('failed')))
         ;
 
         self::assertCount(1, $trail->failed());
@@ -103,7 +103,7 @@ final class TrailTest extends TestCase
     {
         $trail = Trail::create()
             ->push(Some::from(42))
-            ->push(Failure::from(Reason::from('because failed')))
+            ->push(Failure::from(Reason::fromString('because failed')))
         ;
 
         self::assertEquals(

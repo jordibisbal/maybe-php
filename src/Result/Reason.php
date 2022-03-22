@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Result;
+namespace j45l\maybe\Result;
 
 class Reason
 {
@@ -14,7 +14,7 @@ class Reason
         $this->reason = $reason;
     }
 
-    public static function from(string $reason): Reason
+    public static function fromString(string $reason): Reason
     {
         return new self($reason);
     }

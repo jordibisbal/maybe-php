@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Result;
+namespace j45l\maybe\Result;
 
 use RuntimeException;
 use Throwable;
@@ -18,7 +18,7 @@ final class ThrowableReason extends Reason
         $this->throwable = $throwable;
     }
 
-    public static function from(string $reason): Reason
+    public static function fromString(string $reason): Reason
     {
         return new self($reason, new RuntimeException($reason));
     }

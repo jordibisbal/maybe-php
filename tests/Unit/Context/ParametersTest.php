@@ -1,13 +1,13 @@
 <?php
 
-namespace j45l\either\Test\Unit\Context;
+namespace j45l\maybe\Test\Unit\Context;
 
-use j45l\either\Context\Parameters;
+use j45l\maybe\Context\Parameters;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 
-/** @covers \j45l\either\Context\Parameters */
+/** @covers \j45l\maybe\Context\Parameters */
 class ParametersTest extends TestCase
 {
     public function testParametersCanBeRetrievedAsArray(): void

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Context;
+namespace j45l\maybe\Context;
 
-use j45l\either\Either;
-use j45l\either\Tags\Tag;
-use j45l\either\Tags\Untagged;
+use j45l\maybe\Maybe;
+use j45l\maybe\Tags\Tag;
+use j45l\maybe\Tags\Untagged;
 
 /**
  * @template T
@@ -62,12 +62,12 @@ final class Context
     }
 
     /**
-     * @param Either<T> $either
+     * @param Maybe<T> $maybe
      * @return Context<T>
      */
-    public function push(Either $either): Context
+    public function push(Maybe $maybe): Context
     {
-        return new self($this->parameters(), $this->trail()->push($either, $this->tag), $this->tag);
+        return new self($this->parameters(), $this->trail()->push($maybe, $this->tag), $this->tag);
     }
 
     public function parameters(): Parameters

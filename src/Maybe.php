@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace j45l\either;
+namespace j45l\maybe;
 
-use j45l\either\Context\Context;
-use j45l\either\Context\Parameters;
-use j45l\either\Context\Trail;
-use j45l\either\Result\Failure;
-use j45l\either\Result\Success;
-use j45l\either\Result\ThrowableReason;
-use j45l\either\Tags\Tag;
-use j45l\either\Tags\TagCreator;
+use j45l\maybe\Context\Context;
+use j45l\maybe\Context\Parameters;
+use j45l\maybe\Context\Trail;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Result\Success;
+use j45l\maybe\Result\ThrowableReason;
+use j45l\maybe\Tags\Tag;
+use j45l\maybe\Tags\TagCreator;
 use j45l\functional\Functor;
 
 /**
  * @template T
  */
-abstract class Either implements Functor
+abstract class Maybe implements Functor
 {
     /** @var Context<T> */
     protected $context;
@@ -31,9 +31,9 @@ abstract class Either implements Functor
     /**
      * @param mixed $value
      * @param Context<T> $context
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    final protected static function build($value, Context $context): Either
+    final protected static function build($value, Context $context): Maybe
     {
         /** @infection-ignore-all */
         switch (true) {
@@ -54,7 +54,7 @@ abstract class Either implements Functor
         return Success::create();
     }
 
-    /** @return Either<T> */
+    /** @return Maybe<T> */
     public function map(callable $callable): Functor
     {
         return (new Deferred(
@@ -82,17 +82,17 @@ abstract class Either implements Functor
 
     /**
      * @param mixed[] $parameters
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function resolve(...$parameters): Either
+    public function resolve(...$parameters): Maybe
     {
         return $this->withParameters(...$parameters);
     }
 
     /**
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function pipe(callable $callable): Either
+    public function pipe(callable $callable): Maybe
     {
         return new Deferred($callable, $this->context()->push($this)->withParameters($this));
     }
@@ -107,18 +107,18 @@ abstract class Either implements Functor
 
     /**
      * @param mixed $value
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function andThen($value): Either
+    public function andThen($value): Maybe
     {
         return $this->next($value);
     }
 
     /**
      * @param mixed $value
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function next($value): Either
+    public function next($value): Maybe
     {
         return self::build($value, $this->context()->push($this->resolve()));
     }
@@ -135,9 +135,9 @@ abstract class Either implements Functor
     /**
      * @param string|Tag $tag
      * @param mixed $value
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function tagNext($tag, $value): Either
+    public function tagNext($tag, $value): Maybe
     {
         return self::build(
             $value,
@@ -148,9 +148,9 @@ abstract class Either implements Functor
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param mixed $value
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    public function orElse($value): Either
+    public function orElse($value): Maybe
     {
         return $this;
     }
@@ -172,16 +172,16 @@ abstract class Either implements Functor
      * @param array<mixed> $parameters
      * @return static<T>
      */
-    final public function with(...$parameters): Either
+    final public function with(...$parameters): Maybe
     {
         return $this->cloneWith($this->context->withParameters(...$parameters));
     }
 
     /**
      * @param Tag | int | string $tag
-     * @return Either<T>
+     * @return Maybe<T>
      */
-    final public function withTag($tag): Either
+    final public function withTag($tag): Maybe
     {
         return $this->resolve()->cloneWith(
             $this->context()->push($this->resolve())
@@ -191,10 +191,10 @@ abstract class Either implements Functor
 
     /**
      * @param mixed[] $parameters
-     * @return Either<T>
+     * @return Maybe<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function withParameters(...$parameters): Either
+    protected function withParameters(...$parameters): Maybe
     {
         /** @infection-ignore-all */
         switch (true) {

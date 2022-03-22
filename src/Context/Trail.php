@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Context;
+namespace j45l\maybe\Context;
 
 use Countable;
-use j45l\either\Either;
-use j45l\either\Result\Failure;
-use j45l\either\Result\Reason;
-use j45l\either\Some;
-use j45l\either\Tags\StringTag;
-use j45l\either\Tags\Tag;
-use j45l\either\Tags\Untagged;
+use j45l\maybe\Maybe;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Result\Reason;
+use j45l\maybe\Some;
+use j45l\maybe\Tags\StringTag;
+use j45l\maybe\Tags\Tag;
+use j45l\maybe\Tags\Untagged;
 
 use function Functional\invoke;
 use function Functional\map;
@@ -24,10 +24,10 @@ use function j45l\functional\unindex;
  */
 final class Trail implements Countable
 {
-    /** @var array<Either<T>> */
+    /** @var array<Maybe<T>> */
     protected $trail = [];
 
-    /** @var array<Either<T>> */
+    /** @var array<Maybe<T>> */
     private $taggedTrail = [];
 
     private function __construct()
@@ -41,20 +41,20 @@ final class Trail implements Countable
     }
 
     /**
-     * @param Either<T> $either
+     * @param Maybe<T> $maybe
      * @param Tag|null $tag
      * @return Trail<T>
      */
-    public function push(Either $either, Tag $tag = null): Trail
+    public function push(Maybe $maybe, Tag $tag = null): Trail
     {
         $new = clone $this;
-        $new->trail[] = $either;
-        $new->taggedTrail = $this->pushWithTag($either, $tag ?? Untagged::create());
+        $new->trail[] = $maybe;
+        $new->taggedTrail = $this->pushWithTag($maybe, $tag ?? Untagged::create());
 
         return $new;
     }
 
-    /** @return Either<T>[] */
+    /** @return Maybe<T>[] */
     public function asArray(): array
     {
         return $this->trail;
@@ -66,8 +66,8 @@ final class Trail implements Countable
         return array_values(
             select(
                 $this->trail,
-                function (Either $either) {
-                    return $either instanceof Failure;
+                function (Maybe $maybe) {
+                    return $maybe instanceof Failure;
                 }
             )
         );
@@ -80,7 +80,7 @@ final class Trail implements Countable
     }
 
     /**
-     * @param array<Either<T>> $items
+     * @param array<Maybe<T>> $items
      * @return array<Some<T>>
      */
     private function selectSome(array $items): array
@@ -91,7 +91,7 @@ final class Trail implements Countable
     }
 
     /**
-     * @param array<Either<T>> $items
+     * @param array<Maybe<T>> $items
      * @return array<Failure<T>>
      */
     private function selectFailures(array $items): array
@@ -143,16 +143,16 @@ final class Trail implements Countable
     }
 
     /**
-     * @param Either<T> $either
-     * @return array<Either<T>>
+     * @param Maybe<T> $maybe
+     * @return array<Maybe<T>>
      */
-    private function pushWithTag(Either $either, Tag $tag): array
+    private function pushWithTag(Maybe $maybe, Tag $tag): array
     {
         /** @noinspection DegradedSwitchInspection */
         /** @infection-ignore-all */
         switch (true) {
             case $tag instanceof StringTag:
-                return array_replace($this->taggedTrail, [$tag->toString() => $either]);
+                return array_replace($this->taggedTrail, [$tag->toString() => $maybe]);
             default:
                 return $this->taggedTrail;
         }
@@ -176,7 +176,7 @@ final class Trail implements Countable
         return unindex(invoke($this->selectFailures($this->trail), 'reason'));
     }
 
-    /** @return array<string, Either<T>> */
+    /** @return array<string, Maybe<T>> */
     public function tagged(): array
     {
         return $this->taggedTrail;

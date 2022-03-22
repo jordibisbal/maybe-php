@@ -1,6 +1,6 @@
-## lift(callable $callable): Either
+## lift(callable $callable): Maybe
 
-Returns a new function wrapped in an *Either*, on call the function parameters are also briefly lifted,
+Returns a new function wrapped in an *Maybe*, on call the function parameters are also briefly lifted,
 if any of the parameters is *None* the lifted function will return *None* (unless any is *Failure*),
 if any of the parameters is *Failure* the lifted function will return *Failure*.
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace j45l\either\Test\Unit\Stubs;
+namespace j45l\maybe\Test\Unit\Fixtures;
 
-use j45l\either\Either;
-use j45l\either\None;
-use j45l\either\Some;
+use j45l\maybe\Maybe;
+use j45l\maybe\None;
+use j45l\maybe\Some;
 use RuntimeException;
 
 /**
@@ -12,9 +12,9 @@ use RuntimeException;
  */
 class EntityManagerStub
 {
-    /** @var Either<T> */
+    /** @var Maybe<T> */
     public $insertInvokedWith;
-    /** @var Either<T> */
+    /** @var Maybe<T> */
     public $updateInvokedWith;
 
     /** @var bool */

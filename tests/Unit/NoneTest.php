@@ -1,12 +1,12 @@
 <?php
 
-namespace j45l\either\Test\Unit;
+namespace j45l\maybe\Test\Unit;
 
 use Closure;
-use j45l\either\None;
+use j45l\maybe\None;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \j45l\either\None */
+/** @covers \j45l\maybe\None */
 class NoneTest extends TestCase
 {
     public function testPipeFromNoneReturnsItself(): void

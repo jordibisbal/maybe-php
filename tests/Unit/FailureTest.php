@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit;
+namespace j45l\maybe\Test\Unit;
 
-use j45l\either\Context\Parameters;
-use j45l\either\Either;
-use j45l\either\Result\Failure;
-use j45l\either\Result\Reason;
+use j45l\maybe\Context\Parameters;
+use j45l\maybe\Maybe;
+use j45l\maybe\Result\Failure;
+use j45l\maybe\Result\Reason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \j45l\either\Result\Failure
+ * @covers \j45l\maybe\Result\Failure
  */
 final class FailureTest extends TestCase
 {
     public function testCanBeCreatedFromFailure(): void
     {
-        $failure = Failure::from(Reason::from('reason'));
+        $failure = Failure::from(Reason::fromString('reason'));
 
         self::assertEquals('reason', $failure->reason()->toString());
     }
@@ -40,7 +40,7 @@ final class FailureTest extends TestCase
             throw new RuntimeException();
         };
 
-        $failure = Either::start()->next($succeeding)->with(1, 2, 3)->andThen($failing)->resolve();
+        $failure = Maybe::start()->next($succeeding)->with(1, 2, 3)->andThen($failing)->resolve();
 
         self::assertInstanceOf(Failure::class, $failure);
         self::assertEquals(Parameters::create(1, 2, 3), $failure->context()->parameters());

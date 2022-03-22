@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace j45l\either\Test\Unit;
+namespace j45l\maybe\Test\Unit;
 
-use j45l\either\Some;
-use j45l\either\Test\Unit\Stubs\MutableInteger;
+use j45l\maybe\Some;
+use j45l\maybe\Test\Unit\Fixtures\MutableInteger;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \j45l\either\Some */
+/** @covers \j45l\maybe\Some */
 final class SomeTest extends TestCase
 {
     public function testResolvesToItself(): void

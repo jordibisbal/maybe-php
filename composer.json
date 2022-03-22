@@ -1,6 +1,6 @@
 {
-    "name": "j45l/either-php",
-    "description": "Either for PHP",
+    "name": "j45l/maybe-php",
+    "description": "Maybe for PHP",
     "keywords": [
         "optional", "option", "either", "maybe"
     ],
@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "j45l\\either\\": "src"
+            "j45l\\maybe\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "j45l\\either\\Test\\": "tests"
+            "j45l\\maybe\\Test\\": "tests"
         },
         "files": [
             "src/Lift.php"
