@@ -7,8 +7,8 @@ use j45l\maybe\DoTry\Success;
 use j45l\maybe\None;
 use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
-
 use RuntimeException;
+
 use function j45l\maybe\DoTry\doTry;
 
 /** @covers ::j45l\maybe\DoTry\doTry */

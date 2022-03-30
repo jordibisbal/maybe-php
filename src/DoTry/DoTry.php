@@ -6,7 +6,6 @@ namespace j45l\maybe\DoTry;
 
 use j45l\maybe\Deferred;
 use j45l\maybe\Maybe;
-use j45l\maybe\None;
 use j45l\maybe\Some;
 
 /**
