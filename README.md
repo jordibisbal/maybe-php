@@ -12,6 +12,11 @@ Maybe (inspired by the functional thing), helps to:
 Is a supercharged version on the Maybe from functional programing, it provides functionality
 present in such languages along some extra to solve some common use cases in php.
 
+DoTry, adds to *maybe* some behavior of *Try()* (e.g. from Scala), the result of a *doTry()* can be a *Failure* or a *Success* but could
+also be something else (a non failure) like a *None*.
+
+A *Trail* helps to collect *failures*/*values* from a *try*/*next* chain.
+
 Some literature about, google for more:
 
 https://www.thoughtworks.com/en-es/insights/blog/either-data-type-alternative-throwing-exceptions

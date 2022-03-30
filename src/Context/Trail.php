@@ -6,8 +6,8 @@ namespace j45l\maybe\Context;
 
 use Countable;
 use j45l\maybe\Maybe;
-use j45l\maybe\Result\Failure;
-use j45l\maybe\Result\Reason;
+use j45l\maybe\DoTry\Failure;
+use j45l\maybe\DoTry\Reason;
 use j45l\maybe\Some;
 use j45l\maybe\Tags\StringTag;
 use j45l\maybe\Tags\Tag;

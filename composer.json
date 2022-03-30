@@ -38,7 +38,8 @@
             "j45l\\maybe\\Test\\": "tests"
         },
         "files": [
-            "src/Lift.php"
+            "src/Lift.php",
+            "src/DoTry/DoTry.php"
         ]
     },
     "scripts": {

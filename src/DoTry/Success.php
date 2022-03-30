@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Result;
+namespace j45l\maybe\DoTry;
 
 use j45l\maybe\Context\Context;
 use j45l\maybe\Some;
@@ -20,12 +20,11 @@ final class Success extends Some
     }
 
     /**
-     * @param T $value
+     * @param mixed $value
      * @return Success<T>
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public static function from($value): Some
     {
-        return static::create();
+        return new self($value, Context::create());
     }
 }

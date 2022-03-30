@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Result;
+namespace j45l\maybe\DoTry;
 
 use RuntimeException;
 use Throwable;

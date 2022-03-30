@@ -5,13 +5,14 @@ namespace j45l\maybe\Test\Unit;
 use Closure;
 use j45l\maybe\Deferred;
 use j45l\maybe\None;
-use j45l\maybe\Result\Failure;
+use j45l\maybe\DoTry\Failure;
 use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function j45l\maybe\lift;
 
+/** @covers ::j45l\maybe\lift */
 class LiftTest extends TestCase
 {
     public function testLiftingASuccessfulFunction(): void

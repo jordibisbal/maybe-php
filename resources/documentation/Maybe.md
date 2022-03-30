@@ -35,7 +35,7 @@ advised. On extension vs generics vs as-is, each has its tradeoffs.
 
 ## resolve(...$parameters): Maybe
 
-Forces an optional to be resolved, return itself but on Deferred, an *Maybe* from its callable execution return value is returned.
+Forces a maybe to be resolved, return itself but on Deferred, an *Maybe* from its callable execution return value is returned.
 
 If any *$parameter* is given, a new *Maybe* with such parameters is used on resolve, this is syntactic
 sugar so new two statement are equivalent.
@@ -84,30 +84,11 @@ $this->assertEquals([42, 43, 44], $either->trail()->values());
 ```
 
 Be aware that while Either::context()->trail does not include the Either itself, Either::trail() does.
-## static do(Closure $closure): Deferred
-
-Returns a *Deferred* from *$closure* (with the current context).
-
-```php
-// \j45l\maybe\Test\Unit\ExamplesTest::testDo
-// \j45l\maybe\Test\Unit\ExamplesTest::testDoOrElse
-// \j45l\maybe\Test\Unit\ExamplesTest::testDoOrElseFails
-$either =
-    Either::start()->next($this->insertCustomer($em))->with($customer)
-    // The parameters/context ($customer) is passed to orElse(), so does not need to
-    // be provided again, although you could override that by using a second with().
-    ->orElse($this->updateCustomer($em))
-    // orElse() cause the closure from do() to be evaluated, orElse()'s closure is evaluated
-    // on resolve() only when do() returns a none/failure
-    ->resolve()
-    // The value, either a Failure or a Success
-;
-```
 
 ## getOrElse(mixed $value): mixed $value
 
 Return the *Either* value if is a *Some* or *$value$* otherwise 
-(if it is a *Deferred*, first is *resolve*d and then *getOrElse* is called on the result)
+(on a *Deferred*, first is *resolve*d and then *getOrElse* is called on the result)
 
 ```php
 // \j45l\maybe\Test\Unit\SomeTest::testGetOrElse
@@ -126,9 +107,6 @@ self::assertEquals(42, Deferred::create($get42)->getOrElse(null));
 Maps the *Either* value (i.e. calls *closure* with the *Either* as parameter).
 
 Mapping a *None* results in a *None*, being the *closure* not evaluated.
-
-Maps is from Functor, so it returns a Functor, that could be confusing when dealing with the result,
-do some type assessment prior to its use, to ensure the expected type is the returned one.
 
 ```php
 // \j45l\maybe\Test\Unit\ExamplesTest::testMap
@@ -318,6 +296,4 @@ Returns the value
 
 ## Success
 
-An *Either*(*Success* with true value) to signal successful operations
-
-![Class diagram](DetailedClassDiagram.png)
+An *Either*(*Success* with true value) to signal successful operations (vs. *Failure*), used mainly to deal with exceptions

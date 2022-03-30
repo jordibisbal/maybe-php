@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe;
 
 use j45l\maybe\Context\Context;
-use j45l\maybe\Result\ThrowableReason;
+use j45l\maybe\DoTry\ThrowableReason;
 use Throwable;
 
 /**

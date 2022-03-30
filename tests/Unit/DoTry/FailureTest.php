@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Test\Unit;
+namespace j45l\maybe\Test\Unit\DoTry;
 
 use j45l\maybe\Context\Parameters;
+use j45l\maybe\DoTry\Failure;
+use j45l\maybe\DoTry\Reason;
 use j45l\maybe\Maybe;
-use j45l\maybe\Result\Failure;
-use j45l\maybe\Result\Reason;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \j45l\maybe\Result\Failure
+ * @covers \j45l\maybe\DoTry\Failure
  */
 final class FailureTest extends TestCase
 {

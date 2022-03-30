@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Result;
+namespace j45l\maybe\DoTry;
 
 use j45l\maybe\Context\Context;
 use j45l\maybe\None;

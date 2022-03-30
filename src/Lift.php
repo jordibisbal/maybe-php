@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe;
 
 use Closure;
-use j45l\maybe\Result\Failure;
+use j45l\maybe\DoTry\Failure;
 
 use function Functional\first;
 use function Functional\invoke;

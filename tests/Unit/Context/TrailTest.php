@@ -6,8 +6,8 @@ namespace j45l\maybe\Test\Unit\Context;
 
 use j45l\maybe\Context\Trail;
 use j45l\maybe\None;
-use j45l\maybe\Result\Failure;
-use j45l\maybe\Result\Reason;
+use j45l\maybe\DoTry\Failure;
+use j45l\maybe\DoTry\Reason;
 use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
 

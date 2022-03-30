@@ -6,15 +6,15 @@ namespace j45l\maybe\Test\Unit;
 
 use j45l\maybe\Maybe;
 use j45l\maybe\None;
-use j45l\maybe\Result\Success;
+use j45l\maybe\DoTry\Success;
 use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \j45l\maybe\Maybe
  * @covers \j45l\maybe\None
- * @covers \j45l\maybe\Result\Failure
- * @covers \j45l\maybe\Result\Success
+ * @covers \j45l\maybe\DoTry\Failure
+ * @covers \j45l\maybe\DoTry\Success
  */
 final class MaybeNextTest extends TestCase
 {

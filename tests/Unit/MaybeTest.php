@@ -6,7 +6,7 @@ namespace j45l\maybe\Test\Unit;
 
 use j45l\maybe\Maybe;
 use j45l\maybe\None;
-use j45l\maybe\Result\Failure;
+use j45l\maybe\DoTry\Failure;
 use j45l\maybe\Some;
 use j45l\maybe\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ use function j45l\maybe\lift;
  * @covers \j45l\maybe\Maybe
  * @covers \j45l\maybe\None
  * @covers \j45l\maybe\Some
- * @covers \j45l\maybe\Result\Failure
+ * @covers \j45l\maybe\DoTry\Failure
  * @covers \j45l\maybe\Deferred
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */

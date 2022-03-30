@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Test\Unit;
+namespace j45l\maybe\Test\Unit\DoTry;
 
-use j45l\maybe\Result\Success;
+use j45l\maybe\DoTry\Success;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \j45l\maybe\Result\Success */
+/** @covers \j45l\maybe\DoTry\Success */
 final class SuccessTest extends TestCase
 {
     public function testHasTrueValue(): void
@@ -18,11 +18,11 @@ final class SuccessTest extends TestCase
         self::assertTrue($some->get());
     }
 
-    public function testIgnoresValueWhenCreateUsingFrom(): void
+    public function testHasValueWhenCreateUsingFrom(): void
     {
         $some = Success::from(42);
 
-        self::assertIsBool($some->get());
-        self::assertTrue($some->get());
+        self::assertInstanceOf(Success::class, $some);
+        self::assertEquals(42, $some->get());
     }
 }
