@@ -26,3 +26,4 @@ function doTry(callable $callable): Maybe
 
     return $wrap(Deferred::create($callable)->resolve());
 }
+

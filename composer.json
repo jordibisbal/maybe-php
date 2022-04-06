@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.1|~8",
-        "j45l/functional-php": "1.2.1"
+        "j45l/functional-php": "^1.2.1"
     },
     "require-dev": {
         "phpstan/phpstan-phpunit": "^1.0",
