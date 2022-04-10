@@ -1,2 +1,2 @@
 #!/bin/sh
-phpdbg -qrr vendor/bin/infection --threads=6 --ansi -s
+XDEBUG_MODE=coverage vendor/bin/infection --threads=8 --ansi -s

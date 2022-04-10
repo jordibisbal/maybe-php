@@ -21,4 +21,9 @@ class NoneTest extends TestCase
             return $value;
         };
     }
+
+    public function testGetOrElse(): void
+    {
+        self::assertEquals(42, None::create()->getOrElse(42));
+    }
 }

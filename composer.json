@@ -31,16 +31,16 @@
     "autoload": {
         "psr-4": {
             "j45l\\maybe\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "j45l\\maybe\\Test\\": "tests"
         },
         "files": [
             "src/Lift.php",
             "src/DoTry/DoTry.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "j45l\\maybe\\Test\\": "tests"
+        }
     },
     "scripts": {
         "tests": "vendor/bin/phpunit",
