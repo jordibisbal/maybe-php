@@ -8,9 +8,11 @@ use LogicException;
 
 /**
  * @template T
+ * @template ET of \Exception
  * @param Maybe<T> $maybe
+ * @param ET $exception
  * @return Some<T>
- * @throws Exception
+ * @throws ET | LogicException
  */
 function assertSome(Maybe $maybe, Exception $exception = null): Some
 {

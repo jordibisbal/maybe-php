@@ -54,7 +54,11 @@ abstract class Maybe implements Functor
         return Success::create();
     }
 
-    /** @return Maybe<T> */
+    /**
+     * @template TC
+     * @param callable(): TC $callable
+     * @return Maybe<TC>
+     */
     public function map(callable $callable): Functor
     {
         return (new Deferred(
