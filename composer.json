@@ -33,8 +33,9 @@
             "j45l\\maybe\\": "src"
         },
         "files": [
-            "src/Lift.php",
-            "src/DoTry/DoTry.php"
+            "src/AssertSome.php",
+            "src/DoTry/DoTry.php",
+            "src/Lift.php"
         ]
     },
     "autoload-dev": {

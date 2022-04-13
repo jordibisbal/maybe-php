@@ -35,7 +35,7 @@ class Some extends Maybe
         return new self($value, Context::create());
     }
 
-    /** @return mixed $value */
+    /** @return T $value */
     public function get()
     {
         return $this->value;
@@ -43,7 +43,7 @@ class Some extends Maybe
 
     /**
      * @param mixed $value
-     * @return mixed
+     * @return T
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getOrElse($value)
