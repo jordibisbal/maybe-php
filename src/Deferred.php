@@ -80,6 +80,16 @@ class Deferred extends Maybe
     }
 
     /**
+     * @param mixed $default
+     * @param string|int|array<string|int> $propertyName
+     * @return mixed
+     */
+    public function takeOrElse($propertyName, $default)
+    {
+        return $this->resolve()->takeOrElse($propertyName, $default);
+    }
+
+    /**
      * @param T $value
      * @return Maybe<T>
      */

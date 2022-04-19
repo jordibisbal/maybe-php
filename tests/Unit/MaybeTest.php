@@ -130,4 +130,9 @@ final class MaybeTest extends TestCase
 
         self::assertInstanceOf(Failure::class, $some);
     }
+
+    public function testTakeOrElseReturnsDefault(): void
+    {
+        self::assertEquals(42, None::create()->takeOrElse('value', 42));
+    }
 }

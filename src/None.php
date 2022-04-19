@@ -47,7 +47,7 @@ class None extends Maybe
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    public function map(callable $callable): Functor
+    public function map(callable $function): Functor
     {
         return $this;
     }

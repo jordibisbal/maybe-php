@@ -6,6 +6,8 @@ namespace j45l\maybe;
 
 use j45l\maybe\Context\Context;
 
+use function j45l\functional\take;
+
 /**
  * @template T
  * @extends Maybe<T>
@@ -35,7 +37,7 @@ class Some extends Maybe
         return new self($value, Context::create());
     }
 
-    /** @return T $value */
+    /** @return T */
     public function get()
     {
         return $this->value;
@@ -49,6 +51,16 @@ class Some extends Maybe
     public function getOrElse($value)
     {
         return $this->get();
+    }
+
+    /**
+     * @param mixed $default
+     * @param string|int|array<string|int> $propertyName
+     * @return mixed
+     */
+    public function takeOrElse($propertyName, $default)
+    {
+        return take($this->get(), $propertyName, $default);
     }
 
     public function __clone()

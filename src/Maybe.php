@@ -16,6 +16,7 @@ use j45l\functional\Functor;
 
 /**
  * @template T
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 abstract class Maybe implements Functor
 {
@@ -56,13 +57,13 @@ abstract class Maybe implements Functor
 
     /**
      * @template TC
-     * @param callable(): TC $callable
+     * @param callable(Some<TC>): Maybe<TC> $function
      * @return Maybe<TC>
      */
-    public function map(callable $callable): Functor
+    public function map(callable $function): Functor
     {
         return (new Deferred(
-            $callable,
+            $function,
             Context::fromParameters(Parameters::create($this))
         ))->resolve();
     }
@@ -134,6 +135,17 @@ abstract class Maybe implements Functor
     public function getOrElse($value)
     {
         return $value;
+    }
+
+    /**
+     * @param mixed $default
+     * @param string|int|array<string|int> $propertyName
+     * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function takeOrElse($propertyName, $default)
+    {
+        return $default;
     }
 
     /**

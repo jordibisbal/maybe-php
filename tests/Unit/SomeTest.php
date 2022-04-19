@@ -64,4 +64,17 @@ final class SomeTest extends TestCase
     {
         self::assertEquals(42, Some::from(42)->getOrElse(null));
     }
+
+    public function testTakeOrElse(): void
+    {
+        self::assertEquals(42, Some::from(['answer' => 42])->takeOrElse('answer', null));
+    }
+
+    public function testTakeOrElseNotFound(): void
+    {
+        self::assertEquals(
+            'unknown',
+            Some::from(['question' => 42])->takeOrElse('answer', 'unknown')
+        );
+    }
 }

@@ -130,7 +130,7 @@ class ExamplesTest extends TestCase
     public function testMap(): void
     {
         $sideEffect = false;
-        $increment = function (Some $number) use (&$sideEffect) {
+        $increment = function (Some $number) use (&$sideEffect): Some {
             $sideEffect = true;
             return Some::from($number->get() + 1);
         };
