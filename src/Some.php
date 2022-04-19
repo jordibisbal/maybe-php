@@ -56,11 +56,11 @@ class Some extends Maybe
     /**
      * @param mixed $default
      * @param string|int|array<string|int> $propertyName
-     * @return mixed
+     * @return Some<mixed>
      */
-    public function takeOrElse($propertyName, $default)
+    public function takeOrElse($propertyName, $default): Some
     {
-        return take($this->get(), $propertyName, $default);
+        return Some::from(take($this->get(), $propertyName, $default));
     }
 
     public function __clone()

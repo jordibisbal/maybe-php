@@ -106,7 +106,7 @@ final class DeferredTest extends TestCase
             return ['answer' => 42];
         };
 
-        self::assertEquals(42, Deferred::create($get42)->takeOrElse('answer', null));
+        self::assertEquals(Some::from(42), Deferred::create($get42)->takeOrElse('answer', null));
     }
 
     public function testTakeOrElseNotFound(): void
@@ -115,6 +115,9 @@ final class DeferredTest extends TestCase
             return ['question' => 42];
         };
 
-        self::assertEquals('whoKnows', Deferred::create($get42)->takeOrElse('answer', 'whoKnows'));
+        self::assertEquals(
+            Some::from('whoKnows'),
+            Deferred::create($get42)->takeOrElse('answer', 'whoKnows')
+        );
     }
 }
