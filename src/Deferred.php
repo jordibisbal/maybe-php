@@ -71,6 +71,14 @@ class Deferred extends Maybe
     }
 
     /**
+     * @return Maybe<T>
+     */
+    public function sink(callable $callable): Maybe
+    {
+        return $this->resolve()->sink($callable);
+    }
+
+    /**
      * @param mixed $value
      * @return mixed
      */

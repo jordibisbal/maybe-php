@@ -99,7 +99,15 @@ abstract class Maybe implements Functor
      */
     public function pipe(callable $callable): Maybe
     {
-        return new Deferred($callable, $this->context()->push($this)->withParameters($this));
+        return self::build($callable, $this->context()->push($this)->withParameters($this));
+    }
+
+    /**
+     * @return Maybe<T>
+     */
+    public function sink(callable $callable): Maybe
+    {
+        return self::build($callable, $this->context()->push($this)->withParameters($this))->resolve();
     }
 
     /**

@@ -67,4 +67,13 @@ class Some extends Maybe
     {
         $this->value = is_object($this->value) ? clone $this->value : $this->value;
     }
+
+    /**
+     * @return Maybe<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function sink(callable $callable): Maybe
+    {
+        return $this;
+    }
 }
