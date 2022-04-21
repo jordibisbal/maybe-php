@@ -35,7 +35,8 @@
         "files": [
             "src/AssertSome.php",
             "src/DoTry/DoTry.php",
-            "src/Lift.php"
+            "src/Lift.php",
+            "src/SomeOrNone.php"
         ]
     },
     "autoload-dev": {
