@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe\DoTry;
 
 use j45l\maybe\Context\Context;
+use j45l\maybe\Maybe;
 use j45l\maybe\None;
 
 /**
@@ -38,5 +39,22 @@ final class Failure extends None
     public function reason(): Reason
     {
         return $this->reason;
+    }
+
+    /**
+     * @return Maybe<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function pipe(callable $callable): Maybe
+    {
+        return $this;
+    }
+
+    /**
+     * @return Maybe<T>
+     */
+    public function sink(callable $callable): Maybe
+    {
+        return self::build($callable, $this->context()->push($this)->withParameters($this))->resolve();
     }
 }

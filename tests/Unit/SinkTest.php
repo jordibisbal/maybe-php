@@ -30,12 +30,12 @@ final class SinkTest extends TestCase
         self::assertEquals(1, $maybe->get());
     }
 
-    public function testNoneSinks(): void
+    public function testFailureSinks(): void
     {
         $called = false;
         $isCalled = $this->isCalled($called, Some::from(42));
 
-        $maybe = None::create()->sink($isCalled);
+        $maybe = Failure::create()->sink($isCalled);
 
         self::assertInstanceOf(Some::class, $maybe);
         self::assertEquals(42, $maybe->get());
@@ -55,12 +55,12 @@ final class SinkTest extends TestCase
 
     public function testStopExecutionWhenNoneEntersThenSink(): void
     {
-        $none = $this->none();
+        $failure = $this->failure();
 
         $called = false;
         $isCalled = $this->isCalled($called, Some::from(42));
 
-        $maybe = Some::from(1)->pipe($none)->sink($isCalled);
+        $maybe = Some::from(1)->pipe($failure)->sink($isCalled);
         $maybe = $maybe->resolve();
 
         self::assertInstanceOf(Some::class, $maybe);
@@ -104,10 +104,10 @@ final class SinkTest extends TestCase
      * @noinspection PhpUnusedParameterInspection
      * @SuppressWarnings("unused")
      */
-    private function none(): Closure
+    private function failure(): Closure
     {
         return static function (Maybe $maybe): Maybe {
-            return None::create();
+            return Failure::create();
         };
     }
 

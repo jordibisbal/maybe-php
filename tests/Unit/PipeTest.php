@@ -44,15 +44,15 @@ final class PipeTest extends TestCase
         };
     }
 
-    public function testStopExecutionWhenNoneEnters(): void
+    public function testStopExecutionWhenFailureEnters(): void
     {
         $addOne = $this->addOne();
-        $none = $this->none();
+        $failure = $this->failure();
 
         $called = false;
         $notCalled = $this->notCalled($called);
 
-        $maybe = Some::from(1)->pipe($addOne)->pipe($none)->pipe($notCalled);
+        $maybe = Some::from(1)->pipe($addOne)->pipe($failure)->pipe($notCalled);
         $maybe = $maybe->resolve();
 
         self::assertInstanceOf(None::class, $maybe);
@@ -63,10 +63,10 @@ final class PipeTest extends TestCase
      * @noinspection PhpUnusedParameterInspection
      * @SuppressWarnings("unused")
      */
-    private function none(): Closure
+    private function failure(): Closure
     {
         return static function (Maybe $maybe): Maybe {
-            return None::create();
+            return Failure::create();
         };
     }
 

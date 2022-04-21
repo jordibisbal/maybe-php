@@ -104,10 +104,11 @@ abstract class Maybe implements Functor
 
     /**
      * @return Maybe<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function sink(callable $callable): Maybe
     {
-        return self::build($callable, $this->context()->push($this)->withParameters($this))->resolve();
+        return $this;
     }
 
     /**

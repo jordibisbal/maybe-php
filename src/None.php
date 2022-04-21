@@ -37,15 +37,6 @@ class None extends Maybe
         return self::build($this, $this->context());
     }
 
-    /**
-     * @return Maybe<T>
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function pipe(callable $callable): Maybe
-    {
-        return $this;
-    }
-
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
     public function map(callable $function): Functor
     {

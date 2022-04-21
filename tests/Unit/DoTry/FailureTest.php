@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Test\Unit\DoTry;
 
+use Closure;
 use j45l\maybe\Context\Parameters;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Reason;
@@ -44,5 +45,18 @@ final class FailureTest extends TestCase
 
         self::assertInstanceOf(Failure::class, $failure);
         self::assertEquals(Parameters::create(1, 2, 3), $failure->context()->parameters());
+    }
+
+    public function testPipeFromNoneReturnsItself(): void
+    {
+        $failure = Failure::create();
+        self::assertSame($failure, $failure->pipe($this->identity()));
+    }
+
+    private function identity(): Closure
+    {
+        return static function ($value) {
+            return $value;
+        };
     }
 }
