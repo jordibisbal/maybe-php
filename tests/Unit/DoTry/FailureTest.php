@@ -9,6 +9,7 @@ use j45l\maybe\Context\Parameters;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Reason;
 use j45l\maybe\Maybe;
+use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -22,6 +23,18 @@ final class FailureTest extends TestCase
         $failure = Failure::from(Reason::fromString('reason'));
 
         self::assertEquals('reason', $failure->reason()->toString());
+    }
+
+    public function testFailureIsRecoverablInSink(): void
+    {
+        $failure = Failure::from(Reason::fromString('reason'));
+        $recover = function () {
+            return Some::from(42);
+        };
+        $recovered = $failure->sink($recover);
+
+        self::assertInstanceOf(Some::class, $recovered);
+        self::assertEquals(42, $recovered->get());
     }
 
     public function testCanBeCreatedFromFailureWithOutReason(): void

@@ -36,7 +36,7 @@
             "src/AssertSome.php",
             "src/DoTry/DoTry.php",
             "src/Lift.php",
-            "src/SomeOrNone.php"
+            "src/Safe.php"
         ]
     },
     "autoload-dev": {

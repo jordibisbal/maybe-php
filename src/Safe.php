@@ -6,14 +6,18 @@ namespace j45l\maybe;
 
 /**
  * @template T
- * @param Maybe<T> $value
+ * @param T|Maybe<T> $value
  * @phpstan-return Some<T>|None<T>
  */
-function someOrNone(Maybe $value): Maybe
+function safe($value): Maybe
 {
     switch (true) {
+        case is_callable($value):
+            return safe(Deferred::create($value)->resolve());
+        case !$value instanceof Maybe:
+            return safe(Some::from($value));
         case $value instanceof Deferred:
-            return someOrNone($value->resolve());
+            return safe($value->resolve());
         case $value instanceof Some && !is_null($value->get()):
             return $value;
         default:
