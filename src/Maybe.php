@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace j45l\maybe;
 
+use j45l\functional\Functor;
 use j45l\maybe\Context\Context;
+use j45l\maybe\Context\ContextAware;
 use j45l\maybe\Context\Parameters;
-use j45l\maybe\Context\Trail;
+use j45l\maybe\Context\Tags\Tag;
+use j45l\maybe\Context\Tags\TagCreator;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Success;
 use j45l\maybe\DoTry\ThrowableReason;
-use j45l\maybe\Tags\Tag;
-use j45l\maybe\Tags\TagCreator;
-use j45l\functional\Functor;
 
 /**
  * @template T
@@ -20,8 +20,8 @@ use j45l\functional\Functor;
  */
 abstract class Maybe implements Functor
 {
-    /** @var Context<T> */
-    protected $context;
+    /** @phpstan-use ContextAware<T> */
+    use ContextAware;
 
     /** @param Context<T>|null $context */
     protected function __construct(Context $context = null)
@@ -78,14 +78,6 @@ abstract class Maybe implements Functor
     }
 
     /**
-     * @return Trail<T>
-     */
-    public function trail(): Trail
-    {
-        return $this->context->push($this->resolve())->trail();
-    }
-
-    /**
      * @param mixed[] $parameters
      * @return Maybe<T>
      */
@@ -109,14 +101,6 @@ abstract class Maybe implements Functor
     public function sink(callable $callable): Maybe
     {
         return $this;
-    }
-
-    /**
-     * @return Context<T>
-     */
-    public function context(): Context
-    {
-        return $this->context;
     }
 
     /**
@@ -178,55 +162,5 @@ abstract class Maybe implements Functor
     public function orElse($value): Maybe
     {
         return $this;
-    }
-
-    /**
-     * @param Context<T>|null $context
-     * @return static<T>
-     */
-    final protected function cloneWith(Context $context = null): self
-    {
-        $new = clone $this;
-
-        $new->context = $context ?? $this->context;
-
-        return $new;
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     * @return static<T>
-     */
-    final public function with(...$parameters): Maybe
-    {
-        return $this->cloneWith($this->context->withParameters(...$parameters));
-    }
-
-    /**
-     * @param Tag | int | string $tag
-     * @return Maybe<T>
-     */
-    final public function withTag($tag): Maybe
-    {
-        return $this->resolve()->cloneWith(
-            $this->context()->push($this->resolve())
-                ->withTag(TagCreator::from($tag))
-        );
-    }
-
-    /**
-     * @param mixed[] $parameters
-     * @return Maybe<T>
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function withParameters(...$parameters): Maybe
-    {
-        /** @infection-ignore-all */
-        switch (true) {
-            case count($parameters) > 0:
-                return $this->with(...$parameters);
-            default:
-                return $this;
-        }
     }
 }

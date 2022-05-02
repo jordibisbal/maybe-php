@@ -1,6 +1,6 @@
 <?php
 
-namespace j45l\maybe\Tags;
+namespace j45l\maybe\Context\Tags;
 
 final class StringTag implements Tag
 {

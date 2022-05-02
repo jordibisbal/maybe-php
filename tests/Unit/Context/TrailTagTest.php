@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Test\Unit\Context;
 
+use j45l\maybe\Context\Tags\TagCreator;
+use j45l\maybe\Context\Tags\Untagged;
 use j45l\maybe\Context\Trail;
-use j45l\maybe\None;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Reason;
+use j45l\maybe\None;
 use j45l\maybe\Some;
-use j45l\maybe\Tags\TagCreator;
-use j45l\maybe\Tags\Untagged;
 use PHPUnit\Framework\TestCase;
 
 use function Functional\invoke;
 
 /**
  * @covers \j45l\maybe\Context\Trail
- * @covers \j45l\maybe\Tags\StringTag
- * @covers \j45l\maybe\Tags\Untagged
+ * @covers \j45l\maybe\Context\Tags\StringTag
+ * @covers \j45l\maybe\Context\Tags\Untagged
  */
 final class TrailTagTest extends TestCase
 {

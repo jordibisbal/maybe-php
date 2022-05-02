@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace j45l\maybe\Context;
 
 use Countable;
-use j45l\maybe\Maybe;
+use j45l\maybe\Context\Tags\StringTag;
+use j45l\maybe\Context\Tags\Tag;
+use j45l\maybe\Context\Tags\Untagged;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Reason;
+use j45l\maybe\Maybe;
 use j45l\maybe\Some;
-use j45l\maybe\Tags\StringTag;
-use j45l\maybe\Tags\Tag;
-use j45l\maybe\Tags\Untagged;
 
 use function Functional\invoke;
 use function Functional\map;

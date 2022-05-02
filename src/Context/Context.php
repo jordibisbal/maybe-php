@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Context;
 
+use j45l\maybe\Context\Tags\Tag;
+use j45l\maybe\Context\Tags\Untagged;
 use j45l\maybe\Maybe;
-use j45l\maybe\Tags\Tag;
-use j45l\maybe\Tags\Untagged;
 
 /**
  * @template T

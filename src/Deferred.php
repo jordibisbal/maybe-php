@@ -38,7 +38,6 @@ class Deferred extends Maybe
      */
     public function resolve(...$parameters): Maybe
     {
-        /** @var Deferred<T> $maybe */
         $maybe = $this->withParameters(...$parameters);
         try {
             return Maybe::build(

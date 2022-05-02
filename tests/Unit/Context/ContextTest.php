@@ -4,8 +4,8 @@ namespace j45l\maybe\Test\Unit\Context;
 
 use j45l\maybe\Context\Context;
 use j45l\maybe\Context\Parameters;
+use j45l\maybe\Context\Tags\TagCreator;
 use j45l\maybe\Some;
-use j45l\maybe\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
 
 /** @covers \j45l\maybe\Context\Context */

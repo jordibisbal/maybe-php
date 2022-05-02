@@ -2,14 +2,14 @@
 
 namespace j45l\maybe\Test\Unit\Tags;
 
-use j45l\maybe\Tags\TagCreator;
-use j45l\maybe\Tags\Untagged;
+use j45l\maybe\Context\Tags\TagCreator;
+use j45l\maybe\Context\Tags\Untagged;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \j45l\maybe\Tags\TagCreator
- * @covers \j45l\maybe\Tags\StringTag
- * @covers \j45l\maybe\Tags\Untagged
+ * @covers \j45l\maybe\Context\Tags\TagCreator
+ * @covers \j45l\maybe\Context\Tags\StringTag
+ * @covers \j45l\maybe\Context\Tags\Untagged
  */
 class TagCreatorTest extends TestCase
 {

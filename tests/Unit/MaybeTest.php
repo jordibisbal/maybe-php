@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Test\Unit;
 
+use j45l\maybe\Context\Tags\TagCreator;
+use j45l\maybe\DoTry\Failure;
 use j45l\maybe\Maybe;
 use j45l\maybe\None;
-use j45l\maybe\DoTry\Failure;
 use j45l\maybe\Some;
-use j45l\maybe\Tags\TagCreator;
 use PHPUnit\Framework\TestCase;
 
 use function j45l\maybe\lift;
