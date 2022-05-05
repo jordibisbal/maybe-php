@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d98842dfc0d2190d63bcbb13e4a083a",
+    "content-hash": "1566943e090cb292b6abb1d40d503fbf",
     "packages": [
         {
             "name": "j45l/functional-php",
-            "version": "1.2.2.1",
+            "version": "1.2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordibisbal/functional-php.git",
-                "reference": "00285459554c381c09f238e3074eec723b46ba15"
+                "reference": "e667ebc23acec09e9500e838f40d9f51be4a2849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/00285459554c381c09f238e3074eec723b46ba15",
-                "reference": "00285459554c381c09f238e3074eec723b46ba15",
+                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/e667ebc23acec09e9500e838f40d9f51be4a2849",
+                "reference": "e667ebc23acec09e9500e838f40d9f51be4a2849",
                 "shasum": ""
             },
             "require": {
@@ -41,6 +41,7 @@
                     "src/Best.php",
                     "src/CartesianProduct.php",
                     "src/CrossCompareSet.php",
+                    "src/Delay.php",
                     "src/Fold.php",
                     "src/FoldRight.php",
                     "src/Merge.php",
@@ -76,9 +77,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jordibisbal/functional-php/issues",
-                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.2.1"
+                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.3.1"
             },
-            "time": "2022-04-06T20:04:56+00:00"
+            "time": "2022-05-05T05:10:18+00:00"
         },
         {
             "name": "lstrojny/functional-php",
