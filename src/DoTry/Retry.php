@@ -40,7 +40,7 @@ function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn
     $successOnSome = function (Maybe $maybe): Maybe {
         switch (true) {
             case $maybe instanceof Some:
-                return Success::from($maybe);
+                return Success::from($maybe->get());
             default:
                 return $maybe;
         }
