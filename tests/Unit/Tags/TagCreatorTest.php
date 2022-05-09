@@ -2,6 +2,7 @@
 
 namespace j45l\maybe\Test\Unit\Tags;
 
+use j45l\maybe\Context\Tags\StringTag;
 use j45l\maybe\Context\Tags\TagCreator;
 use j45l\maybe\Context\Tags\Untagged;
 use PHPUnit\Framework\TestCase;
@@ -19,6 +20,8 @@ class TagCreatorTest extends TestCase
 
         $this->assertEquals($tag, TagCreator::from($tag));
         $this->assertSame($tag, TagCreator::from($tag));
+        $this->assertInstanceOf(StringTag::class, $tag);
+        $this->assertEquals('42', $tag->toString());
     }
 
     public function testCreatingTagFromEmptyStringResultsInUntagged(): void

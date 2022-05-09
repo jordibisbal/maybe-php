@@ -1,2 +1,2 @@
 #!/bin/sh
-vendor/bin/phpunit
+XDEBUG_MODE=off vendor/bin/phpunit

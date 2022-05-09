@@ -7,7 +7,6 @@ namespace j45l\maybe\Test\Unit;
 use Closure;
 use j45l\maybe\Deferred;
 use j45l\maybe\Maybe;
-use j45l\maybe\None;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
@@ -45,8 +44,8 @@ final class DeferredTest extends TestCase
 
     public function testEvaluationWithNullResultReturnsANone(): void
     {
-        $none =
-            Maybe::start()->next(
+        $some =
+            Maybe::begin()->next(
                 static function () {
                     return null;
                 }
@@ -54,13 +53,23 @@ final class DeferredTest extends TestCase
             ->resolve()
         ;
 
-        self::assertInstanceOf(None::class, $none);
+        self::assertInstanceOf(Some::class, $some);
+        self::assertNull($some->get());
+    }
+
+    public function testResolvingIsImmutableOnResolve(): void
+    {
+        $deferred = Some::from(42)->tag('tag A');
+        $some = $deferred->resolve();
+
+        self::assertCount(0, $deferred->context()->tagged()->someValues());
+        self::assertCount(1, $some->context()->tagged()->someValues());
     }
 
     public function testThenCausesEvaluation(): void
     {
-        $maybe = Maybe::start()->next($this->identity())->with(123)
-            ->andThen($this->identity())->with(456)
+        $maybe = Maybe::begin()->next($this->identity(), 123)
+            ->andThen($this->identity(), 456)
         ;
 
         $trail = $maybe->trail()->asArray();
@@ -78,7 +87,7 @@ final class DeferredTest extends TestCase
 
     public function testEvaluatingAThrowingClosureResultsInAFailure(): void
     {
-        $failure = Maybe::start()->next($this->throwsRuntime())->resolve();
+        $failure = Maybe::begin()->next($this->throwsRuntime())->resolve();
         self::assertInstanceOf(Failure::class, $failure);
 
         self::assertEquals('Runtime !', $failure->reason()->toString());

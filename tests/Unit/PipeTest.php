@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace j45l\maybe\Test\Unit;
 
 use Closure;
-use j45l\maybe\Deferred;
 use j45l\maybe\Maybe;
 use j45l\maybe\None;
 use j45l\maybe\DoTry\Failure;
@@ -24,14 +23,10 @@ final class PipeTest extends TestCase
     {
         $addOne = $this->addOne();
 
-        $maybe = Some::from(1)->pipe($addOne)->pipe($addOne);
+        $some = Some::from(1)->pipe($addOne)->pipe($addOne);
 
-        self::assertInstanceOf(Deferred::class, $maybe);
-
-        $maybe = $maybe->resolve();
-
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(3, $maybe->get());
+        self::assertInstanceOf(Some::class, $some);
+        self::assertEquals(3, $some->get());
     }
 
     /** @noinspection PhpUnusedParameterInspection */

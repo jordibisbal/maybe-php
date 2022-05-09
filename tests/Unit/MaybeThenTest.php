@@ -52,7 +52,7 @@ final class MaybeThenTest extends TestCase
     public function testDeferredSomeReturnsNextValue(): void
     {
         $maybe =
-            Maybe::start()->next(static function (): Maybe {
+            Maybe::begin()->next(static function (): Maybe {
                 return Some::from(42);
             })
             ->andThen(None::create())
@@ -64,7 +64,7 @@ final class MaybeThenTest extends TestCase
     public function testDeferredNoneReturnsNoneValue(): void
     {
         $maybe =
-            Maybe::start()->next(static function (): Maybe {
+            Maybe::begin()->next(static function (): Maybe {
                 return None::create();
             })
             ->andThen(Some::from(42))

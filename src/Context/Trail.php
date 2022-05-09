@@ -5,18 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe\Context;
 
 use Countable;
-use j45l\maybe\Context\Tags\StringTag;
-use j45l\maybe\Context\Tags\Tag;
-use j45l\maybe\Context\Tags\Untagged;
-use j45l\maybe\DoTry\Failure;
-use j45l\maybe\DoTry\Reason;
 use j45l\maybe\Maybe;
-use j45l\maybe\Some;
-
-use function Functional\invoke;
-use function Functional\map;
-use function Functional\select;
-use function j45l\functional\unindex;
 
 /**
  * @template T
@@ -24,11 +13,8 @@ use function j45l\functional\unindex;
  */
 final class Trail implements Countable
 {
-    /** @var array<Maybe<T>> */
-    protected $trail = [];
-
-    /** @var array<Maybe<T>> */
-    private $taggedTrail = [];
+    /** @phpstan-use MaybeAware<T> */
+    use MaybeAware;
 
     private function __construct()
     {
@@ -42,14 +28,12 @@ final class Trail implements Countable
 
     /**
      * @param Maybe<T> $maybe
-     * @param Tag|null $tag
      * @return Trail<T>
      */
-    public function push(Maybe $maybe, Tag $tag = null): Trail
+    public function push(Maybe $maybe): Trail
     {
         $new = clone $this;
-        $new->trail[] = $maybe;
-        $new->taggedTrail = $this->pushWithTag($maybe, $tag ?? Untagged::create());
+        $new->maybes[] = $maybe;
 
         return $new;
     }
@@ -57,55 +41,7 @@ final class Trail implements Countable
     /** @return Maybe<T>[] */
     public function asArray(): array
     {
-        return $this->trail;
-    }
-
-    /** @return Failure<T>[] */
-    public function failed(): array
-    {
-        return array_values(
-            select(
-                $this->trail,
-                function (Maybe $maybe) {
-                    return $maybe instanceof Failure;
-                }
-            )
-        );
-    }
-
-    /** @return mixed[] */
-    public function values(): array
-    {
-        return array_values(map($this->selectSome($this->trail), $this->pickValue()));
-    }
-
-    /**
-     * @param array<Maybe<T>> $items
-     * @return array<Some<T>>
-     */
-    private function selectSome(array $items): array
-    {
-        return select($items, function ($item) {
-            return $item instanceof Some;
-        });
-    }
-
-    /**
-     * @param array<Maybe<T>> $items
-     * @return array<Failure<T>>
-     */
-    private function selectFailures(array $items): array
-    {
-        return select($items, function ($item) {
-            return $item instanceof Failure;
-        });
-    }
-
-    private function pickValue(): callable
-    {
-        return static function (Some $some) {
-            return $some->get();
-        };
+        return $this->maybes;
     }
 
     public function empty(): bool
@@ -116,7 +52,7 @@ final class Trail implements Countable
 
     public function count(): int
     {
-        return count($this->trail);
+        return count($this->maybes);
     }
 
     /**
@@ -125,7 +61,7 @@ final class Trail implements Countable
     public function butLast(): Trail
     {
         $new = clone $this;
-        $new->trail = array_slice($new->trail, 0, count($new->trail) - 1);
+        $new->maybes = array_slice($new->maybes, 0, count($new->maybes) - 1);
 
         return $new;
     }
@@ -137,48 +73,8 @@ final class Trail implements Countable
     {
         $new = self::create();
         /** @infection-ignore-all */
-        $new->trail = array_slice($this->trail, -1, 1);
+        $new->maybes = array_slice($this->maybes, -1, 1);
 
         return $new;
-    }
-
-    /**
-     * @param Maybe<T> $maybe
-     * @return array<Maybe<T>>
-     */
-    private function pushWithTag(Maybe $maybe, Tag $tag): array
-    {
-        /** @noinspection DegradedSwitchInspection */
-        /** @infection-ignore-all */
-        switch (true) {
-            case $tag instanceof StringTag:
-                return array_replace($this->taggedTrail, [$tag->toString() => $maybe]);
-            default:
-                return $this->taggedTrail;
-        }
-    }
-
-    /** @return array<string, Some<T>> */
-    public function taggedValues(): array
-    {
-        return invoke($this->selectSome($this->taggedTrail), 'get');
-    }
-
-    /** @return array<string, Reason> */
-    public function taggedFailureReasons(): array
-    {
-        return invoke($this->selectFailures($this->taggedTrail), 'reason');
-    }
-
-    /** @return array<Reason> */
-    public function failureReasons(): array
-    {
-        return unindex(invoke($this->selectFailures($this->trail), 'reason'));
-    }
-
-    /** @return array<string, Maybe<T>> */
-    public function tagged(): array
-    {
-        return $this->taggedTrail;
     }
 }

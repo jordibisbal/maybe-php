@@ -11,13 +11,6 @@ use PHPUnit\Framework\TestCase;
 /** @covers \j45l\maybe\Some */
 final class SomeTest extends TestCase
 {
-    public function testResolvesToItself(): void
-    {
-        $some = Some::from(42);
-
-        self::assertSame($some, $some->resolve());
-    }
-
     public function testCloningClonesValueWhenObject(): void
     {
         $some = Some::from(MutableInteger::fromInt(42));

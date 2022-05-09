@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Context;
 
-use j45l\maybe\Context\Tags\Tag;
-use j45l\maybe\Context\Tags\Untagged;
+use j45l\maybe\Context\Tags\StringTag;
 use j45l\maybe\Maybe;
 
 /**
@@ -17,27 +16,32 @@ final class Context
     private $parameters;
     /** @var Trail<T> */
     private $trail;
-    /** @var Tag */
-    private $tag;
+    /**
+     * @var TaggedMaybes<T>
+     */
+    private $tags;
 
-    /** @param Trail<T> $trail */
-    private function __construct(Parameters $parameters, Trail $trail, Tag $tag)
+    /**
+     * @param Trail<T> $trail
+     * @param TaggedMaybes<T> $tags
+     */
+    private function __construct(Parameters $parameters, Trail $trail, TaggedMaybes $tags)
     {
         $this->parameters = $parameters;
         $this->trail = $trail;
-        $this->tag = $tag;
+        $this->tags = $tags;
     }
 
     /** @return Context<T> */
     public static function create(): Context
     {
-        return new self(Parameters::create(), Trail::create(), new Untagged());
+        return new self(Parameters::create(), Trail::create(), TaggedMaybes::create());
     }
 
     /** @return Context<T> */
     public static function fromParameters(Parameters $parameters): Context
     {
-        return new self($parameters, Trail::create(), new Untagged());
+        return new self($parameters, Trail::create(), TaggedMaybes::create());
     }
 
     /**
@@ -46,13 +50,15 @@ final class Context
      */
     public function withParameters(...$parameters): Context
     {
-        return new self(Parameters::create(...$parameters), $this->trail(), $this->tag);
+        return new self(Parameters::create(...$parameters), $this->trail(), $this->tags);
     }
 
-    /** @return Context<T> */
-    public function withTag(Tag $tag): Context
+    /**
+     * @return Context<T>
+     */
+    public function withTag(StringTag $tag): Context
     {
-        return new self($this->parameters, $this->trail(), $tag);
+        return new self($this->parameters, $this->trail(), $this->tags->withTag($tag));
     }
 
     /** @return Trail<T> */
@@ -67,7 +73,7 @@ final class Context
      */
     public function push(Maybe $maybe): Context
     {
-        return new self($this->parameters(), $this->trail()->push($maybe, $this->tag), $this->tag);
+        return new self($this->parameters(), $this->trail()->push($maybe), $this->tags);
     }
 
     public function parameters(): Parameters
@@ -75,8 +81,20 @@ final class Context
         return $this->parameters;
     }
 
-    public function tag(): Tag
+    /**
+     * @param Maybe<T> $maybe
+     * @return Context<T>
+     */
+    public function tag(Maybe $maybe): Context
     {
-        return $this->tag;
+        return new self($this->parameters(), $this->trail(), $this->tags->set($maybe));
+    }
+
+    /**
+     * @return TaggedMaybes<T>
+     */
+    public function tagged(): TaggedMaybes
+    {
+        return $this->tags;
     }
 }

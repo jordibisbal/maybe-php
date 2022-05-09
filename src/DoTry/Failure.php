@@ -55,6 +55,6 @@ final class Failure extends None
      */
     public function sink(callable $callable): Maybe
     {
-        return self::build($callable, $this->context()->push($this)->withParameters($this))->resolve();
+        return self::build($callable, $this->track()->withParameters($this))->resolve();
     }
 }

@@ -20,11 +20,12 @@ class None extends Maybe
 
     /**
      * @param T $value
+     * @param array<mixed> $parameters
      * @return Maybe<T>
      */
-    public function orElse($value): Maybe
+    public function orElse($value, ...$parameters): Maybe
     {
-        return self::build($value, $this->context());
+        return $this->next($value, ...$parameters);
     }
 
     /**
@@ -32,9 +33,9 @@ class None extends Maybe
      * @return Maybe<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function andThen($value): Maybe
+    public function andThen($value, ...$parameters): Maybe
     {
-        return self::build($this, $this->context());
+        return $this;
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */

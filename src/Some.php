@@ -44,11 +44,11 @@ class Some extends Maybe
     }
 
     /**
-     * @param mixed $value
+     * @param mixed $default
      * @return T
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getOrElse($value)
+    public function getOrElse($default)
     {
         return $this->get();
     }

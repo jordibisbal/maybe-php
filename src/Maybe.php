@@ -8,8 +8,6 @@ use j45l\functional\Functor;
 use j45l\maybe\Context\Context;
 use j45l\maybe\Context\ContextAware;
 use j45l\maybe\Context\Parameters;
-use j45l\maybe\Context\Tags\Tag;
-use j45l\maybe\Context\Tags\TagCreator;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Success;
 use j45l\maybe\DoTry\ThrowableReason;
@@ -42,15 +40,13 @@ abstract class Maybe implements Functor
                 return $value->cloneWith($context);
             case is_callable($value):
                 return new Deferred($value, $context);
-            case is_null($value):
-                return new None($context);
             default:
                 return new Some($value, $context);
         }
     }
 
     /** @return Success<T> */
-    public static function start(): Success
+    public static function begin(): Success
     {
         return Success::create();
     }
@@ -83,7 +79,18 @@ abstract class Maybe implements Functor
      */
     public function resolve(...$parameters): Maybe
     {
-        return $this->withParameters(...$parameters);
+        return $this->withParameters(...$parameters)->doResolve();
+    }
+
+    /**
+     * @return Maybe<T>
+     */
+    protected function doResolve(): Maybe
+    {
+        $new = clone($this);
+
+        $new->context = $new->context->tag($this);
+        return $new;
     }
 
     /**
@@ -91,7 +98,7 @@ abstract class Maybe implements Functor
      */
     public function pipe(callable $callable): Maybe
     {
-        return self::build($callable, $this->context()->push($this)->withParameters($this));
+        return $this->next($callable, $this);
     }
 
     /**
@@ -105,29 +112,51 @@ abstract class Maybe implements Functor
 
     /**
      * @param mixed $value
+     * @param array<mixed> $parameters
+     * @return Maybe<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function andThen($value, ...$parameters): Maybe
+    {
+        return $this->doResolve()->next($value);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param mixed $value
+     * @param array<mixed> $parameters
      * @return Maybe<T>
      */
-    public function andThen($value): Maybe
+    public function orElse($value, ...$parameters): Maybe
     {
-        return $this->next($value);
+        return $this->resolve($parameters);
     }
 
     /**
      * @param mixed $value
+     * @param array<mixed> $parameters
      * @return Maybe<T>
      */
-    public function next($value): Maybe
+    public function next($value, ...$parameters): Maybe
     {
-        return self::build($value, $this->context()->push($this->resolve()));
+        /** @infection-ignore-all */
+        switch (true) {
+            case count($parameters) > 0:
+                return self::build($value, $this->track()->withParameters($parameters))->resolve(...$parameters);
+            default:
+                return self::build($value, $this->track())->doResolve();
+        }
     }
 
+
     /**
-     * @param mixed $value
+     * @param mixed $default
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getOrElse($value)
+    public function getOrElse($default)
     {
-        return $value;
+        return $default;
     }
 
     /**
@@ -139,28 +168,5 @@ abstract class Maybe implements Functor
     public function takeOrElse($propertyName, $default)
     {
         return $default;
-    }
-
-    /**
-     * @param string|Tag $tag
-     * @param mixed $value
-     * @return Maybe<T>
-     */
-    public function tagNext($tag, $value): Maybe
-    {
-        return self::build(
-            $value,
-            $this->withTag(TagCreator::from($tag))->context()->push($this->resolve())
-        );
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param mixed $value
-     * @return Maybe<T>
-     */
-    public function orElse($value): Maybe
-    {
-        return $this;
     }
 }

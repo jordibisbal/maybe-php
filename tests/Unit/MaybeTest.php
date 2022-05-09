@@ -54,16 +54,16 @@ final class MaybeTest extends TestCase
 
     public function testTrailWithNewTagIsSet(): void
     {
-        $maybe = Maybe::start()->withTag('tag');
+        $maybe = Maybe::begin()->tag('tag');
 
-        $this->assertEquals(TagCreator::from('tag'), $maybe->context()->tag());
+        $this->assertEquals(TagCreator::from('tag'), $maybe->context()->tagged()->activeTag());
     }
 
     public function testTrailWithTagNextIsSet(): void
     {
-        $maybe = Maybe::start()->tagNext('tag', 42);
+        $maybe = Maybe::begin()->tag('tag')->next(42);
 
-        $this->assertEquals(TagCreator::from('tag'), $maybe->context()->tag());
+        $this->assertEquals(TagCreator::from('tag'), $maybe->context()->tagged()->activeTag());
         $this->assertInstanceOf(Some::class, $maybe);
         $this->assertEquals(42, $maybe->get());
     }

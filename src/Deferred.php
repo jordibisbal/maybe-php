@@ -33,57 +33,27 @@ class Deferred extends Maybe
     }
 
     /**
-     * @param mixed[] $parameters
      * @return Maybe<T>
      */
-    public function resolve(...$parameters): Maybe
+    protected function doResolve(): Maybe
     {
-        $maybe = $this->withParameters(...$parameters);
         try {
             return Maybe::build(
-                ($maybe->callable)(...$maybe->context()->parameters()->asArray()),
-                $maybe->context
-            );
+                ($this->callable)(...$this->context()->parameters()->asArray()),
+                $this->context()
+            )->doResolve();
         } catch (Throwable $throwable) {
-            return Maybe::buildFailure(
-                ThrowableReason::fromThrowable($throwable),
-                $maybe->context()->push($maybe)
-            );
+            return Maybe::buildFailure(ThrowableReason::fromThrowable($throwable), $this->context())->doResolve();
         }
     }
 
     /**
-     * @param T $value
-     * @return Maybe<T>
-     */
-    public function andThen($value): Maybe
-    {
-        return $this->resolve()->andThen($value);
-    }
-
-    /**
-     * @return Maybe<T>
-     */
-    public function pipe(callable $callable): Maybe
-    {
-        return $this->resolve()->pipe($callable);
-    }
-
-    /**
-     * @return Maybe<T>
-     */
-    public function sink(callable $callable): Maybe
-    {
-        return $this->resolve()->sink($callable);
-    }
-
-    /**
-     * @param mixed $value
+     * @param mixed $default
      * @return mixed
      */
-    public function getOrElse($value)
+    public function getOrElse($default)
     {
-        return $this->resolve()->getOrElse($value);
+        return $this->doResolve()->getOrElse($default);
     }
 
     /**
@@ -93,15 +63,6 @@ class Deferred extends Maybe
      */
     public function takeOrElse($propertyName, $default)
     {
-        return $this->resolve()->takeOrElse($propertyName, $default);
-    }
-
-    /**
-     * @param T $value
-     * @return Maybe<T>
-     */
-    public function orElse($value): Maybe
-    {
-        return $this->resolve()->orElse($value);
+        return $this->doResolve()->takeOrElse($propertyName, $default);
     }
 }

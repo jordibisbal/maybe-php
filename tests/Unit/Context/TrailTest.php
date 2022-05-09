@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace j45l\maybe\Test\Unit\Context;
 
 use j45l\maybe\Context\Trail;
+use j45l\maybe\DoTry\ThrowableReason;
 use j45l\maybe\None;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Reason;
 use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
-use function Functional\invoke;
+use function j45l\functional\pluck;
+use function j45l\functional\unindex;
+use function j45l\maybe\DoTry\doTry;
 
-/** @covers \j45l\maybe\Context\Trail */
+/**
+ * @covers \j45l\maybe\Context\Trail
+ * @covers \j45l\maybe\Context\MaybeAware
+ */
 final class TrailTest extends TestCase
 {
     public function testPushingToATrailDoesNotModifyIt(): void
@@ -33,7 +40,7 @@ final class TrailTest extends TestCase
             ->push(Some::from(2))
         ;
 
-        self::assertEquals([1, 2], $trail->values());
+        self::assertEquals([1, 2], unindex($trail->someValues()));
     }
 
     public function testGettingButLastDoesNotReturnLastMaybe(): void
@@ -44,7 +51,7 @@ final class TrailTest extends TestCase
             ->push(Some::from(3))
         ;
 
-        self::assertEquals([1, 2], $trail->butLast()->values());
+        self::assertEquals([1, 2], $trail->butLast()->someValues());
     }
 
     public function testGettingLastReturnsLastOne(): void
@@ -71,8 +78,8 @@ final class TrailTest extends TestCase
             ->push(Some::from(3))
         ;
 
-        self::assertEquals([1, 2], $trail->butLast()->values());
-        self::assertEquals([1, 2, 3], $trail->values());
+        self::assertEquals([1, 2], $trail->butLast()->someValues());
+        self::assertEquals([1, 2, 3], $trail->someValues());
     }
 
     public function testGettingFailureDoesNotReturnOtherMaybe(): void
@@ -87,6 +94,28 @@ final class TrailTest extends TestCase
         self::assertEquals('failed', $trail->failed()[0]->reason()->toString());
     }
 
+    public function testThrowableFailureReasonsCanBrRetrieved(): void
+    {
+        $failure = doTry(function () {
+            throw new RuntimeException('Exception reason');
+        })->orElse(doTry(function () {
+            throw new RuntimeException('Another exception reason');
+        }));
+
+        $this->assertInstanceOf(Failure::class, $failure);
+        $reason = $failure->reason();
+        $this->assertInstanceOf(ThrowableReason::class, $reason);
+        $this->assertInstanceOf(RuntimeException::class, $reason->throwable());
+        $this->assertEquals(
+            ['Exception reason', 'Another exception reason'],
+            pluck($failure->trail()->failureReasons(), ['throwable', 'getMessage'])
+        );
+        $this->assertEquals(
+            ['Exception reason', 'Another exception reason'],
+            $failure->trail()->failureReasonStrings()
+        );
+    }
+
     public function testResolvingASomeDoesNotAddsToTheTrail(): void
     {
         $some = Some::from(42)->resolve()->resolve()->resolve();
@@ -97,18 +126,5 @@ final class TrailTest extends TestCase
     public function testCanBeCheckForEmptiness(): void
     {
         self::assertTrue(Trail::create()->empty());
-    }
-
-    public function testFailuresReasons(): void
-    {
-        $trail = Trail::create()
-            ->push(Some::from(42))
-            ->push(Failure::from(Reason::fromString('because failed')))
-        ;
-
-        self::assertEquals(
-            ['because failed'],
-            invoke($trail->failureReasons(), 'toString')
-        );
     }
 }

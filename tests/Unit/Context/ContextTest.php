@@ -4,6 +4,7 @@ namespace j45l\maybe\Test\Unit\Context;
 
 use j45l\maybe\Context\Context;
 use j45l\maybe\Context\Parameters;
+use j45l\maybe\Context\Tags\StringTag;
 use j45l\maybe\Context\Tags\TagCreator;
 use j45l\maybe\Some;
 use PHPUnit\Framework\TestCase;
@@ -37,27 +38,27 @@ class ContextTest extends TestCase
         self::assertSame([$some], $newContext->trail()->asArray());
     }
 
-    public function testAContextCanApplyATagToTrail(): void
+    public function testAContextCanApplyATag(): void
     {
         $context = Context::create()
-            ->withTag(TagCreator::from('tag'))
-            ->push(Some::from(42))
+            ->withTag(StringTag::create('tag'))
+            ->tag(Some::from(42))
         ;
 
-        self::assertEquals(['tag' => 42], $context->trail()->taggedValues());
+        self::assertEquals(['tag' => 42], $context->tagged()->someValues());
     }
 
-    public function testAContextCanApplyATagVariousTimeToTrail(): void
+    public function testAContextCanApplyATagSeveralTimesToTags(): void
     {
         $context = Context::create()
-            ->withTag(TagCreator::from('tag 43'))
-            ->push(Some::from(42))
-            ->push(Some::from(43))
-            ->withTag(TagCreator::from('tag 44'))
-            ->push(Some::from(44))
+            ->withTag(StringTag::create('tag 43'))
+            ->tag(Some::from(42))
+            ->tag(Some::from(43))
+            ->withTag(StringTag::create('tag 44'))
+            ->tag(Some::from(44))
         ;
 
-        self::assertEquals(['tag 43' => 43, 'tag 44' => 44], $context->trail()->taggedValues());
-        self::assertEquals(TagCreator::from('tag 44'), $context->tag());
+        self::assertEquals(['tag 43' => 43, 'tag 44' => 44], $context->tagged()->someValues());
+        self::assertEquals(TagCreator::from('tag 44'), $context->tagged()->activeTag());
     }
 }

@@ -25,7 +25,7 @@ final class FailureTest extends TestCase
         self::assertEquals('reason', $failure->reason()->toString());
     }
 
-    public function testFailureIsRecoverablInSink(): void
+    public function testFailureIsRecoverableInSink(): void
     {
         $failure = Failure::from(Reason::fromString('reason'));
         $recover = function () {
@@ -54,7 +54,7 @@ final class FailureTest extends TestCase
             throw new RuntimeException();
         };
 
-        $failure = Maybe::start()->next($succeeding)->with(1, 2, 3)->andThen($failing)->resolve();
+        $failure = Maybe::begin()->next($succeeding)->with(1, 2, 3)->andThen($failing)->resolve();
 
         self::assertInstanceOf(Failure::class, $failure);
         self::assertEquals(Parameters::create(1, 2, 3), $failure->context()->parameters());

@@ -50,7 +50,7 @@ final class MaybeOrElseTest extends TestCase
             return Some::from(42);
         };
 
-        $maybe = Maybe::start()->next($fortyTwo)->OrElse(None::create());
+        $maybe = Maybe::begin()->next($fortyTwo)->OrElse(None::create());
 
         self::assertInstanceOf(Some::class, $maybe);
         self::assertEquals(42, $maybe->get());
@@ -111,7 +111,7 @@ final class MaybeOrElseTest extends TestCase
             return None::create();
         };
 
-        $maybe = Maybe::start()->next($none)->OrElse(Some::from(42));
+        $maybe = Maybe::begin()->next($none)->OrElse(Some::from(42));
 
         self::assertInstanceOf(Some::class, $maybe);
         self::assertEquals(42, $maybe->get());

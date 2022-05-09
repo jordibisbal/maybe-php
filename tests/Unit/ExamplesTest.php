@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function Functional\first;
-use function Functional\invoke;
+use function j45l\functional\unindex;
 
 /**
  * @coversNothing
@@ -31,7 +31,7 @@ class ExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
 
         $maybe =
-            Maybe::start()->next($this->insertCustomer($entityManager))->with($customer)
+            Maybe::begin()->next($this->insertCustomer($entityManager), $customer)
             ->orElse($this->updateCustomer($entityManager))
             ->resolve()
         ;
@@ -68,7 +68,7 @@ class ExamplesTest extends TestCase
         $entityManager->insertWillFail = true;
 
         $maybe =
-            Maybe::start()->next($this->insertCustomer($entityManager))->with($customer)
+            Maybe::begin()->next($this->insertCustomer($entityManager), $customer)
                 ->orElse($this->updateCustomer($entityManager))
                 ->resolve()
         ;
@@ -78,7 +78,7 @@ class ExamplesTest extends TestCase
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
         $this->assertEquals($customer, $entityManager->updateInvokedWith);
         $this->assertInstanceOf(Success::class, $maybe);
-        $this->assertCount(0, $maybe->trail()->failed());
+        $this->assertCount(1, $maybe->trail()->failed());
     }
 
     public function testDoOrElseFails(): void
@@ -89,7 +89,7 @@ class ExamplesTest extends TestCase
         $entityManager->updateWillFail = true;
 
         $maybe =
-            Maybe::start()->next($this->insertCustomer($entityManager))->with($customer)
+            Maybe::begin()->next($this->insertCustomer($entityManager), $customer)
                 ->orElse($this->updateCustomer($entityManager))
                 ->resolve();
 
@@ -98,9 +98,9 @@ class ExamplesTest extends TestCase
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
         $this->assertEquals($customer, $entityManager->updateInvokedWith);
         $this->assertInstanceOf(Failure::class, $maybe);
-        $this->assertCount(1, $maybe->trail()->failed());
+        $this->assertCount(2, $maybe->trail()->failed());
 
-        $reason = $maybe->trail()->failed()[0]->reason();
+        $reason = $maybe->trail()->failed()[1]->reason();
         $this->assertInstanceOf(ThrowableReason::class, $reason);
         $this->assertEquals(new RuntimeException('Failed to update'), $reason->throwable());
         $this->assertEquals($reason, $maybe->reason());
@@ -123,8 +123,8 @@ class ExamplesTest extends TestCase
         $this->assertEquals(43, $firstContextParameter->get());
 
         $this->assertCount(2, $maybe->context()->trail());
-        $this->assertEquals([42, 43], $maybe->context()->trail()->values());
-        $this->assertEquals([42, 43, 44], $maybe->trail()->values());
+        $this->assertEquals([42, 43], $maybe->context()->trail()->someValues());
+        $this->assertEquals([42, 43, 44], $maybe->trail()->someValues());
     }
 
     public function testMap(): void
@@ -154,18 +154,18 @@ class ExamplesTest extends TestCase
             return 'email@test.com';
         };
 
-        $chain = Maybe::start()
-            ->withTag('id')->next($id)
-            ->withTag('name')->next($name)
-            ->withTag('email')->next($email)
+        $chain = Maybe::begin()
+            ->tag('id')->next($id)
+            ->tag('name')->next($name)
+            ->tag('email')->next($email)
         ;
 
-        $trail = $chain->trail();
+        $tags = $chain->context()->tagged();
 
-        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->taggedValues());
+        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $tags->someValues());
         $this->assertEquals(
             ['name' => 'Unable to get name'],
-            invoke($trail->taggedFailureReasons(), 'toString')
+            $tags->failureReasonStrings()
         );
     }
 
@@ -182,18 +182,18 @@ class ExamplesTest extends TestCase
         };
 
 
-        $chain = Maybe::start()
-            ->tagNext('id', $id)
-            ->tagNext('name', $name)
-            ->tagNext('email', $email)
+        $chain = Maybe::begin()
+            ->tag('id')->Next($id)
+            ->tag('name')->Next($name)
+            ->tag('email')->Next($email)
         ;
 
-        $trail = $chain->trail();
+        $tags = $chain->context()->tagged();
 
-        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $trail->taggedValues());
+        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $tags->someValues());
         $this->assertEquals(
             ['name' => 'Unable to get name'],
-            invoke($trail->taggedFailureReasons(), 'toString')
+            $tags->failureReasonStrings()
         );
     }
 
@@ -213,8 +213,8 @@ class ExamplesTest extends TestCase
         $this->assertInstanceOf(Some::class, $someNext);
         $this->assertEquals(42, $noneNext->get());
         $this->assertEquals(42, $someNext->get());
-        $this->assertEquals([1, 42, 42], $someNext->trail()->values());
-        $this->assertEquals([ThrowableReason::fromString('42!')], $someNext->trail()->failureReasons());
+        $this->assertEquals([1, 42, 42], unindex($someNext->trail()->someValues()));
+        $this->assertEquals([ThrowableReason::fromString('42!')], unindex($someNext->trail()->failureReasons()));
     }
 
     public function testOrElse(): void
@@ -288,11 +288,7 @@ class ExamplesTest extends TestCase
             return $value + 1;
         };
 
-        $maybe = Maybe::start()->with(41)->andThen($increment);
-
-        $this->assertInstanceOf(Deferred::class, $maybe);
-
-        $some = $maybe->resolve();
+        $some = Maybe::begin()->with(41)->andThen($increment);
 
         $this->assertInstanceOf(Some::class, $some);
         $this->assertEquals(42, $some->get());
@@ -308,7 +304,7 @@ class ExamplesTest extends TestCase
             throw new RuntimeException('42!');
         };
 
-        $failure = Maybe::start()->andThen($failure)->andThen($increment);
+        $failure = Maybe::begin()->andThen($failure)->andThen($increment);
 
         $this->assertInstanceOf(Failure::class, $failure);
         $this->assertEquals('42!', $failure->reason()->toString());

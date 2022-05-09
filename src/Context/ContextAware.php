@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Context;
 
-use j45l\maybe\Context\Tags\Tag;
-use j45l\maybe\Context\Tags\TagCreator;
+use j45l\maybe\Context\Tags\StringTag;
 
 /**
  * @template T
@@ -18,7 +17,7 @@ trait ContextAware
     /**
      * @return Context<T>
      */
-    public function context(): Context
+    final public function context(): Context
     {
         return $this->context;
     }
@@ -51,7 +50,7 @@ trait ContextAware
      * @return static
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function withParameters(...$parameters): self
+    final protected function withParameters(...$parameters): self
     {
         /** @infection-ignore-all */
         switch (true) {
@@ -63,22 +62,27 @@ trait ContextAware
     }
 
     /**
-     * @param Tag | int | string $tag
+     * @param string $tag
      * @return self<T>
      */
-    final public function withTag($tag): self
+    final public function tag(string $tag): self
     {
-        return $this->resolve()->cloneWith(
-            $this->context()->push($this->resolve())
-                ->withTag(TagCreator::from($tag))
-        );
+        return $this->cloneWith($this->context()->withTag(StringTag::create($tag)));
     }
 
     /**
      * @return Trail<T>
      */
-    public function trail(): Trail
+    final public function trail(): Trail
     {
         return $this->context->push($this->resolve())->trail();
+    }
+
+    /**
+     * @return Context<T>
+     */
+    final protected function track(): Context
+    {
+        return $this->context()->push($this);
     }
 }

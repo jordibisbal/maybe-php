@@ -36,6 +36,7 @@
             "src/AssertSome.php",
             "src/DoTry/DoTry.php",
             "src/Lift.php",
+            "src/DoTry/Retry.php",
             "src/Safe.php"
         ]
     },
