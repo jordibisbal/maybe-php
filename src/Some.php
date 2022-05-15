@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace j45l\maybe;
 
+use j45l\functional\Functor;
 use j45l\maybe\Context\Context;
+use j45l\maybe\DoTry\Failure;
+use j45l\maybe\DoTry\ThrowableReason;
+use Throwable;
 
 use function j45l\functional\take;
 
@@ -35,6 +39,19 @@ class Some extends Maybe
     public static function from($value): Some
     {
         return new self($value, Context::create());
+    }
+
+    /**
+     * @param callable(Some<T>): Maybe<T> $function
+     * @return Maybe<T>
+     */
+    public function map(callable $function): Functor
+    {
+        try {
+            return $function($this);
+        } catch (Throwable $throwable) {
+            return Failure::from(ThrowableReason::fromThrowable($throwable));
+        }
     }
 
     /** @return T */

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace j45l\maybe;
 
+use function j45l\maybe\DoTry\doTry;
+
 /**
  * @template T
  * @param T|Maybe<T> $value
@@ -13,7 +15,7 @@ function safe($value): Maybe
 {
     switch (true) {
         case is_callable($value):
-            return safe(Deferred::create($value)->resolve());
+            return safe(doTry($value));
         case !$value instanceof Maybe:
             return safe(Some::from($value));
         case $value instanceof Deferred:

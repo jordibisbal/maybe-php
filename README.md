@@ -9,7 +9,7 @@ Maybe (inspired by the functional thing), helps to:
 
 ## Maybe
 
-Is a supercharged version on the Maybe from functional programing, it provides functionality
+Is a pragmatic version on the Maybe from functional programing, it provides functionality
 present in such languages along some extra to solve some common use cases in php.
 
 DoTry, adds to *maybe* some behavior of *Try()* (e.g. from Scala), the result of a *doTry()* can be a *Failure* or a *Success* but could
@@ -34,8 +34,8 @@ https://functionalprogramming.medium.com/either-is-a-common-type-in-functional-l
 ## Lifting
 
 You can lift a function (closure) to *Maybe* by using *lift()*, doing so result in a function with the same signature but
-return a Maybe, when invoking the lifted function, if any of the argument is a *None* or and *Failure* will return into
-one, any *Some* or *Deferred* will be resolved before the original function is invoked.
+return a Maybe, when invoking the lifted function, if any of the argument is a *None* or a *Failure* will return into
+one otherwise will be resolved before the original function is invoked.
 
 ```php
 $lifted = function (int $first, int $second): int { return $first + $second; };

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace j45l\maybe;
 
+use j45l\functional\Functor;
 use j45l\maybe\Context\Context;
 use j45l\maybe\DoTry\ThrowableReason;
 use Throwable;
@@ -64,5 +65,14 @@ class Deferred extends Maybe
     public function takeOrElse($propertyName, $default)
     {
         return $this->doResolve()->takeOrElse($propertyName, $default);
+    }
+
+    /**
+     * @param callable(Some<T>): Maybe<T> $function
+     * @returns Maybe<T>
+     */
+    public function map(callable $function): Functor
+    {
+        return $this->doResolve()->map($function);
     }
 }

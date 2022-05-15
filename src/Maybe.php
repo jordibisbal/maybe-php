@@ -7,7 +7,6 @@ namespace j45l\maybe;
 use j45l\functional\Functor;
 use j45l\maybe\Context\Context;
 use j45l\maybe\Context\ContextAware;
-use j45l\maybe\Context\Parameters;
 use j45l\maybe\DoTry\Failure;
 use j45l\maybe\DoTry\Success;
 use j45l\maybe\DoTry\ThrowableReason;
@@ -49,19 +48,6 @@ abstract class Maybe implements Functor
     public static function begin(): Success
     {
         return Success::create();
-    }
-
-    /**
-     * @template TC
-     * @param callable(Some<TC>): Maybe<TC> $function
-     * @return Maybe<TC>
-     */
-    public function map(callable $function): Functor
-    {
-        return (new Deferred(
-            $function,
-            Context::fromParameters(Parameters::create($this))
-        ))->resolve();
     }
 
     /**
@@ -118,7 +104,7 @@ abstract class Maybe implements Functor
      */
     public function andThen($value, ...$parameters): Maybe
     {
-        return $this->doResolve()->next($value);
+        return $this->doResolve()->next($value, ...$parameters);
     }
 
     /**
@@ -142,7 +128,7 @@ abstract class Maybe implements Functor
         /** @infection-ignore-all */
         switch (true) {
             case count($parameters) > 0:
-                return self::build($value, $this->track()->withParameters($parameters))->resolve(...$parameters);
+                return $this->withParameters(...$parameters)->next($value);
             default:
                 return self::build($value, $this->track())->doResolve();
         }

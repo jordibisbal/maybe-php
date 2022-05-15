@@ -10,14 +10,18 @@ use j45l\maybe\DoTry\Failure;
 use function Functional\first;
 use function Functional\invoke;
 use function Functional\map;
+use function Functional\partial_left;
 use function Functional\some;
+use function j45l\maybe\DoTry\doTry;
 
+/** @returns Maybe */
 function lift(callable $callable): Closure
 {
     return static function (...$parameters) use ($callable) {
         $isNone = static function (Maybe $maybe) {
             return $maybe instanceof None;
         };
+
         $isFailure = static function (Maybe $maybe) {
             return $maybe instanceof Failure;
         };
@@ -30,17 +34,15 @@ function lift(callable $callable): Closure
                 case some($parameters, $isNone):
                     return None::create();
                 default:
-                    return Deferred::create(static function (...$parameters) use ($callable) {
-                        return $callable(...$parameters);
-                    })->resolve(...invoke($parameters, 'get'));
+                    return doTry(partial_left($callable, ...invoke($parameters, 'get')))
+                ;
             }
         };
 
-        return $buildLifted(invoke(
-            map($parameters, function ($parameter) {
-                return $parameter instanceof Maybe ? $parameter : Some::from($parameter);
-            }),
-            'resolve'
-        ));
+        $liftParameters = map($parameters, function ($parameter) {
+            return $parameter instanceof Maybe ? $parameter : Some::from($parameter);
+        });
+
+        return $buildLifted(invoke($liftParameters, 'resolve'));
     };
 }
