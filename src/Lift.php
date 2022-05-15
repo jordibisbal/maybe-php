@@ -14,7 +14,6 @@ use function Functional\partial_left;
 use function Functional\some;
 use function j45l\maybe\DoTry\doTry;
 
-/** @returns Maybe */
 function lift(callable $callable): Closure
 {
     return static function (...$parameters) use ($callable) {

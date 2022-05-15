@@ -155,4 +155,10 @@ abstract class Maybe implements Functor
     {
         return $default;
     }
+
+    /**
+     * @param callable(Some<T>): Maybe<T> $function
+     * @return Maybe<T>
+     */
+    abstract public function map(callable $function): Functor;
 }

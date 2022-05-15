@@ -41,7 +41,7 @@ class None extends Maybe
     /**
      * @param callable(Some<T>): Maybe<T> $function
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @returns Maybe<T>
+     * @return Maybe<T>
      */
     public function map(callable $function): Functor
     {

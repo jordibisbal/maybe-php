@@ -16,7 +16,7 @@ class UnhandledMaybe extends Maybe
     /**
      * @param callable $function
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @returns Maybe<void>
+     * @return Maybe<void>
      */
     public function map(callable $function): Functor
     {

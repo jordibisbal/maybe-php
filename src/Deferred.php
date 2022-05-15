@@ -69,7 +69,7 @@ class Deferred extends Maybe
 
     /**
      * @param callable(Some<T>): Maybe<T> $function
-     * @returns Maybe<T>
+     * @return Maybe<T>
      */
     public function map(callable $function): Functor
     {
