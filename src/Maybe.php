@@ -80,11 +80,13 @@ abstract class Maybe implements Functor
     }
 
     /**
-     * @return Maybe<T>
+     * @template R
+     * @param callable(Some<T>): Maybe<R>|callable(Some<T>): R $callable
+     * @return Maybe<R>
      */
     public function pipe(callable $callable): Maybe
     {
-        return $this->next($callable, $this);
+        return $this->next($callable, $this); /** @phpstan-ignore-line */
     }
 
     /**
