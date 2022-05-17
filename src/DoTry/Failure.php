@@ -43,15 +43,6 @@ final class Failure extends None
 
     /**
      * @return Maybe<T>
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function pipe(callable $callable): Maybe
-    {
-        return $this;
-    }
-
-    /**
-     * @return Maybe<T>
      */
     public function sink(callable $callable): Maybe
     {

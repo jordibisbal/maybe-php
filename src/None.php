@@ -47,4 +47,13 @@ class None extends Maybe
     {
         return $this;
     }
+
+    /**
+     * @return Maybe<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function pipe(callable $callable): Maybe
+    {
+        return $this;
+    }
 }
