@@ -100,6 +100,17 @@ final class SinkTest extends TestCase
         self::assertEquals(new RuntimeException(), $reason->throwable());
     }
 
+    public function testSinkCanReturnNullSome(): void
+    {
+        $failure = Failure::create();
+        $some = $failure->sink(static function () {
+            return null;
+        });
+
+        self::assertInstanceOf(Some::class, $some);
+        self::assertNull($some->get());
+    }
+
     /**
      * @noinspection PhpUnusedParameterInspection
      * @SuppressWarnings("unused")
