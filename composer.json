@@ -33,11 +33,15 @@
             "j45l\\maybe\\": "src"
         },
         "files": [
-            "src/AssertSome.php",
-            "src/DoTry/DoTry.php",
-            "src/Lift.php",
-            "src/DoTry/Retry.php",
-            "src/Safe.php"
+            "src/Functions/GetFailureReasons.php",
+            "src/Functions/GetSomes.php",
+            "src/Functions/IsFailure.php",
+            "src/Functions/IsNone.php",
+            "src/Functions/IsSome.php",
+            "src/Functions/Lift.php",
+            "src/Functions/Retry.php",
+            "src/Functions/Safe.php",
+            "src/Functions/SafeMap.php"
         ]
     },
     "autoload-dev": {

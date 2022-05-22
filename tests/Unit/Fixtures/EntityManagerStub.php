@@ -2,9 +2,9 @@
 
 namespace j45l\maybe\Test\Unit\Fixtures;
 
-use j45l\maybe\Maybe;
-use j45l\maybe\None;
-use j45l\maybe\Some;
+use j45l\maybe\LeftRight\LeftRight;
+use j45l\maybe\Maybe\None;
+use j45l\maybe\Maybe\Some;
 use RuntimeException;
 
 /**
@@ -12,9 +12,9 @@ use RuntimeException;
  */
 class EntityManagerStub
 {
-    /** @var Maybe<T> */
+    /** @var LeftRight<T> */
     public $insertInvokedWith;
-    /** @var Maybe<T> */
+    /** @var LeftRight<T> */
     public $updateInvokedWith;
 
     /** @var bool */
