@@ -12,7 +12,7 @@ use j45l\maybe\LeftRight\LeftRight;
 use j45l\maybe\Maybe\Maybe;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
-use j45l\maybe\Test\Unit\Fixtures\EntityManagerStub;
+use j45l\maybe\Test\Unit\LeftRightExamplesFixtures\EntityManagerStub;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -25,7 +25,7 @@ use function j45l\maybe\Functions\safeMap;
  * @coversNothing
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class ExamplesTest extends TestCase
+class LeftRightExamplesTest extends TestCase
 {
     public function testDo(): void
     {

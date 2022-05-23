@@ -1,6 +1,6 @@
 <?php
 
-namespace j45l\maybe\Test\Unit\Fixtures;
+namespace j45l\maybe\Test\Unit\LeftRightExamplesFixtures;
 
 use j45l\maybe\LeftRight\LeftRight;
 use j45l\maybe\Maybe\None;
