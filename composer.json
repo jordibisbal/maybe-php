@@ -33,15 +33,15 @@
             "j45l\\maybe\\": "src"
         },
         "files": [
-            "src/Functions/GetFailureReasons.php",
-            "src/Functions/GetSomes.php",
-            "src/Functions/IsFailure.php",
-            "src/Functions/IsNone.php",
-            "src/Functions/IsSome.php",
-            "src/Functions/Lift.php",
-            "src/Functions/Retry.php",
-            "src/Functions/Safe.php",
-            "src/Functions/SafeMap.php"
+            "src/LeftRight/GetFailureReasons.php",
+            "src/LeftRight/GetSomes.php",
+            "src/LeftRight/IsFailure.php",
+            "src/LeftRight/IsNone.php",
+            "src/LeftRight/IsSome.php",
+            "src/LeftRight/Lift.php",
+            "src/LeftRight/Retry.php",
+            "src/LeftRight/Safe.php",
+            "src/LeftRight/SafeMap.php"
         ]
     },
     "autoload-dev": {
