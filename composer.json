@@ -33,6 +33,15 @@
             "j45l\\maybe\\": "src"
         },
         "files": [
+            "src/LeftRight/GetFailureReasons.php",
+            "src/LeftRight/GetSomes.php",
+            "src/LeftRight/IsFailure.php",
+            "src/LeftRight/IsNone.php",
+            "src/LeftRight/IsSome.php",
+            "src/LeftRight/Lift.php",
+            "src/LeftRight/Retry.php",
+            "src/LeftRight/Safe.php",
+            "src/LeftRight/SafeMap.php",
             "src/AssertSome.php",
             "src/DoTry/DoTry.php",
             "src/Lift.php",
