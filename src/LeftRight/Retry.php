@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Functions;
+namespace j45l\maybe\LeftRight;
 
 use j45l\functional\Sequences\Sequence;
 use j45l\maybe\Either\Failure;
-use j45l\maybe\LeftRight\LeftRight;
 
 use function j45l\functional\delay;
 

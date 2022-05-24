@@ -9,9 +9,9 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-use function j45l\maybe\Functions\lift;
+use function j45l\maybe\LeftRight\lift;
 
-/** @covers ::j45l\maybe\Functions\lift */
+/** @covers ::j45l\maybe\LeftRight\lift */
 class LiftTest extends TestCase
 {
     public function testLiftingASuccessfulFunction(): void

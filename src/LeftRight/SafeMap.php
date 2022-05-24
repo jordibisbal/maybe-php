@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Functions;
+namespace j45l\maybe\LeftRight;
 
 use Closure;
-use j45l\maybe\LeftRight\LeftRight;
 
 use function Functional\map;
 

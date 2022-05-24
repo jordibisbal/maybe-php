@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function j45l\functional\apply;
-use function j45l\maybe\Functions\getFailureReasons;
-use function j45l\maybe\Functions\getSomes;
-use function j45l\maybe\Functions\safeMap;
+use function j45l\maybe\LeftRight\getFailureReasons;
+use function j45l\maybe\LeftRight\getSomes;
+use function j45l\maybe\LeftRight\safeMap;
 
 /**
  * @coversNothing

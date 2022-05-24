@@ -10,7 +10,7 @@ use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 
-use function j45l\maybe\Functions\safe;
+use function j45l\maybe\LeftRight\safe;
 
 /**
  * @covers \j45l\maybe\LeftRight\LeftRight
