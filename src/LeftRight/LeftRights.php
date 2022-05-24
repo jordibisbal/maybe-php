@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace j45l\maybe\LeftRight;
 
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Maybe\Some;
+
 use function Functional\map;
 use function Functional\select;
 

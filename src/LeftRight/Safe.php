@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace j45l\maybe\LeftRight;
 
-use Closure;
-
 /**
  * @template T
  * @param T|callable():T $value
- * @phpstan-return Closure():LeftRight<T>
+ * @phpstan-return LeftRight<T>
  */
-function safe($value): Closure
+function safe($value): LeftRight
 {
-    return function (...$parameters) use ($value) {
-        return LeftRight::do($value, ...$parameters);
-    };
+    return LeftRight::do($value);
 }
