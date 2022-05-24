@@ -17,8 +17,6 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function j45l\functional\apply;
-use function j45l\maybe\LeftRight\getFailureReasons;
-use function j45l\maybe\LeftRight\getSomes;
 use function j45l\maybe\LeftRight\safeMap;
 
 /**
@@ -129,10 +127,10 @@ class LeftRightExamplesTest extends TestCase
             'id' => $id,
             'name' => $name,
             'email' => $email
-        ])();
+        ]);
 
-        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], getSomes($all));
-        $this->assertEquals(['name' => 'Unable to get name'], getFailureReasons($all));
+        $this->assertEquals(['id' => 123, 'email' => 'email@test.com'], $all->values());
+        $this->assertEquals(['name' => 'Unable to get name'], $all->failureReasonStrings());
     }
 
     public function testOrElse(): void

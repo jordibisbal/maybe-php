@@ -55,8 +55,7 @@ final class LeftRightAndThenTest extends TestCase
         $maybe =
             safe(static function (): LeftRight {
                 return Some::from(42);
-            })()
-            ->andThen(None::create())
+            })->andThen(None::create())
         ;
 
         self::assertInstanceOf(None::class, $maybe);

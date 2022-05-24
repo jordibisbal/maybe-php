@@ -36,5 +36,5 @@ function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn
         }
     };
 
-    return $retry(safe($callable)(), $delaySequence, $tries - 1);
+    return $retry(safeLazy($callable)(), $delaySequence, $tries - 1);
 }

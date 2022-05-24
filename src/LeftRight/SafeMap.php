@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace j45l\maybe\LeftRight;
 
-use Closure;
-
 use function Functional\map;
 
 /**
  * @param mixed[] $values
- * @phpstan-return Closure():iterable<LeftRight<mixed>>
+ * @phpstan-return LeftRights<mixed>
  */
-function safeMap(array $values): Closure
+function safeMap(array $values): LeftRights
 {
-    return function (...$parameters) use ($values) {
-        return map(
+    return LeftRights::create(
+        map(
             $values,
-            function ($value) use ($parameters) {
-                return safe($value, ...$parameters)();
+            function ($value) {
+                return safe($value);
             }
-        );
-    };
+        )
+    );
 }
