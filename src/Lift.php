@@ -12,6 +12,9 @@ use function Functional\invoke;
 use function Functional\map;
 use function Functional\some;
 
+/**
+ * @deprecated Move to v3
+ */
 function lift(callable $callable): Closure
 {
     return static function (...$parameters) use ($callable) {

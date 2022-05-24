@@ -9,6 +9,7 @@ use j45l\maybe\Context\Context;
 use function j45l\functional\take;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @extends Maybe<T>
  */

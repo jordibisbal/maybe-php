@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace j45l\maybe\DoTry;
 
+/**
+ * @deprecated Move to v3
+ */
 class Reason
 {
     /** @var string */

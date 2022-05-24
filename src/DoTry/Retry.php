@@ -11,6 +11,7 @@ use j45l\maybe\Some;
 use function j45l\functional\delay;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @param callable():T $callable
  * @phpstan-param  callable(Float $seconds): void $delayFn

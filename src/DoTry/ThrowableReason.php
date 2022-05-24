@@ -7,6 +7,9 @@ namespace j45l\maybe\DoTry;
 use RuntimeException;
 use Throwable;
 
+/**
+ * @deprecated Move to v3
+ */
 final class ThrowableReason extends Reason
 {
     /** @var Throwable */

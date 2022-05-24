@@ -9,6 +9,7 @@ use j45l\maybe\DoTry\ThrowableReason;
 use Throwable;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @extends Maybe<T>
  */

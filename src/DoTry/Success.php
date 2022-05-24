@@ -8,6 +8,7 @@ use j45l\maybe\Context\Context;
 use j45l\maybe\Some;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @extends Some<T>
  */

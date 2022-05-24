@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @param T|Maybe<T> $value
  * @phpstan-return Some<T>|None<T>

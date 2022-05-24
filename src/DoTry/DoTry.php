@@ -8,6 +8,7 @@ use j45l\maybe\Maybe;
 use Throwable;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @param callable():T $callable
  * @return Maybe<T>

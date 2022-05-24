@@ -9,6 +9,7 @@ use j45l\maybe\Maybe;
 use j45l\maybe\None;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @extends None<T>
  */

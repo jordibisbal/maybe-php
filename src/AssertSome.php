@@ -8,6 +8,7 @@ use Exception;
 use LogicException;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @template ET of \Exception
  * @param Maybe<T> $maybe

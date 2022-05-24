@@ -7,6 +7,7 @@ namespace j45l\maybe;
 use j45l\functional\Functor;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @extends Maybe<T>
  */

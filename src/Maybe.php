@@ -13,6 +13,7 @@ use j45l\maybe\DoTry\Success;
 use j45l\maybe\DoTry\ThrowableReason;
 
 /**
+ * @deprecated Move to v3
  * @template T
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
