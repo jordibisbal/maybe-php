@@ -103,4 +103,9 @@ final class LeftRights
             }
         );
     }
+
+    public function empty(): bool
+    {
+        return count($this->items()) === 0;
+    }
 }
