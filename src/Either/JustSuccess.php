@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace j45l\maybe\Either;
 
 use j45l\functional\Functor;
-use j45l\maybe\LeftRight\NonValued;
-use j45l\maybe\LeftRight\Right;
+use j45l\maybe\Optional\NonValued;
+use j45l\maybe\Optional\Right;
 
 /**
  * @extends Either<mixed>

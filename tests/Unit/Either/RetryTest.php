@@ -10,9 +10,9 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-use function j45l\maybe\LeftRight\retry;
+use function j45l\maybe\Optional\retry;
 
-/** @covers ::j45l\maybe\LeftRight\retry */
+/** @covers ::j45l\maybe\Optional\retry */
 class RetryTest extends TestCase
 {
     public function testTriesAsManyTimesAsAskedFor(): void

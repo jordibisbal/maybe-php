@@ -38,6 +38,11 @@ function testUnit() {
     execute "$home/.." "bin/phpunit"
 }
 
+function testUnitCoverage() {
+    echo -e "\nUnitary tests...\n"
+    execute "$home/.." "XDEBUG_MODE=coverage vendor/bin/phpunit  --coverage-html build/coverage && open build/coverage/index.html"
+}
+
 function testMutant() {
     echo -e "\nMutant tests...\n"
     execute "$home/.." "bin/infection"
@@ -48,14 +53,19 @@ function tests() {
 	do
 		choice=$(dialog --menu "Tests" 11 40 $largeDialogHeight \
 			1 "Unitary" \
-			2 "Mutant (Infection)" \
+			2 "Unitary with coverage" \
+			3 "Mutant (Infection)" \
 		2>&1 >/dev/tty)
 		case $choice in
 			1)  clear
 			    testUnit
 			    enterToContinue
 			    ;;
-			2)  clear
+      2)  clear
+          testUnitCoverage
+          enterToContinue
+          ;;
+			3)  clear
 			    testMutant
 			    enterToContinue
 			    ;;

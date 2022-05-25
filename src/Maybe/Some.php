@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace j45l\maybe\Maybe;
 
 use j45l\maybe\Either\Success;
-use j45l\maybe\LeftRight\Right;
-use j45l\maybe\LeftRight\Valued;
+use j45l\maybe\Optional\Right;
+use j45l\maybe\Optional\Valued;
 
 /**
  * @template T
