@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Either;
 
-use j45l\maybe\LeftRight\Left;
-use j45l\maybe\LeftRight\NonValued;
+use j45l\maybe\Optional\Left;
+use j45l\maybe\Optional\NonValued;
 
 /**
  * @extends Either<mixed>

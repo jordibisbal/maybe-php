@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\LeftRight;
+namespace j45l\maybe\Optional;
 
 use j45l\functional\Functor;
 use j45l\maybe\Either\Failure;
@@ -13,13 +13,13 @@ use Throwable;
 /**
  * @template T
  */
-abstract class LeftRight implements Functor
+abstract class Optional implements Functor
 {
     /**
      * @SuppressWarnings(PHPMD.ShortMethodName)
      * @param mixed $value
      * @param mixed $parameters
-     * @return LeftRight<T>
+     * @return Optional<T>
      */
     public static function do($value, ...$parameters): self
     {
@@ -35,9 +35,9 @@ abstract class LeftRight implements Functor
     /**
      * @param callable $value
      * @param mixed[] $params
-     * @return LeftRight<mixed>
+     * @return Optional<mixed>
      */
-    private static function callableDo(callable $value, ...$params): LeftRight
+    private static function callableDo(callable $value, ...$params): Optional
     {
         try {
             return Maybe::someWrap($value(...$params));
@@ -63,21 +63,21 @@ abstract class LeftRight implements Functor
 
     //endregion
 
-    //region LeftRight
+    //region Optional
 
     /**
      * @param mixed $value
-     * @return LeftRight<T>
+     * @return Optional<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    abstract public function andThen($value): LeftRight;
+    abstract public function andThen($value): Optional;
 
     /**
      * @param mixed $value;
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @return LeftRight<T>
+     * @return Optional<T>
      */
-    abstract public function orElse($value): LeftRight;
+    abstract public function orElse($value): Optional;
 
     //endregion
 }

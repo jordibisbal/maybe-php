@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\LeftRight;
+namespace j45l\maybe\Optional;
 
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Maybe\Some;
@@ -13,35 +13,35 @@ use function Functional\select;
 /**
  * @template T
  */
-final class LeftRights
+final class Optionals
 {
     /**
-     * @var LeftRight<T>[]
+     * @var Optional<T>[]
      */
-    private $leftRights;
+    private $optionals;
 
-    /** @phpstan-param LeftRight<T>[] $leftRights */
-    private function __construct(array $leftRights)
+    /** @phpstan-param Optional<T>[] $optionals */
+    private function __construct(array $optionals)
     {
-        $this->leftRights = $leftRights;
+        $this->optionals = $optionals;
     }
 
     /**
-     * @param LeftRight<T>[] $leftRights
+     * @param Optional<T>[] $optionals
      * @return self<T>
      */
-    public static function create(array $leftRights): self
+    public static function create(array $optionals = []): self
     {
-        return new self($leftRights);
+        return new self($optionals);
     }
 
     /** @return self<T> */
     public function somes(): self
     {
         return self::create(select(
-            $this->leftRights,
-            function (LeftRight $leftRight) {
-                return isSome($leftRight);
+            $this->optionals,
+            function (Optional $optional) {
+                return isSome($optional);
             }
         ));
     }
@@ -50,9 +50,9 @@ final class LeftRights
     public function successes(): self
     {
         return self::create(select(
-            $this->leftRights,
-            function (LeftRight $leftRight) {
-                return isSuccess($leftRight);
+            $this->optionals,
+            function (Optional $optional) {
+                return isSuccess($optional);
             }
         ));
     }
@@ -61,9 +61,9 @@ final class LeftRights
     public function nones(): self
     {
         return self::create(select(
-            $this->leftRights,
-            function (LeftRight $leftRight) {
-                return isNone($leftRight);
+            $this->optionals,
+            function (Optional $optional) {
+                return isNone($optional);
             }
         ));
     }
@@ -72,9 +72,9 @@ final class LeftRights
     public function failures(): self
     {
         return self::create(select(
-            $this->leftRights,
-            function (LeftRight $leftRight) {
-                return isFailure($leftRight);
+            $this->optionals,
+            function (Optional $optional) {
+                return isFailure($optional);
             }
         ));
     }
@@ -87,10 +87,10 @@ final class LeftRights
         });
     }
 
-    /** @return LeftRight<T>[] */
+    /** @return Optional<T>[] */
     public function items(): array
     {
-        return $this->leftRights;
+        return $this->optionals;
     }
 
     /** @return mixed[] */
@@ -106,6 +106,7 @@ final class LeftRights
 
     public function empty(): bool
     {
+        /** @infection-ignore-all */
         return count($this->items()) === 0;
     }
 }

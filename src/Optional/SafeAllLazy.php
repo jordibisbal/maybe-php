@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\LeftRight;
+namespace j45l\maybe\Optional;
 
 use Closure;
 
@@ -10,12 +10,12 @@ use function Functional\map;
 
 /**
  * @param mixed[] $values
- * @phpstan-return Closure():LeftRights<mixed>
+ * @phpstan-return Closure():Optionals<mixed>
  */
-function safeLazyMap(array $values): Closure
+function safeAllLazy(array $values): Closure
 {
     return function (...$parameters) use ($values) {
-        return LeftRights::create(
+        return Optionals::create(
             map(
                 $values,
                 function ($value) use ($parameters) {

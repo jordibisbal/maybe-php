@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\LeftRight;
+namespace j45l\maybe\Optional;
 
 use function Functional\map;
 
 /**
  * @param mixed[] $values
- * @phpstan-return LeftRights<mixed>
+ * @phpstan-return Optionals<mixed>
  */
-function safeMap(array $values): LeftRights
+function safeAll(array $values): Optionals
 {
-    return LeftRights::create(
+    return Optionals::create(
         map(
             $values,
             function ($value) {

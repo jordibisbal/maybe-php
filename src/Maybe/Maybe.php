@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Maybe;
 
-use j45l\maybe\LeftRight\LeftRight;
+use j45l\maybe\Optional\Optional;
 
 /**
  * @template T
- * @extends LeftRight<T>
+ * @extends Optional<T>
  */
-abstract class Maybe extends LeftRight
+abstract class Maybe extends Optional
 {
     /**
      * @param T $value
-     * @return LeftRight<T>|None|Some<T>
+     * @return Optional<T>|None|Some<T>
      */
-    protected static function someWrap($value): LeftRight
+    protected static function someWrap($value): Optional
     {
         /** @infection-ignore-all */
         switch (true) {
-            case $value instanceof LeftRight:
+            case $value instanceof Optional:
                 return $value;
             case is_null($value):
                 return None::create();

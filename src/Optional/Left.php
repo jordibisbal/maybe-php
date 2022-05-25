@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\LeftRight;
+namespace j45l\maybe\Optional;
 
 /**
  * @template T
@@ -12,7 +12,7 @@ trait Left
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function andThen($value): LeftRight
+    public function andThen($value): Optional
     {
         return $this;
     }
@@ -20,9 +20,9 @@ trait Left
     /**
      * @param mixed $value;
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @return LeftRight<T>
+     * @return Optional<T>
      */
-    public function orElse($value): LeftRight
+    public function orElse($value): Optional
     {
         return $this->do($value, $this);
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\LeftRight;
+namespace j45l\maybe\Optional;
 
 use Closure;
 use j45l\maybe\Either\Failure;
@@ -17,23 +17,23 @@ use function Functional\some;
 function lift(callable $callable): Closure
 {
     return static function (...$parameters) use ($callable) {
-        $isNone = static function (LeftRight $maybe) {
+        $isNone = static function (Optional $maybe) {
             return $maybe instanceof None;
         };
 
-        $isFailure = static function (LeftRight $maybe) {
+        $isFailure = static function (Optional $maybe) {
             return $maybe instanceof Failure;
         };
 
         $liftParameters = function ($parameters) {
             return map($parameters, function ($parameter) {
-                       return LeftRight::do($parameter);
+                return Optional::do($parameter);
             });
         };
 
         $sinkParameters = function ($parameters) {
             return map($parameters, function (Some $parameter) {
-                       return $parameter->get();
+                return $parameter->get();
             });
         };
 
@@ -45,7 +45,7 @@ function lift(callable $callable): Closure
                 case some($parameters, $isNone):
                     return None::create();
                 default:
-                    return LeftRight::do(partial_left($callable, ...($sinkParameters($parameters))))
+                    return Optional::do(partial_left($callable, ...($sinkParameters($parameters))))
                 ;
             }
         };

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\LeftRight;
+namespace j45l\maybe\Optional;
 
 use Closure;
 
 /**
  * @template T
  * @param T|callable():T $value
- * @phpstan-return Closure():LeftRight<T>
+ * @phpstan-return Closure():Optional<T>
  */
 function safeLazy($value): Closure
 {
     return function (...$parameters) use ($value) {
-        return LeftRight::do($value, ...$parameters);
+        return Optional::do($value, ...$parameters);
     };
 }
