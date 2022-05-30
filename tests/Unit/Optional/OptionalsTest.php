@@ -93,4 +93,76 @@ final class OptionalsTest extends TestCase
         $this->assertTrue(Optionals::create()->empty());
         $this->assertFalse(OptionalsFixtures::getMixed()->empty());
     }
+
+    public function testNewSomeCanBeAdded(): void
+    {
+        $optionals = Optionals::create([Some::from(42)]);
+        $mergedOptionals = $optionals->mergeSome(Some::from(43));
+
+        $this->assertCount(1, $optionals);
+        $this->assertCount(2, $mergedOptionals);
+        $this->assertEquals($mergedOptionals->head(), Some::from(42));
+        $this->assertEquals($mergedOptionals->tail()->head(), Some::from(43));
+    }
+
+    public function testNewAddingSomeOtherAreNotAdded(): void
+    {
+        $optionals = Optionals::create([Some::from(42)]);
+        $mergedOptionals = $optionals->mergeSome(None::create(), Failure::create(), Some::from(43));
+
+        $this->assertCount(1, $optionals);
+        $this->assertCount(2, $mergedOptionals);
+        $this->assertEquals($mergedOptionals->head(), Some::from(42));
+        $this->assertEquals($mergedOptionals->tail()->head(), Some::from(43));
+    }
+
+    public function testNewFailureCanBeAdded(): void
+    {
+        $optionals = Optionals::create([Failure::because(Reason::fromString('Failure'))]);
+        $mergedOptionals = $optionals->mergeFailures(Failure::because(Reason::fromString('Another Failure')));
+
+        $this->assertCount(1, $optionals);
+        $this->assertCount(2, $mergedOptionals);
+        $this->assertEquals($mergedOptionals->head(), Failure::because(Reason::fromString('Failure')));
+        $this->assertEquals(
+            $mergedOptionals->tail()->head(),
+            Failure::because(Reason::fromString('Another Failure'))
+        );
+    }
+
+    public function testNewAddingFailuresOtherAreNotAdded(): void
+    {
+        $optionals = Optionals::create([Failure::because(Reason::fromString('Failure'))]);
+        $mergedOptionals = $optionals->mergeFailures(
+            None::create(),
+            Some::from(42),
+            Failure::because(Reason::fromString('Another Failure'))
+        );
+
+        $this->assertCount(1, $optionals);
+        $this->assertCount(2, $mergedOptionals);
+        $this->assertEquals($mergedOptionals->head(), Failure::because(Reason::fromString('Failure')));
+        $this->assertEquals(
+            $mergedOptionals->tail()->head(),
+            Failure::because(Reason::fromString('Another Failure'))
+        );
+    }
+
+    public function testHeadOnEmptyOptionalsIsNone(): void
+    {
+        $optional = Optionals::create([]);
+        $this->assertEquals(None::create(), $optional->head());
+    }
+
+    public function testHeadOnEmptyOptionalsCanBeDefaulted(): void
+    {
+        $optional = Optionals::create([]);
+        $this->assertEquals(Some::from(42), $optional->head(Some::from(42)));
+    }
+
+    public function testHeadOnNotOptionalsDefaultIsIgnored(): void
+    {
+        $optional = Optionals::create([Some::from(42)]);
+        $this->assertEquals(Some::from(42), $optional->head(Some::from(43)));
+    }
 }

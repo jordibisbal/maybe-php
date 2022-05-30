@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Optional;
 
+use Countable;
 use j45l\maybe\Either\Failure;
+use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 
+use function Functional\first;
 use function Functional\map;
 use function Functional\select;
+use function Functional\tail;
 
 /**
  * @template T
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-final class Optionals
+final class Optionals implements Countable
 {
     /**
      * @var Optional<T>[]
@@ -108,5 +113,43 @@ final class Optionals
     {
         /** @infection-ignore-all */
         return count($this->items()) === 0;
+    }
+
+    /**
+     * @param Optional<T> ...$optionals
+     * @return  Optionals<T>
+     */
+    public function mergeSome(Optional ...$optionals): self
+    {
+        return new self(array_merge($this->items(), self::create($optionals)->somes()->items()));
+    }
+
+    /**
+     * @param Optional<T> ...$optionals
+     * @return  Optionals<T>
+     */
+    public function mergeFailures(Optional ...$optionals): self
+    {
+        return new self(array_merge($this->items(), self::create($optionals)->failures()->items()));
+    }
+
+    public function count(): int
+    {
+        return count($this->items());
+    }
+
+    /**
+     * @param T $default
+     * @return Optional<T>
+     */
+    public function head($default = null): Optional
+    {
+        return first($this->items()) ?? $default ?? None::create();
+    }
+
+    /** @return self<T> */
+    public function tail(): self
+    {
+        return self::create(tail($this->items()));
     }
 }
