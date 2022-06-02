@@ -29,6 +29,20 @@ final class OptionalOnTest extends TestCase
         self::assertEquals(42, $maybe->get());
     }
 
+    public function testMatchingClassCurrentIsPassed(): void
+    {
+        $maybe = Some::from(41)
+            ->on(
+                Some::class,
+                function (Some $some) {
+                    return Some::from($some->get() + 1);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(42, $maybe->get());
+    }
+
     public function testNotMatchingClassBypasses(): void
     {
         $maybe = Some::from(1)

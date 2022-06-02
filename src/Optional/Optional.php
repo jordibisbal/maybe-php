@@ -91,7 +91,7 @@ abstract class Optional implements Functor
         /** @infection-ignore-all */
         switch (true) {
             case ($this instanceof $className):
-                return $this->do($value);
+                return $this->do($value, $this);
             default:
                 return $this;
         }
