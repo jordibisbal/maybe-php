@@ -79,5 +79,22 @@ abstract class Optional implements Functor
      */
     abstract public function orElse($value): Optional;
 
+    /**
+     * @template T2
+     * @param class-string $className
+     * @param T2 $value
+     * @return T2|Optional<T>
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
+    public function on(string $className, $value)
+    {
+        /** @infection-ignore-all */
+        switch (true) {
+            case ($this instanceof $className):
+                return $this->do($value);
+            default:
+                return $this;
+        }
+    }
     //endregion
 }
