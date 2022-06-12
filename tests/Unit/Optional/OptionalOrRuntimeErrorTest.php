@@ -6,10 +6,12 @@ namespace j45l\maybe\Test\Unit\Optional;
 
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
+use j45l\maybe\Either\ThrowableReason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Throwable;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -44,5 +46,37 @@ final class OptionalOrRuntimeErrorTest extends TestCase
         $this->expectExceptionObject(new RuntimeException('Ops'));
 
         Failure::create()->getOrRuntimeException('Ops');
+    }
+
+    public function testThrowableFailureThrowsRuntimeError(): void
+    {
+        try {
+            Failure::because(ThrowableReason::fromString('Inner Runtime'))->getOrRuntimeException('Ops');
+        } catch (Throwable $throwable) {
+            $this->assertEquals(
+                new RuntimeException(
+                    'Ops',
+                    0,
+                    new RuntimeException('Inner Runtime')
+                ),
+                $throwable
+            );
+        }
+    }
+
+    public function testThrowableFailureThrowsRuntimeErrorWithNoMessage(): void
+    {
+        try {
+            Failure::because(ThrowableReason::fromString('Runtime'))->getOrRuntimeException();
+        } catch (Throwable $throwable) {
+            $this->assertEquals(
+                new RuntimeException(
+                    'Runtime',
+                    0,
+                    new RuntimeException('Runtime')
+                ),
+                $throwable
+            );
+        }
     }
 }

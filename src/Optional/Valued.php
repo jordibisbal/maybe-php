@@ -56,7 +56,6 @@ trait Valued
         return $this->get();
     }
 
-
     public function takeOrElse($propertyName, $defaultValue)
     {
         return take($this->get(), $propertyName, $defaultValue);

@@ -18,8 +18,7 @@ abstract class Maybe extends Optional
      */
     protected static function someWrap($value): Optional
     {
-        /** @infection-ignore-all */
-        switch (true) {
+        switch (/** @infection-ignore-all */  true) {
             case $value instanceof Optional:
                 return $value;
             case is_null($value):
