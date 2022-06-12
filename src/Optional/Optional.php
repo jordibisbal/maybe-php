@@ -55,6 +55,12 @@ abstract class Optional implements Functor
     abstract public function getOrElse($defaultValue);
 
     /**
+     * @param string $message
+     * @return T
+     */
+    abstract public function getOrRuntimeException(string $message = '');
+
+    /**
      * @param mixed $defaultValue
      * @param string|int|array<string|int> $propertyName
      * @return mixed
@@ -91,7 +97,7 @@ abstract class Optional implements Functor
         /** @infection-ignore-all */
         switch (true) {
             case ($this instanceof $className):
-                return $this->do($value, $this);
+                return self::do($value, $this);
             default:
                 return $this;
         }

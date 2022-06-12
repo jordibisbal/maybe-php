@@ -47,6 +47,16 @@ trait Valued
         return $this->get();
     }
 
+    /**
+     * @return T
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getOrRuntimeException(string $message = '')
+    {
+        return $this->get();
+    }
+
+
     public function takeOrElse($propertyName, $defaultValue)
     {
         return take($this->get(), $propertyName, $defaultValue);
