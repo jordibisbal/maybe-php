@@ -26,6 +26,7 @@ trait Valued
      * @param T $value
      * @return static<T>
      * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     public static function from($value)
     {

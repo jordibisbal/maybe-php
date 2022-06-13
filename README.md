@@ -1,21 +1,16 @@
 # Why
 
-Maybe (inspired by the functional thing), helps to:
-* Better handling of exception (Success/Failure).
-* Discourage the use of null (None/Some).
+Optional (inspired by the functional thing), helps to:
+* Better handling of exception (JustSuccess/Failure).
+* Better typed alternative to the use of null (None/Some).
 * Simplify the control flow on errors.
 * Build failsafe code
 * Improve testability.
 
-## Maybe
+## Optional
 
-Is a pragmatic version on the Maybe from functional programing, it provides functionality
+Is a pragmatic version on the Optional/Either/Maybe from functional programing, it provides functionality
 present in such languages along some extra to solve some common use cases in php.
-
-DoTry, adds to *maybe* some behavior of *Try()* (e.g. from Scala), the result of a *doTry()* can be a *Failure* or a *Success* but could
-also be something else (a non failure) like a *None*.
-
-A *Trail* helps to collect *failures*/*values* from a *try*/*next* chain.
 
 Some literature about, google for more:
 
@@ -25,22 +20,8 @@ https://itnext.io/either-monad-a-functional-approach-to-error-handling-in-js-ffd
 
 https://functionalprogramming.medium.com/either-is-a-common-type-in-functional-languages-94b86eea325c
 
-## Maybe Documentation
+## Optional Documentation
 
-[Maybe class](resources/documentation/Maybe.md)
+[Optional class](resources/documentation/Optional.md)
 
 [Support functions](resources/documentation/Functions.md)
-
-## Lifting
-
-You can lift a function (closure) to *Maybe* by using *lift()*, doing so result in a function with the same signature but
-return a Maybe, when invoking the lifted function, if any of the argument is a *None* or a *Failure* will return into
-one otherwise will be resolved before the original function is invoked.
-
-```php
-$lifted = function (int $first, int $second): int { return $first + $second; };
-$maybe = $lifted(40, 2);
-
-$this->assertInstanceOf(Some::class, $maybe);
-$this->assertEquals(42, $maybe->get());
-```

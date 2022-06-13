@@ -23,8 +23,3 @@ if any of the parameters is *Failure* the lifted function will return *Failure*.
     $failure = lift($function)(None::create(), Failure::create());
     self::assertInstanceOf(Failure::class, $failure);
 ```
-
-## doTry(callable $callable): Success|Failure|None
-
-Evaluates *$callable* and returns a *Failure* if *$callable* throws, *None* if returns *None*, *Some* if returns a *Some* 
-or a *Some* of the returned value otherwise. Note that doTry raises a *Some* to a *Success*.

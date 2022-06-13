@@ -97,7 +97,7 @@ final class OptionalsTest extends TestCase
     public function testNewSomeCanBeAdded(): void
     {
         $optionals = Optionals::create([Some::from(42)]);
-        $mergedOptionals = $optionals->mergeSome(Some::from(43));
+        $mergedOptionals = $optionals->mergeSomes(Some::from(43));
 
         $this->assertCount(1, $optionals);
         $this->assertCount(2, $mergedOptionals);
@@ -108,7 +108,7 @@ final class OptionalsTest extends TestCase
     public function testNewAddingSomeOtherAreNotAdded(): void
     {
         $optionals = Optionals::create([Some::from(42)]);
-        $mergedOptionals = $optionals->mergeSome(None::create(), Failure::create(), Some::from(43));
+        $mergedOptionals = $optionals->mergeSomes(None::create(), Failure::create(), Some::from(43));
 
         $this->assertCount(1, $optionals);
         $this->assertCount(2, $mergedOptionals);
