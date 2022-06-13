@@ -119,7 +119,7 @@ final class Optionals implements Countable
      * @param Optional<T> ...$optionals
      * @return  Optionals<T>
      */
-    public function mergeSome(Optional ...$optionals): self
+    public function mergeSomes(Optional ...$optionals): self
     {
         return new self(array_merge($this->items(), self::create($optionals)->somes()->items()));
     }

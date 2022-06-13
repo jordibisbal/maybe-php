@@ -6,13 +6,17 @@ namespace j45l\maybe\Either;
 
 use j45l\maybe\Optional\Left;
 use j45l\maybe\Optional\NonValued;
+use RuntimeException;
 
 /**
  * @extends Either<mixed>
  */
 final class Failure extends Either
 {
-    use NonValued;
+    use NonValued {
+        getOrRuntimeException as nonValuedGetOrRuntimeException;
+    }
+
     /** @use Left<void> */
     use Left;
 
@@ -40,5 +44,20 @@ final class Failure extends Either
     public function reason(): Reason
     {
         return $this->reason;
+    }
+
+    public function getOrRuntimeException(string $message = null)
+    {
+        $this->throwRuntimeException($message ?? $this->reason->toString(), $this->reason);
+    }
+
+    private function throwRuntimeException(string $message, Reason $reason): void
+    {
+        switch (/** @infection-ignore-all */ true) {
+            case $reason instanceof ThrowableReason:
+                throw new RuntimeException($message, 0, $reason->throwable());
+            default:
+                $this->nonValuedGetOrRuntimeException($message);
+        }
     }
 }

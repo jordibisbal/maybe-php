@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe\Optional;
 
 use j45l\functional\Functor;
+use RuntimeException;
 
 trait NonValued
 {
@@ -18,6 +19,12 @@ trait NonValued
     public function getOrElse($defaultValue)
     {
         return $defaultValue;
+    }
+
+    /** @noinspection ReturnTypeCanBeDeclaredInspection */
+    public function getOrRuntimeException(string $message = '')
+    {
+        throw new RuntimeException($message);
     }
 
     /**

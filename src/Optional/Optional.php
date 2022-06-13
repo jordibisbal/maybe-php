@@ -23,8 +23,7 @@ abstract class Optional implements Functor
      */
     public static function do($value, ...$parameters): self
     {
-        /** @infection-ignore-all */
-        switch (true) {
+        switch (/** @infection-ignore-all */ true) {
             case is_callable($value):
                 return self::callableDo($value, ...$parameters);
             default:
@@ -53,6 +52,12 @@ abstract class Optional implements Functor
      * @return mixed
      */
     abstract public function getOrElse($defaultValue);
+
+    /**
+     * @param string $message
+     * @return T
+     */
+    abstract public function getOrRuntimeException(string $message = '');
 
     /**
      * @param mixed $defaultValue
@@ -88,10 +93,9 @@ abstract class Optional implements Functor
      */
     public function on(string $className, $value)
     {
-        /** @infection-ignore-all */
-        switch (true) {
+        switch (/** @infection-ignore-all */ true) {
             case ($this instanceof $className):
-                return $this->do($value, $this);
+                return self::do($value, $this);
             default:
                 return $this;
         }

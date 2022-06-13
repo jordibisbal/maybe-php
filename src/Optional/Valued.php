@@ -26,6 +26,7 @@ trait Valued
      * @param T $value
      * @return static<T>
      * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     public static function from($value)
     {
@@ -43,6 +44,15 @@ trait Valued
      * @return mixed
      */
     public function getOrElse($defaultValue)
+    {
+        return $this->get();
+    }
+
+    /**
+     * @return T
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getOrRuntimeException(string $message = '')
     {
         return $this->get();
     }
