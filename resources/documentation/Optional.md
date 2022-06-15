@@ -124,6 +124,7 @@ evaluates **$value** when the **Optional** is a *$className*.
 ```PHP
 public function assert($condition, string $message = null): Optional
 ```
+If the **Optional** is a Failure, return the same **Optional**.
 If the optional is a valued one and *$condition* is true 
 (or a callable like **function(Optional): bool** that evaluates to true) 
 returns the **Optional** itself. Otherwise, if the optional is not a values one (i.e. not a **Some**) or evaluates 

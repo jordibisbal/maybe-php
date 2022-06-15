@@ -6,6 +6,7 @@ namespace j45l\maybe\Either;
 
 use j45l\maybe\Optional\Left;
 use j45l\maybe\Optional\NonValued;
+use j45l\maybe\Optional\Optional;
 use RuntimeException;
 
 /**
@@ -59,5 +60,10 @@ final class Failure extends Either
             default:
                 $this->nonValuedGetOrRuntimeException($message);
         }
+    }
+
+    public function assert($condition, string $message = null): Optional
+    {
+        return $this;
     }
 }

@@ -6,6 +6,7 @@ namespace j45l\maybe\Test\Unit\Optional;
 
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
+use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -13,24 +14,33 @@ use RuntimeException;
 /**
  * @covers \j45l\maybe\Optional\Optional
  * @covers \j45l\maybe\Maybe\None
+ * @covers \j45l\maybe\Either\Failure
  * @covers \j45l\maybe\Maybe\Some
  */
 final class OptionalAssertTest extends TestCase
 {
-    public function testAssertingFailureReturnsFailure(): void
+    public function testAssertingNoneReturnsFailure(): void
     {
-        $maybe = Failure::create()->assert(false);
+        $maybe = None::create()->assert(false);
 
         self::assertInstanceOf(Failure::class, $maybe);
         self::assertEquals('failed assertion', $maybe->reason()->toString());
     }
 
-    public function testAssertingFailureReturnsFailureWithMessage(): void
+    public function testAssertingNoneReturnsFailureWithMessage(): void
     {
-        $maybe = Failure::create()->assert(false, 'Failed!');
+        $maybe = None::create()->assert(false, 'Failed!');
 
         self::assertInstanceOf(Failure::class, $maybe);
         self::assertEquals('Failed!', $maybe->reason()->toString());
+    }
+
+    public function testAssertingFailureReturnsSame(): void
+    {
+        $failure = Failure::create();
+        $result = $failure->assert(false);
+
+        self::assertSame($failure, $result);
     }
 
     public function testAssertingFalseReturnsFailure(): void
