@@ -8,6 +8,7 @@ use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -48,6 +49,19 @@ final class OptionalAssertTest extends TestCase
 
         self::assertInstanceOf(Failure::class, $maybe);
         self::assertEquals('Failed!', $maybe->reason()->toString());
+    }
+
+    public function testAssertingFailingClosureReturnsFailure(): void
+    {
+        $maybe = Some::from(1)
+            ->assert(
+                function () {
+                    throw new RuntimeException();
+                }
+            );
+
+        self::assertInstanceOf(Failure::class, $maybe);
+        self::assertEquals('failed assertion', $maybe->reason()->toString());
     }
 
     public function testAssertingTrueReturnsOriginalOptionalIfValued(): void
