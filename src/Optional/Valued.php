@@ -10,6 +10,7 @@ use j45l\maybe\Either\Reason;
 
 use function is_callable as isCallable;
 use function j45l\functional\take;
+use function j45l\maybe\Optional\safe as safeWrap;
 
 /**
  * @template T
@@ -81,7 +82,12 @@ trait Valued
     {
         switch (/** @infection-ignore-all */ true) {
             case isCallable($condition):
-                return $this->assert($condition($this), $message);
+                return $this->assert(
+                    safeWrap(function () use ($condition) {
+                        return $condition($this);
+                    })->getOrElse(false),
+                    $message
+                );
             default:
                 return $condition ? $this : Failure::because(Reason::fromString($message ?? 'failed assertion'));
         }
