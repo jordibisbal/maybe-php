@@ -6,6 +6,7 @@ namespace j45l\maybe\Optional;
 
 use j45l\functional\Functor;
 use j45l\maybe\Either\Failure;
+use j45l\maybe\Either\Reason;
 use j45l\maybe\Either\ThrowableReason;
 use j45l\maybe\Maybe\Maybe;
 use Throwable;
@@ -65,6 +66,16 @@ abstract class Optional implements Functor
      * @return mixed
      */
     abstract public function takeOrElse($propertyName, $defaultValue);
+
+    /**
+     * @param bool|callable(Optional<T>):bool $condition
+     * @return Optional<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function assert($condition, string $message = null): Optional
+    {
+        return Failure::because(Reason::fromString($message ?? 'failed assertion'));
+    }
 
     //endregion
 
