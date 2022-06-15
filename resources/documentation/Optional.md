@@ -62,16 +62,16 @@ It is just an Optional collection with some filtering capabilities.
 # Getting values
 
 Just valued **Optional**s (**Some**) can return a value directly by 
-```php
+```PHP
 public function get()
 ```
 all **Optional**s but, can either return its value or a default one.
-```php
+```PHP
 public function getOrElse($defaultValue)
 ```
 getOrElse will either return the **Optional** value if it is a **Some** or *$defaultValue* as it is.
 
-```php
+```PHP
 public function takeOrElse($propertyName, $defaultValue)
 ```
 When a property or result of an **Optional** is need, **Optional::takeOrElse()** can be used,
@@ -82,7 +82,7 @@ or *$defaultValue* if neither exists, or the **Optional** is not a **Some**
 Sometimes exists the need to either return the **Optional** value or a **RunTimeException** as we
 expect at some point that the **Optional** must be a **Some** and not being one it is a bug or failure
 in our domain logic, **Optional::getOrRuntimeException()** is used in such cases.
-```php
+```PHP
 public function getOrRuntimeException(string $message = '')
 ```
 
@@ -92,7 +92,7 @@ Optional provides several way to bind (chain).
 When binding, if the *$value* is a callable, it is called with the **Optional** as first argument.
 
 ### orElse
-```php
+```PHP
 abstract public function orElse($value): Optional;
 ```
 **Optional::orElse** is used to provide an alternative when the **Optional** is not 
@@ -103,7 +103,7 @@ On **Some** or **JustSuccess** this will return the **Optional** itself.
 
 ### andThen
 
-```php
+```PHP
 abstract public function andThen($value): Optional;
 ```
 **Optional::orElse** is used to follow the execution on a happy path, 
@@ -114,12 +114,21 @@ On **Failure** or **None** this will return the **Optional** itself.
 On **Some** or **JustSuccess** this will return the given *$value* evaluation.
 
 ### on
-```php
+```PHP
 public function on(string $className, $value)
 ```
 In the line of **Optional::orElse** or **Optional::andThen**, **Optional::on**
-evaluates **$value** when the Optional is a *$className*.
+evaluates **$value** when the **Optional** is a *$className*.
 
+### assert
+```PHP
+public function assert($condition, string $message = null): Optional
+```
+If the optional is a valued one and *$condition* is true 
+(or a callable like **function(Optional): bool** that evaluates to true) 
+returns the **Optional** itself. Otherwise, if the optional is not a values one (i.e. not a **Some**) or evaluates 
+to false, returns a **Failure** with the given *$message* or 'Failed assertion' if not specified. 
+ 
 # Being lazy
 Often it is convenient to be lazy, specially when providing function results as
 *$value* to **Optional::orElse**, as the execution of the function itself is desired
@@ -130,7 +139,7 @@ change database value, creating files, or sending email/commands).
 
 For instance,
 
-```php
+```PHP
 safe($this->insertCustomer($entityManager)($customer))
     ->orElse(apply($this->updateCustomer($entityManager), $customer))
 ```
@@ -139,7 +148,7 @@ Here both **apply** and **$this->updateCustomer** return a function so the evalu
 database mutating code is deferred until **orElse** evaluated it when **insertCustomer** fails.
 
 A common pattern to deffer this kind of calls is just to wrap them in an arrow function.
-```php
+```PHP
 safe($this->insertCustomer($entityManager)($customer))
     ->orElse(fn() => $entityManager->update($customer))
 ```
