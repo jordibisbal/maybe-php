@@ -133,6 +133,38 @@ final class OptionalOnTest extends TestCase
         self::assertEquals(1, $maybe->get());
     }
 
+    public function testFalseCallableOnOptionalBypasses(): void
+    {
+        $maybe = Some::from(false)
+            ->on(
+                function ($optional): bool {
+                    return $optional->getOrElse(false);
+                },
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(false, $maybe->get());
+    }
+
+    public function testTrueCallableOnOptionalEvaluates(): void
+    {
+        $maybe = Some::from(1)
+            ->on(
+                function ($optional) {
+                    return $optional;
+                },
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(42, $maybe->get());
+    }
+
     public function testFailingCallableBypasses(): void
     {
         $maybe = Some::from(1)
