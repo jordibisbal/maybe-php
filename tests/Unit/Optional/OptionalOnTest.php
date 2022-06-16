@@ -7,6 +7,7 @@ namespace j45l\maybe\Test\Unit\Optional;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -20,6 +21,51 @@ final class OptionalOnTest extends TestCase
         $maybe = Some::from(1)
             ->on(
                 Some::class,
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(42, $maybe->get());
+    }
+
+    public function testTrueReturnsValue(): void
+    {
+        $maybe = Some::from(1)
+            ->on(
+                true,
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(42, $maybe->get());
+    }
+
+    public function testTrulyReturnsValue(): void
+    {
+        $maybe = Some::from(1)
+            ->on(
+                1, // @phpstan-ignore-line
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(42, $maybe->get());
+    }
+
+
+    public function testTrueCallableReturnsValue(): void
+    {
+        $maybe = Some::from(1)
+            ->on(
+                function () {
+                    return true;
+                },
                 function () {
                     return Some::from(42);
                 }
@@ -48,6 +94,52 @@ final class OptionalOnTest extends TestCase
         $maybe = Some::from(1)
             ->on(
                 None::class,
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(1, $maybe->get());
+    }
+
+    public function testFalseBypasses(): void
+    {
+        $maybe = Some::from(1)
+            ->on(
+                false,
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(1, $maybe->get());
+    }
+
+    public function testFalseCallableBypasses(): void
+    {
+        $maybe = Some::from(1)
+            ->on(
+                function () {
+                    return false;
+                },
+                function () {
+                    return Some::from(42);
+                }
+            );
+
+        self::assertInstanceOf(Some::class, $maybe);
+        self::assertEquals(1, $maybe->get());
+    }
+
+    public function testFailingCallableBypasses(): void
+    {
+        $maybe = Some::from(1)
+            ->on(
+                function () {
+                    throw new RuntimeException();
+                },
                 function () {
                     return Some::from(42);
                 }
