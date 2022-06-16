@@ -100,7 +100,7 @@ abstract class Optional implements Functor
 
     /**
      * @template T2
-     * @param class-string|callable():bool|bool $condition
+     * @param class-string|callable(Optional<T>):bool|bool $condition
      * @param T2 $value
      * @return T2|Optional<T>
      * @SuppressWarnings(PHPMD.ShortMethodName)
@@ -110,6 +110,8 @@ abstract class Optional implements Functor
         switch (/** @infection-ignore-all */ true) {
             case isString($condition):
                 return $this->on(is_a($this, $condition, true), $value);
+            case isCallable($condition):
+                return $this->on((bool) static::do($condition, $this)->getOrElse(false), $value);
             case safe($condition)->getOrElse(false):
                 return self::do($value, $this);
             default:
