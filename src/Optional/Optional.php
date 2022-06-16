@@ -109,7 +109,7 @@ abstract class Optional implements Functor
     {
         switch (/** @infection-ignore-all */ true) {
             case isString($condition):
-                return $this->on($this instanceof $condition, $value);
+                return $this->on(is_a($this, $condition, true), $value);
             case safe($condition)->getOrElse(false):
                 return self::do($value, $this);
             default:
