@@ -11,6 +11,9 @@ use j45l\maybe\Either\ThrowableReason;
 use j45l\maybe\Maybe\Maybe;
 use Throwable;
 
+use function is_callable as isCallable;
+use function is_string as isString;
+
 /**
  * @template T
  */
@@ -25,7 +28,7 @@ abstract class Optional implements Functor
     public static function do($value, ...$parameters): self
     {
         switch (/** @infection-ignore-all */ true) {
-            case is_callable($value):
+            case isCallable($value):
                 return self::callableDo($value, ...$parameters);
             default:
                 return Maybe::someWrap($value);
@@ -97,15 +100,17 @@ abstract class Optional implements Functor
 
     /**
      * @template T2
-     * @param class-string $className
+     * @param class-string|callable():bool|bool $condition
      * @param T2 $value
      * @return T2|Optional<T>
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public function on(string $className, $value)
+    public function on($condition, $value)
     {
         switch (/** @infection-ignore-all */ true) {
-            case ($this instanceof $className):
+            case isString($condition):
+                return $this->on($this instanceof $condition, $value);
+            case safe($condition)->getOrElse(false):
                 return self::do($value, $this);
             default:
                 return $this;
