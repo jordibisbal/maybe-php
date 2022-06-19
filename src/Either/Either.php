@@ -12,4 +12,9 @@ use j45l\maybe\Optional\Optional;
  */
 abstract class Either extends Optional
 {
+    /** @return static */
+    public function toEither(): self
+    {
+        return $this;
+    }
 }

@@ -5,20 +5,26 @@ declare(strict_types=1);
 namespace j45l\maybe\Optional;
 
 use j45l\functional\Functor;
+use j45l\maybe\Either\Either;
 use j45l\maybe\Either\Failure;
+use j45l\maybe\Either\JustSuccess;
 use j45l\maybe\Either\Reason;
+use j45l\maybe\Either\Success;
 use j45l\maybe\Either\ThrowableReason;
 use j45l\maybe\Maybe\Maybe;
 use Throwable;
 
+use function get_class as getClass;
 use function is_callable as isCallable;
-use function is_string as isString;
 
 /**
  * @template T
  */
 abstract class Optional implements Functor
 {
+    /** @use OptionalOn<T> */
+    use OptionalOn;
+
     /**
      * @SuppressWarnings(PHPMD.ShortMethodName)
      * @param mixed $value
@@ -98,24 +104,14 @@ abstract class Optional implements Functor
      */
     abstract public function orElse($value): Optional;
 
-    /**
-     * @template T2
-     * @param class-string|callable(Optional<T>):bool|bool $condition
-     * @param T2 $value
-     * @return T2|Optional<T>
-     * @SuppressWarnings(PHPMD.ShortMethodName)
-     */
-    public function on($condition, $value)
+    /** @return Either<T> */
+    public function toEither(): Either
     {
         switch (/** @infection-ignore-all */ true) {
-            case isString($condition):
-                return $this->on(is_a($this, $condition, true), $value);
-            case isCallable($condition):
-                return $this->on((bool) static::do($condition, $this)->getOrElse(false), $value);
-            case safe($condition)->getOrElse(false):
-                return self::do($value, $this);
+            case $this instanceof Success:
+                return JustSuccess::create();
             default:
-                return $this;
+                return Failure::because(Reason::fromString(sprintf('From %s', getClass($this))));
         }
     }
     //endregion
