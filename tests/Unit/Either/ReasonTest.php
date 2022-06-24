@@ -18,4 +18,11 @@ final class ReasonTest extends TestCase
 
         assertEquals('reason', $reason->toString());
     }
+
+    public function testCanBeCreatedFromAFormat(): void
+    {
+        $reason = Reason::fromFormatted('because %s and %s', 'one', 'another');
+
+        assertEquals('because one and another', $reason->toString());
+    }
 }

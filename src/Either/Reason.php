@@ -19,6 +19,15 @@ class Reason
         return new self($reason);
     }
 
+    /**
+     * @param string $format Sprintf format
+     * @param mixed ...$values
+     */
+    public static function fromFormatted(string $format, ...$values): Reason
+    {
+        return new self(sprintf($format, ...$values));
+    }
+
     public function toString(): string
     {
         return $this->reason;
