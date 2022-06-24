@@ -45,6 +45,7 @@
             "src/Optional/SafeLazy.php",
             "src/Optional/SafeAll.php",
             "src/Optional/SafeAllLazy.php",
+            "src/Optional/PhpUnit/Assertions.php",
             "src/AssertSome.php",
             "src/DoTry/DoTry.php",
             "src/Lift.php",
