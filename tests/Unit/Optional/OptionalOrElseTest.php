@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace j45l\maybe\Test\Unit\Optional;
 
 use j45l\maybe\Either\Either;
-use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
 use j45l\maybe\Optional\Optional;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
+use function j45l\maybe\Optional\PhpUnit\assertJustSuccess;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertNotFailure;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -24,23 +28,21 @@ final class OptionalOrElseTest extends TestCase
     {
         $maybe = Some::from(42)->orElse(0);
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testSucceedReturnsItself(): void
     {
         $maybe = JustSuccess::create()->orElse(0);
 
-        self::assertInstanceOf(JustSuccess::class, $maybe);
+        assertJustSuccess($maybe);
     }
 
     public function testNoneReturnsDefaultValue(): void
     {
         $maybe = None::create()->OrElse(Some::from(42));
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testDeferredSomeReturnsItsValue(): void
@@ -51,20 +53,18 @@ final class OptionalOrElseTest extends TestCase
 
         $maybe = Either::do($fortyTwo)->OrElse(None::create());
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testMapSomeReturnsItsValueMapped(): void
     {
-        $addOne = static function (Some $some): Optional {
-            return Some::from($some->get() + 1);
+        $addOne = static function (int $x): int {
+            return $x + 1;
         };
 
         $maybe = Some::from(41)->map($addOne);
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testMapNoneReturnsNoneMapped(): void
@@ -75,8 +75,8 @@ final class OptionalOrElseTest extends TestCase
 
         $maybe = None::create()->map($addOne);
 
-        self::assertInstanceOf(None::class, $maybe);
-        self::assertNotInstanceOf(Failure::class, $maybe);
+        assertNone($maybe);
+        assertNotFailure($maybe);
     }
 
     /** @noinspection PhpUnusedParameterInspection */
@@ -88,8 +88,8 @@ final class OptionalOrElseTest extends TestCase
 
         $maybe = None::create()->map($addOne);
 
-        self::assertInstanceOf(None::class, $maybe);
-        self::assertNotInstanceOf(\j45l\maybe\Either\Failure::class, $maybe);
+        assertNone($maybe);
+        assertNotFailure($maybe);
     }
 
     public function testDeferredNoneReturnsDefaultValue(): void
@@ -100,7 +100,6 @@ final class OptionalOrElseTest extends TestCase
 
         $maybe = Either::do($none)->OrElse(Some::from(42));
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 }

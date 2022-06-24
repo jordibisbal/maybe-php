@@ -71,7 +71,7 @@ trait Valued
      */
     public function map(callable $function): Functor
     {
-        return $function($this);
+        return static::do($function, $this->get());
     }
 
     /**

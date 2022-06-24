@@ -10,6 +10,9 @@ use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
+use function j45l\maybe\Optional\PhpUnit\assertJustSuccess;
+
 /**
  * @covers \j45l\maybe\Optional\Optional
  * @covers \j45l\maybe\Either\Either
@@ -30,14 +33,13 @@ final class OptionalToEitherTest extends TestCase
 
     public function testSomeReturnsJustSuccess(): void
     {
-        self::assertInstanceOf(JustSuccess::class, Some::from(42)->toEither());
+        assertJustSuccess(Some::from(42)->toEither());
     }
 
     public function testNoneReturnsFailure(): void
     {
         $failure = None::create()->toEither();
 
-        self::assertInstanceOf(Failure::class, $failure);
-        self::assertEquals(sprintf('From %s', None::class), $failure->reason()->toString());
+        assertFailureReasonString(sprintf('From %s', None::class), $failure);
     }
 }

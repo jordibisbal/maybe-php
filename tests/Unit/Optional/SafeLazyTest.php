@@ -2,12 +2,14 @@
 
 namespace j45l\maybe\Test\Unit\Optional;
 
-use j45l\maybe\Either\Failure;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\maybe\Optional\PhpUnit\assertFailure;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 use function j45l\maybe\Optional\safeLazy;
 
 /** @covers ::j45l\maybe\Optional\safeLazy */
@@ -15,12 +17,12 @@ class SafeLazyTest extends TestCase
 {
     public function testsOnNoneReturnsNone(): void
     {
-        self::assertInstanceOf(None::class, safeLazy(None::create())());
+        assertNone(safeLazy(None::create())());
     }
 
     public function testsOnNullReturnsNone(): void
     {
-        self::assertInstanceOf(None::class, safeLazy(null)());
+        assertNone(safeLazy(null)());
     }
 
     public function testsOnFailingCallableReturnsFailure(): void
@@ -29,7 +31,7 @@ class SafeLazyTest extends TestCase
             throw new RuntimeException();
         };
 
-        self::assertInstanceOf(Failure::class, safeLazy($fail)());
+        assertFailure(safeLazy($fail)());
     }
 
     public function testsOnNullReturningCallableReturnsNone(): void
@@ -38,7 +40,7 @@ class SafeLazyTest extends TestCase
             return null;
         };
 
-        self::assertInstanceOf(None::class, safeLazy($nullReturning)());
+        assertNone(safeLazy($nullReturning)());
     }
 
     public function testsOnValueReturningCallableReturnsNone(): void
@@ -47,20 +49,16 @@ class SafeLazyTest extends TestCase
             return 42;
         };
 
-        self::assertInstanceOf(Some::class, safeLazy($valueReturning)());
+        assertSomeEquals(42, safeLazy($valueReturning)());
     }
 
     public function testsOnValueSomeReturnsSome(): void
     {
-        $some = safeLazy(Some::from(42))();
-        self::assertInstanceOf(Some::class, $some);
-        self::assertEquals(42, $some->get());
+        assertSomeEquals(42, safeLazy(Some::from(42))());
     }
 
     public function testsOnValueReturnsSome(): void
     {
-        $some = safeLazy(42)();
-        self::assertInstanceOf(Some::class, $some);
-        self::assertEquals(42, $some->get());
+        assertSomeEquals(42, safeLazy(42)());
     }
 }

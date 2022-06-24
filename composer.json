@@ -44,7 +44,8 @@
             "src/Optional/Safe.php",
             "src/Optional/SafeLazy.php",
             "src/Optional/SafeAll.php",
-            "src/Optional/SafeAllLazy.php"
+            "src/Optional/SafeAllLazy.php",
+            "src/Optional/PhpUnit/Assertions.php"
         ]
     },
     "autoload-dev": {

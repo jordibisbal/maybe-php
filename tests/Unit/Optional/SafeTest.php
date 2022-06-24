@@ -2,12 +2,14 @@
 
 namespace j45l\maybe\Test\Unit\Optional;
 
-use j45l\maybe\Either\Failure;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\maybe\Optional\PhpUnit\assertFailure;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 use function j45l\maybe\Optional\safe;
 
 /** @covers ::j45l\maybe\Optional\safe */
@@ -15,12 +17,12 @@ class SafeTest extends TestCase
 {
     public function testsOnNoneReturnsNone(): void
     {
-        self::assertInstanceOf(None::class, safe(None::create()));
+        assertNone(safe(None::create()));
     }
 
     public function testsOnNullReturnsNone(): void
     {
-        self::assertInstanceOf(None::class, safe(null));
+        assertNone(safe(null));
     }
 
     public function testsOnFailingCallableReturnsFailure(): void
@@ -29,7 +31,7 @@ class SafeTest extends TestCase
             throw new RuntimeException();
         };
 
-        self::assertInstanceOf(Failure::class, safe($fail));
+        assertFailure(safe($fail));
     }
 
     public function testsOnNullReturningCallableReturnsNone(): void
@@ -38,7 +40,7 @@ class SafeTest extends TestCase
             return null;
         };
 
-        self::assertInstanceOf(None::class, safe($nullReturning));
+        assertNone(safe($nullReturning));
     }
 
     public function testsOnValueReturningCallableReturnsNone(): void
@@ -47,20 +49,20 @@ class SafeTest extends TestCase
             return 42;
         };
 
-        self::assertInstanceOf(Some::class, safe($valueReturning));
+        assertSomeEquals(42, safe($valueReturning));
     }
 
     public function testsOnValueSomeReturnsSome(): void
     {
         $some = safe(Some::from(42));
-        self::assertInstanceOf(Some::class, $some);
-        self::assertEquals(42, $some->get());
+
+        assertSomeEquals(42, $some);
     }
 
     public function testsOnValueReturnsSome(): void
     {
         $some = safe(42);
-        self::assertInstanceOf(Some::class, $some);
-        self::assertEquals(42, $some->get());
+
+        assertSomeEquals(42, $some);
     }
 }

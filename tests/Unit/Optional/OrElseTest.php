@@ -6,12 +6,16 @@ namespace j45l\maybe\Test\Unit\Optional;
 
 use Closure;
 use j45l\maybe\Either\Failure;
-use j45l\maybe\Either\ThrowableReason;
 use j45l\maybe\Optional\Optional;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
+use function j45l\maybe\Optional\PhpUnit\assertFailure;
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowable;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -26,8 +30,7 @@ final class OrElseTest extends TestCase
 
         $maybe = Some::from(1)->orElse($addOne);
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(1, $maybe->get());
+        assertSomeEquals(1, $maybe);
     }
 
     public function testFailureSinks(): void
@@ -37,8 +40,7 @@ final class OrElseTest extends TestCase
 
         $maybe = Failure::create()->orElse($isCalled);
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
         /** @noinspection PhpUnitAssertTrueWithIncompatibleTypeArgumentInspection */
         self::assertTrue($called);
     }
@@ -62,8 +64,7 @@ final class OrElseTest extends TestCase
 
         $maybe = Some::from(1)->andThen($failure)->orElse($isCalled);
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
         /** @noinspection PhpUnitAssertTrueWithIncompatibleTypeArgumentInspection */
         self::assertTrue($called);
     }
@@ -77,8 +78,7 @@ final class OrElseTest extends TestCase
 
         $maybe = Some::from(1)->andThen($fails)->orElse($isCalled);
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
         /** @noinspection PhpUnitAssertTrueWithIncompatibleTypeArgumentInspection */
         self::assertTrue($called);
     }
@@ -89,13 +89,10 @@ final class OrElseTest extends TestCase
         $captures = $this->capture($captured);
         $maybe = Some::from(1)->andThen($this->fails())->orElse($captures);
 
-        self::assertInstanceOf(Failure::class, $maybe);
-        self::assertInstanceOf(Failure::class, $captured);
+        assertFailure($maybe);
+        assertFailure($captured);
 
-        $reason = $captured->reason();
-        self::assertInstanceOf(ThrowableReason::class, $reason);
-
-        self::assertEquals(new RuntimeException(), $reason->throwable());
+        assertFailureReasonThrowable(RuntimeException::class, $captured);
     }
 
     public function testSinkCanReturnNone(): void
@@ -105,7 +102,7 @@ final class OrElseTest extends TestCase
             return null;
         });
 
-        self::assertInstanceOf(None::class, $some);
+        assertNone($some);
     }
 
     /**
@@ -147,7 +144,7 @@ final class OrElseTest extends TestCase
     /** @param mixed $captured */
     private function capture(&$captured): Closure
     {
-        return function (Optional $maybe) use (&$captured) {
+        return static function (Optional $maybe) use (&$captured) {
             $captured = $maybe;
             return $maybe;
         };

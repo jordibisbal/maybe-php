@@ -62,6 +62,7 @@ final class Failure extends Either
         }
     }
 
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
     public function assert($condition, string $message = null): Optional
     {
         return $this;

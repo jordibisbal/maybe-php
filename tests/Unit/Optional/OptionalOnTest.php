@@ -11,6 +11,8 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
+
 /**
  * @covers \j45l\maybe\Optional\Optional
  * @covers \j45l\maybe\Optional\OptionalOn
@@ -30,8 +32,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testTrueReturnsValue(): void
@@ -44,8 +45,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testTrulyReturnsValue(): void
@@ -58,8 +58,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testNullReturnsCurrent(): void
@@ -72,8 +71,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(1, $maybe->get());
+        assertSomeEquals(1, $maybe);
     }
 
     public function testTrueCallableReturnsValue(): void
@@ -88,8 +86,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testMatchingClassCurrentIsPassed(): void
@@ -102,8 +99,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testNotMatchingClassBypasses(): void
@@ -116,8 +112,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(1, $maybe->get());
+        assertSomeEquals(1, $maybe);
     }
 
     public function testFalseBypasses(): void
@@ -130,8 +125,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(1, $maybe->get());
+        assertSomeEquals(1, $maybe);
     }
 
     public function testFalseCallableBypasses(): void
@@ -146,8 +140,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(1, $maybe->get());
+        assertSomeEquals(1, $maybe);
     }
 
     public function testFalseCallableOnOptionalBypasses(): void
@@ -162,8 +155,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(false, $maybe->get());
+        assertSomeEquals(false, $maybe);
     }
 
     public function testTrueCallableOnOptionalEvaluates(): void
@@ -178,8 +170,7 @@ final class OptionalOnTest extends TestCase
                 }
             );
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testFailingCallableBypasses(): void
@@ -193,9 +184,7 @@ final class OptionalOnTest extends TestCase
                     return Some::from(42);
                 }
             );
-
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(1, $maybe->get());
+        assertSomeEquals(1, $maybe);
     }
 
     public function testOnSomeAlias(): void

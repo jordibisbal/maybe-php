@@ -7,13 +7,16 @@ namespace j45l\maybe\Test\Unit\Optional;
 use Closure;
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
-use j45l\maybe\Either\Success;
 use j45l\maybe\Optional\Optional;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\maybe\Optional\PhpUnit\assertFailure;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
+use function j45l\maybe\Optional\PhpUnit\assertSuccess;
 use function j45l\maybe\Optional\safe;
 
 /**
@@ -31,8 +34,7 @@ final class OptionalAndThenTest extends TestCase
             })
         ;
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testSucceedReturnsLastValue(): void
@@ -43,15 +45,14 @@ final class OptionalAndThenTest extends TestCase
             })
         ;
 
-        self::assertInstanceOf(Some::class, $maybe);
-        self::assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testNoneReturnsNoneValue(): void
     {
         $maybe = None::create()->andThen(Some::from(42));
 
-        self::assertInstanceOf(None::class, $maybe);
+        assertNone($maybe);
     }
 
     public function testDeferredSomeReturnsNextValue(): void
@@ -62,7 +63,7 @@ final class OptionalAndThenTest extends TestCase
             })->andThen(None::create())
         ;
 
-        self::assertInstanceOf(None::class, $maybe);
+        assertNone($maybe);
     }
 
     public function testResultIsPassToNextOne(): void
@@ -71,8 +72,7 @@ final class OptionalAndThenTest extends TestCase
 
         $some = Some::from(1)->andThen($addOne)->andThen($addOne);
 
-        self::assertInstanceOf(Some::class, $some);
-        self::assertEquals(3, $some->get());
+        assertSomeEquals(3, $some);
     }
 
     /** @noinspection PhpUnusedParameterInspection */
@@ -95,7 +95,7 @@ final class OptionalAndThenTest extends TestCase
 
         $maybe = Some::from(1)->andThen($addOne)->andThen($failure)->andThen($notCalled);
 
-        self::assertInstanceOf(Failure::class, $maybe);
+        assertFailure($maybe);
         self::assertFalse($called);
     }
 
@@ -133,7 +133,7 @@ final class OptionalAndThenTest extends TestCase
 
         $maybe = Some::from(1)->andThen($addOne)->andThen($fails)->andThen($notCalled);
 
-        self::assertInstanceOf(Failure::class, $maybe);
+        assertFailure($maybe);
         self::assertFalse($called);
     }
 
@@ -144,7 +144,7 @@ final class OptionalAndThenTest extends TestCase
             ->andThen($this->isSome())
         ;
 
-        self::assertInstanceOf(Success::class, $isSome);
+        assertSuccess($isSome);
     }
 
     /**

@@ -17,6 +17,8 @@ use RuntimeException;
 
 /**
  * @covers \j45l\maybe\Optional\Optionals
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 final class OptionalsTest extends TestCase
 {
