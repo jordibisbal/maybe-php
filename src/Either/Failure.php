@@ -14,6 +14,7 @@ use RuntimeException;
  */
 final class Failure extends Either
 {
+    /** @use NonValued<mixed> */
     use NonValued {
         getOrRuntimeException as nonValuedGetOrRuntimeException;
     }

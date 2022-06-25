@@ -29,7 +29,7 @@ abstract class Optional implements Functor
      * @SuppressWarnings(PHPMD.ShortMethodName)
      * @param mixed $value
      * @param mixed $parameters
-     * @return Optional<T>
+     * @return Optional<mixed>
      */
     public static function do($value, ...$parameters): self
     {
@@ -57,7 +57,11 @@ abstract class Optional implements Functor
 
     //region (Non)Valued
 
-    /** @return Optional<T> */
+    /**
+     * @template R
+     * @param callable(T):R $function
+     * @return Optional<R>
+     */
     abstract public function map(callable $function): Functor;
 
     /**

@@ -67,7 +67,9 @@ trait Valued
     }
 
     /**
-     * @return Optional<T>
+     * @template R
+     * @param callable(T):R $function
+     * @return Optional<R>
      */
     public function map(callable $function): Functor
     {

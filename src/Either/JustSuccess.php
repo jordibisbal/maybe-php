@@ -13,6 +13,7 @@ use j45l\maybe\Optional\Right;
  */
 final class JustSuccess extends Either implements Success
 {
+    /** @use NonValued<mixed> */
     use NonValued;
     use Right;
 

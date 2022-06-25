@@ -12,6 +12,7 @@ use j45l\maybe\Optional\NonValued;
  */
 final class None extends Maybe
 {
+    /** @use NonValued<mixed> */
     use NonValued;
     /** @use Left<mixed> */
     use Left;
