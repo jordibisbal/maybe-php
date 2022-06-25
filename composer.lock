@@ -1359,32 +1359,32 @@
         },
         {
             "name": "ocramius/package-versions",
-            "version": "2.1.1",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/PackageVersions.git",
-                "reference": "1478d1a6e167d9250f6c41d75bee806b47bec4c3"
+                "reference": "6707caff2e84a2368f29fdf2cb28a6b5a9e3ab53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/1478d1a6e167d9250f6c41d75bee806b47bec4c3",
-                "reference": "1478d1a6e167d9250f6c41d75bee806b47bec4c3",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/6707caff2e84a2368f29fdf2cb28a6b5a9e3ab53",
+                "reference": "6707caff2e84a2368f29fdf2cb28a6b5a9e3ab53",
                 "shasum": ""
             },
             "require": {
-                "composer-runtime-api": "^2.0.0",
-                "php": "^7.4.7 || ~8.0.0"
+                "composer-runtime-api": "^2.2.0",
+                "php": "~8.0.0 || ~8.1.0"
             },
             "replace": {
                 "composer/package-versions-deprecated": "*"
             },
             "require-dev": {
-                "composer/composer": "^2.0.0@dev",
-                "doctrine/coding-standard": "^8.1.0",
+                "composer/composer": "^2.2.0",
+                "doctrine/coding-standard": "^9.0.0",
                 "ext-zip": "^1.15.0",
-                "infection/infection": "dev-master#8d6c4d6b15ec58d3190a78b7774a5d604ec1075a",
-                "phpunit/phpunit": "~9.3.11",
-                "vimeo/psalm": "^4.0.1"
+                "phpunit/phpunit": "^9.5.9",
+                "roave/infection-static-analysis-plugin": "^1.10.0",
+                "vimeo/psalm": "^4.10.0"
             },
             "type": "library",
             "autoload": {
@@ -1405,7 +1405,7 @@
             "description": "Provides efficient querying for installed package versions (no runtime IO)",
             "support": {
                 "issues": "https://github.com/Ocramius/PackageVersions/issues",
-                "source": "https://github.com/Ocramius/PackageVersions/tree/2.1.1"
+                "source": "https://github.com/Ocramius/PackageVersions/tree/2.5.1"
             },
             "funding": [
                 {
@@ -1417,7 +1417,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-05T17:58:25+00:00"
+            "time": "2022-03-05T18:04:57+00:00"
         },
         {
             "name": "ondram/ci-detector",
@@ -2112,16 +2112,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.6.9",
+            "version": "1.7.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8c98899c7c54251a098befd23b50a983594a20f9"
+                "reference": "cd0202ea1b1fc6d1bbe156c6e2e18a03e0ff160a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8c98899c7c54251a098befd23b50a983594a20f9",
-                "reference": "8c98899c7c54251a098befd23b50a983594a20f9",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cd0202ea1b1fc6d1bbe156c6e2e18a03e0ff160a",
+                "reference": "cd0202ea1b1fc6d1bbe156c6e2e18a03e0ff160a",
                 "shasum": ""
             },
             "require": {
@@ -2147,7 +2147,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.6.9"
+                "source": "https://github.com/phpstan/phpstan/tree/1.7.15"
             },
             "funding": [
                 {
@@ -2167,7 +2167,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-21T11:34:44+00:00"
+            "time": "2022-06-20T08:29:01+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",

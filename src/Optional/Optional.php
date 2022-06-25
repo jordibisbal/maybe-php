@@ -27,9 +27,10 @@ abstract class Optional implements Functor
 
     /**
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @param mixed $value
+     * @template C
+     * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C)|C $value
      * @param mixed $parameters
-     * @return Optional<mixed>
+     * @return Optional<C>
      */
     public static function do($value, ...$parameters): self
     {
