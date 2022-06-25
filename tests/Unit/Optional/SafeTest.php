@@ -65,4 +65,17 @@ class SafeTest extends TestCase
 
         assertSomeEquals(42, $some);
     }
+
+    public function testsParametersArePassedOn(): void
+    {
+        $some = safe(
+            static function ($x, $y): int {
+                return $x + $y;
+            },
+            41,
+            1
+        );
+
+        assertSomeEquals(42, $some);
+    }
 }

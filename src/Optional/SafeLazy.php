@@ -13,7 +13,7 @@ use Closure;
  */
 function safeLazy($value): Closure
 {
-    return function (...$parameters) use ($value) {
+    return static function (...$parameters) use ($value) {
         return Optional::do($value, ...$parameters);
     };
 }

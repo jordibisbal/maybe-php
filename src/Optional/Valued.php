@@ -67,7 +67,7 @@ trait Valued
     }
 
     /**
-     * @return Functor
+     * @return Optional<T>
      */
     public function map(callable $function): Functor
     {

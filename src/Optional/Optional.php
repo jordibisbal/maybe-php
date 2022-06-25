@@ -57,6 +57,9 @@ abstract class Optional implements Functor
 
     //region (Non)Valued
 
+    /** @return Optional<T> */
+    abstract public function map(callable $function): Functor;
+
     /**
      * @param mixed $defaultValue
      * @return mixed
@@ -114,5 +117,6 @@ abstract class Optional implements Functor
                 return Failure::because(Reason::fromString(sprintf('From %s', getClass($this))));
         }
     }
+
     //endregion
 }
