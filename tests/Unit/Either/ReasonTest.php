@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace j45l\maybe\Test\Unit\Either;
 
 use j45l\maybe\Either\Reason;
+use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 
+use function j45l\maybe\Optional\PhpUnit\assertNone;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotSame;
+use function PHPUnit\Framework\assertSame;
 
 /** @covers \j45l\maybe\Either\Reason */
 final class ReasonTest extends TestCase
@@ -17,6 +21,7 @@ final class ReasonTest extends TestCase
         $reason = Reason::fromString('reason');
 
         assertEquals('reason', $reason->toString());
+        assertNone($reason->subject());
     }
 
     public function testCanBeCreatedFromAFormat(): void
@@ -24,5 +29,24 @@ final class ReasonTest extends TestCase
         $reason = Reason::fromFormatted('because %s and %s', 'one', 'another');
 
         assertEquals('because one and another', $reason->toString());
+        assertNone($reason->subject());
+    }
+
+    public function testAReasonCanHaveASubject(): void
+    {
+        $subject = Some::from(42);
+        $reason = Reason::fromString('')->withSubject($subject);
+
+        assertSame($subject, $reason->subject());
+    }
+
+    public function testWithSubjectIsNotMutagen(): void
+    {
+        $subject = Some::from(42);
+        $reason = Reason::fromString('');
+        $newReason = $reason->withSubject($subject);
+
+        assertNotSame($reason, $newReason);
+        assertSame($subject, $newReason->subject());
     }
 }

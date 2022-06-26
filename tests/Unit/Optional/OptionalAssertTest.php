@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function PHPUnit\Framework\assertEquals;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -25,7 +27,9 @@ final class OptionalAssertTest extends TestCase
     {
         $maybe = None::create()->assert(false);
 
+        self::assertInstanceOf(Failure::class, $maybe);
         assertFailureReasonString('failed assertion', $maybe);
+        assertNone($maybe->reason()->subject());
     }
 
     public function testAssertingNoneReturnsFailureWithMessage(): void
@@ -41,6 +45,7 @@ final class OptionalAssertTest extends TestCase
         $result = $failure->assert(false);
 
         self::assertSame($failure, $result);
+        assertNone($failure->reason()->subject());
     }
 
     public function testAssertingFalseReturnsFailure(): void
@@ -48,7 +53,9 @@ final class OptionalAssertTest extends TestCase
         $maybe = Some::from(1)
             ->assert(false);
 
+        self::assertInstanceOf(Failure::class, $maybe);
         assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(1, $maybe->reason()->subject()->getOrElse(null));
     }
 
     public function testAssertingFalseReturnsFailureWithMessage(): void
@@ -56,7 +63,9 @@ final class OptionalAssertTest extends TestCase
         $maybe = Some::from(1)
             ->assert(false, 'Failed!');
 
+        self::assertInstanceOf(Failure::class, $maybe);
         assertFailureReasonString('Failed!', $maybe);
+        assertEquals(1, $maybe->reason()->subject()->getOrElse(null));
     }
 
     public function testAssertingFailingClosureReturnsFailure(): void
@@ -68,7 +77,9 @@ final class OptionalAssertTest extends TestCase
                 }
             );
 
+        self::assertInstanceOf(Failure::class, $maybe);
         assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(1, $maybe->reason()->subject()->getOrElse(null));
     }
 
     public function testAssertingTrueReturnsOriginalOptionalIfValued(): void
@@ -95,13 +106,17 @@ final class OptionalAssertTest extends TestCase
             return $some->get() !== 42;
         });
 
+        self::assertInstanceOf(Failure::class, $maybe);
         assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(42, $maybe->reason()->subject()->getOrElse(null));
     }
 
     public function testAssertingTrueReturnsFailureIfNotValued(): void
     {
         $maybe = JustSuccess::create()->assert(true);
 
+        self::assertInstanceOf(Failure::class, $maybe);
         assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(42, $maybe->reason()->subject()->getOrElse(42));
     }
 }

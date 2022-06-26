@@ -91,7 +91,9 @@ trait Valued
                     $message
                 );
             default:
-                return $condition ? $this : Failure::because(Reason::fromString($message ?? 'failed assertion'));
+                return $condition
+                    ? $this :
+                    Failure::because(Reason::fromString($message ?? 'failed assertion')->withSubject($this));
         }
     }
 }

@@ -91,7 +91,7 @@ abstract class Optional implements Functor
      */
     public function assert($condition, string $message = null): Optional
     {
-        return Failure::because(Reason::fromString($message ?? 'failed assertion'));
+        return Failure::because(Reason::fromString($message ?? 'failed assertion')->withSubject($this));
     }
 
     //endregion
@@ -119,7 +119,7 @@ abstract class Optional implements Functor
             case $this instanceof Success:
                 return JustSuccess::create();
             default:
-                return Failure::because(Reason::fromString(sprintf('From %s', getClass($this))));
+                return Failure::because(Reason::fromString(sprintf('From %s', getClass($this)))->withSubject($this));
         }
     }
 
