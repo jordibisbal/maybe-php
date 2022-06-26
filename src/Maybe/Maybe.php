@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe\Maybe;
 
 use j45l\maybe\Optional\Optional;
+use function is_null as isNull;
 
 /**
  * @template T
@@ -21,7 +22,7 @@ abstract class Maybe extends Optional
         switch (/** @infection-ignore-all */  true) {
             case $value instanceof Optional:
                 return $value;
-            case is_null($value):
+            case isNull($value):
                 return None::create();
             default:
                 return Some::from($value);

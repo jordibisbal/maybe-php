@@ -16,5 +16,6 @@ final class Some extends Maybe implements Success
 {
     /** @use Valued<T> */
     use Valued;
+    /** @use Right<T> */
     use Right;
 }

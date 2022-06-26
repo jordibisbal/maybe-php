@@ -72,6 +72,14 @@ abstract class Optional implements Functor
     abstract public function getOrElse($defaultValue);
 
     /**
+     * @return T
+     */
+    public function getOrFail(string $message = '')
+    {
+        return $this->getOrRuntimeException($message);
+    }
+
+    /**
      * @param string $message
      * @return T
      */
@@ -111,6 +119,9 @@ abstract class Optional implements Functor
      * @return Optional<T>
      */
     abstract public function orElse($value): Optional;
+
+    /** @return Optional<T> */
+    abstract public function orFail(string $message, Throwable $throwable = null): Optional;
 
     /** @return Either<T> */
     public function toEither(): Either
