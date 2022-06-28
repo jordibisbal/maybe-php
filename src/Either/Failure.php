@@ -14,8 +14,9 @@ use RuntimeException;
  */
 final class Failure extends Either
 {
+    /** @use NonValued<mixed> */
     use NonValued {
-        getOrRuntimeException as nonValuedGetOrRuntimeException;
+        getOrFail as nonValuedGetOrRuntimeException;
     }
 
     /** @use Left<void> */
@@ -47,7 +48,7 @@ final class Failure extends Either
         return $this->reason;
     }
 
-    public function getOrRuntimeException(string $message = null)
+    public function getOrFail(string $message = null)
     {
         $this->throwRuntimeException($message ?? $this->reason->toString(), $this->reason);
     }

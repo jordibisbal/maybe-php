@@ -11,11 +11,13 @@ use j45l\maybe\Either\JustSuccess;
 use j45l\maybe\Either\Reason;
 use j45l\maybe\Either\Success;
 use j45l\maybe\Either\ThrowableReason;
-use j45l\maybe\Maybe\Maybe;
+use j45l\maybe\Maybe\None;
+use j45l\maybe\Maybe\Some;
 use Throwable;
 
 use function get_class as getClass;
 use function is_callable as isCallable;
+use function is_null as isNull;
 
 /**
  * @template T
@@ -27,17 +29,34 @@ abstract class Optional implements Functor
 
     /**
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @param mixed $value
+     * @template C
+     * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C) $function
      * @param mixed $parameters
-     * @return Optional<T>
+     * @return Optional<C>
      */
-    public static function do($value, ...$parameters): self
+    public static function do(callable $function, ...$parameters): self
+    {
+        return self::wrap($function, ...$parameters);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @template C
+     * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C)|C $value
+     * @param mixed $parameters
+     * @return Optional<C>|None|Some<C>
+     */
+    public static function wrap($value, ...$parameters): self
     {
         switch (/** @infection-ignore-all */ true) {
             case isCallable($value):
                 return self::callableDo($value, ...$parameters);
+            case $value instanceof self:
+                return $value;
+            case isNull($value):
+                return None::create();
             default:
-                return Maybe::someWrap($value);
+                return Some::from($value);
         }
     }
 
@@ -49,13 +68,20 @@ abstract class Optional implements Functor
     private static function callableDo(callable $value, ...$params): Optional
     {
         try {
-            return Maybe::someWrap($value(...$params));
+            return self::wrap($value(...$params));
         } catch (Throwable $throwable) {
             return Failure::because(ThrowableReason::fromThrowable($throwable));
         }
     }
 
     //region (Non)Valued
+
+    /**
+     * @template R
+     * @param callable(T):R $function
+     * @return Optional<R>
+     */
+    abstract public function map(callable $function): Functor;
 
     /**
      * @param mixed $defaultValue
@@ -67,7 +93,7 @@ abstract class Optional implements Functor
      * @param string $message
      * @return T
      */
-    abstract public function getOrRuntimeException(string $message = '');
+    abstract public function getOrFail(string $message = '');
 
     /**
      * @param mixed $defaultValue
@@ -83,7 +109,7 @@ abstract class Optional implements Functor
      */
     public function assert($condition, string $message = null): Optional
     {
-        return Failure::because(Reason::fromString($message ?? 'failed assertion'));
+        return Failure::because(Reason::fromString($message ?? 'failed assertion')->withSubject($this));
     }
 
     //endregion
@@ -91,18 +117,21 @@ abstract class Optional implements Functor
     //region Optional
 
     /**
-     * @param mixed $value
+     * @param callable $value
      * @return Optional<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    abstract public function andThen($value): Optional;
+    abstract public function andThen(callable $value): Optional;
 
     /**
-     * @param mixed $value;
+     * @param callable $value;
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return Optional<T>
      */
-    abstract public function orElse($value): Optional;
+    abstract public function orElse(callable $value): Optional;
+
+    /** @return Optional<T> */
+    abstract public function orFail(string $message, Throwable $throwable = null): Optional;
 
     /** @return Either<T> */
     public function toEither(): Either
@@ -111,8 +140,9 @@ abstract class Optional implements Functor
             case $this instanceof Success:
                 return JustSuccess::create();
             default:
-                return Failure::because(Reason::fromString(sprintf('From %s', getClass($this))));
+                return Failure::because(Reason::fromString(sprintf('From %s', getClass($this)))->withSubject($this));
         }
     }
+
     //endregion
 }

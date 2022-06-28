@@ -6,7 +6,9 @@ namespace j45l\maybe\Optional;
 
 use j45l\maybe\Maybe\Some;
 
-if (!function_exists(__NAMESPACE__ . '\isSome')) {
+use function function_exists as functionExists;
+
+if (!functionExists(__NAMESPACE__ . '\isSome')) {
     /**
      * @template T
      * @param Optional<T> $maybe

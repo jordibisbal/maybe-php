@@ -21,19 +21,19 @@ trait OptionalOn
     /**
      * @template T2
      * @param class-string|callable(Optional<T>):bool|bool $condition
-     * @param T2 $value
+     * @param callable(Optional<mixed>):T2 $function
      * @phpstan-return (T2 is Optional<mixed> ? T2 : Optional<T2>)|Optional<T>
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public function on($condition, $value)
+    public function on($condition, callable $function)
     {
         switch (/** @infection-ignore-all */ true) {
             case isString($condition):
-                return $this->on(is_a($this, $condition, true), $value);
+                return $this->on(is_a($this, $condition, true), $function);
             case isCallable($condition):
-                return $this->on(static::do($condition, $this)->getOrElse(false), $value);
-            case safe($condition)->getOrElse(false):
-                return self::do($value, $this);
+                return $this->on(static::do($condition, $this)->getOrElse(false), $function);
+            case self::wrap($condition)->getOrElse(false):
+                return self::do($function, $this);
             default:
                 return $this;
         }
@@ -41,56 +41,51 @@ trait OptionalOn
 
     /**
      * @template T2
-     * @param T2 $value
-     * @phpstan-return (T2 is Optional<mixed> ? T2 : Optional<T2>)|Optional<T>
-     * @noinspection PhpMissingReturnTypeInspection
+     * @param callable(Optional<T>):T2 $function
+     * @phpstan-return (Optional<T2>|Optional<T>)
      */
-    public function onSome($value)
+    public function onSome(callable $function): Optional
     {
-        return $this->on(Some::class, $value);
+        return $this->on(Some::class, $function);
     }
 
     /**
      * @template T2
-     * @param T2 $value
-     * @phpstan-return (T2 is Optional<mixed> ? T2 : Optional<T2>)|Optional<T>
-     * @noinspection PhpMissingReturnTypeInspection
+     * @param callable(Optional<T>):T2 $function
+     * @phpstan-return (Optional<T2>|Optional<T>)
      */
-    public function onNone($value)
+    public function onNone(callable $function): Optional
     {
-        return $this->on(None::class, $value);
+        return $this->on(None::class, $function);
     }
 
     /**
      * @template T2
-     * @param T2 $value
-     * @phpstan-return (T2 is Optional<mixed> ? T2 : Optional<T2>)|Optional<T>
-     * @noinspection PhpMissingReturnTypeInspection
+     * @param callable(Optional<T>):T2 $function
+     * @phpstan-return (Optional<T2>|Optional<T>)
      */
-    public function onSuccess($value)
+    public function onSuccess(callable $function): Optional
     {
-        return $this->on(Success::class, $value);
+        return $this->on(Success::class, $function);
     }
 
     /**
      * @template T2
-     * @param T2 $value
-     * @phpstan-return (T2 is Optional<mixed> ? T2 : Optional<T2>)|Optional<T>
-     * @noinspection PhpMissingReturnTypeInspection
+     * @param callable(Optional<T>):T2 $function
+     * @phpstan-return (Optional<T2>|Optional<T>)
      */
-    public function onJustSuccess($value)
+    public function onJustSuccess(callable $function): Optional
     {
-        return $this->on(JustSuccess::class, $value);
+        return $this->on(JustSuccess::class, $function);
     }
 
     /**
      * @template T2
-     * @param T2 $value
-     * @phpstan-return (T2 is Optional<mixed> ? T2 : Optional<T2>)|Optional<T>
-     * @noinspection PhpMissingReturnTypeInspection
+     * @param callable(Optional<T>):T2 $function
+     * @phpstan-return (Optional<T2>|Optional<T>)
      */
-    public function onFailure($value)
+    public function onFailure(callable $function): Optional
     {
-        return $this->on(Failure::class, $value);
+        return $this->on(Failure::class, $function);
     }
 }

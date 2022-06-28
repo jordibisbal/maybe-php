@@ -14,7 +14,7 @@ use function Functional\map;
  */
 function safeAllLazy(array $values): Closure
 {
-    return function (...$parameters) use ($values) {
+    return static function (...$parameters) use ($values) {
         return Optionals::create(
             map(
                 $values,

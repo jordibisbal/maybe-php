@@ -6,6 +6,7 @@ namespace j45l\maybe\Optional;
 
 use Countable;
 use j45l\maybe\Either\Failure;
+use j45l\maybe\Either\Reason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 
@@ -151,5 +152,18 @@ final class Optionals implements Countable
     public function tail(): self
     {
         return self::create(tail($this->items()));
+    }
+
+    /**
+     * @return Optional<self<T>>
+     */
+    public function assertAllSucceed(): Optional
+    {
+        switch (/** @infection-ignore-all */ true) {
+            case $this->failures()->empty():
+                return Some::from($this);
+            default:
+                return Failure::because(Reason::fromString('Some not Succeed')->withSubject(Some::from($this)));
+        }
     }
 }

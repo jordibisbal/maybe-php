@@ -56,7 +56,7 @@ trait Valued
      * @return T
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getOrRuntimeException(string $message = '')
+    public function getOrFail(string $message = '')
     {
         return $this->get();
     }
@@ -67,7 +67,9 @@ trait Valued
     }
 
     /**
-     * @return Functor
+     * @template R
+     * @param callable(T):R $function
+     * @return Optional<R>
      */
     public function map(callable $function): Functor
     {
@@ -89,7 +91,9 @@ trait Valued
                     $message
                 );
             default:
-                return $condition ? $this : Failure::because(Reason::fromString($message ?? 'failed assertion'));
+                return $condition
+                    ? $this :
+                    Failure::because(Reason::fromString($message ?? 'failed assertion')->withSubject($this));
         }
     }
 }

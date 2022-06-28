@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace j45l\maybe\Optional;
 
 /**
- * @template T
- * @param T|callable():T $value
- * @phpstan-return Optional<T>
+ * @template C
+ * @phpstan-param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C) $function
+ * @param mixed $parameters
+ * @phpstan-return Optional<C>
  */
-function safe($value): Optional
+function safe(callable $function, ...$parameters): Optional
 {
-    return Optional::do($value);
+    return Optional::do($function, ...$parameters);
 }
