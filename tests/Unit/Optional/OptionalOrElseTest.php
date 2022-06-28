@@ -12,6 +12,7 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertJustSuccess;
 use function j45l\maybe\Optional\PhpUnit\assertNone;
 use function j45l\maybe\Optional\PhpUnit\assertNotFailure;
@@ -26,21 +27,21 @@ final class OptionalOrElseTest extends TestCase
 {
     public function testSomeReturnsItsValue(): void
     {
-        $maybe = Some::from(42)->orElse(0);
+        $maybe = Some::from(42)->orElse(value(0));
 
         assertSomeEquals(42, $maybe);
     }
 
     public function testSucceedReturnsItself(): void
     {
-        $maybe = JustSuccess::create()->orElse(0);
+        $maybe = JustSuccess::create()->orElse(value(0));
 
         assertJustSuccess($maybe);
     }
 
     public function testNoneReturnsDefaultValue(): void
     {
-        $maybe = None::create()->OrElse(Some::from(42));
+        $maybe = None::create()->OrElse(value(Some::from(42)));
 
         assertSomeEquals(42, $maybe);
     }
@@ -51,7 +52,7 @@ final class OptionalOrElseTest extends TestCase
             return Some::from(42);
         };
 
-        $maybe = Either::do($fortyTwo)->OrElse(None::create());
+        $maybe = Either::do($fortyTwo)->OrElse(value(None::create()));
 
         assertSomeEquals(42, $maybe);
     }
@@ -98,7 +99,7 @@ final class OptionalOrElseTest extends TestCase
             return None::create();
         };
 
-        $maybe = Either::do($none)->OrElse(Some::from(42));
+        $maybe = Either::do($none)->OrElse(value(Some::from(42)));
 
         assertSomeEquals(42, $maybe);
     }

@@ -7,7 +7,7 @@ namespace j45l\maybe\Optional;
 use function Functional\map;
 
 /**
- * @param mixed[] $values
+ * @param callable[] $values
  * @phpstan-return Optionals<mixed>
  */
 function safeAll(array $values): Optionals
@@ -15,7 +15,7 @@ function safeAll(array $values): Optionals
     return Optionals::create(
         map(
             $values,
-            function ($value) {
+            function (callable $value) {
                 return safe($value);
             }
         )

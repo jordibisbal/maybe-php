@@ -25,7 +25,7 @@ trait NonValued
     }
 
     /** @noinspection ReturnTypeCanBeDeclaredInspection */
-    public function getOrRuntimeException(string $message = '')
+    public function getOrFail(string $message = '')
     {
         throw new RuntimeException($message);
     }

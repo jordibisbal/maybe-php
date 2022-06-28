@@ -8,9 +8,11 @@ use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
+use j45l\maybe\Optional\Optional;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 
 /**
@@ -94,8 +96,8 @@ final class OptionalOnTest extends TestCase
         $maybe = Some::from(41)
             ->on(
                 Some::class,
-                function (Some $some) {
-                    return Some::from($some->get() + 1);
+                function (Optional $some) {
+                    return Some::from($some->getOrElse(0) + 1);
                 }
             );
 
@@ -191,11 +193,11 @@ final class OptionalOnTest extends TestCase
     {
         $maybe = Some::from('notMatched');
 
-        $onSome = $maybe->onSome('Matched');
-        $onNone = $maybe->onNone('Matched');
-        $onSuccess = $maybe->onSuccess('Matched');
-        $onJustSuccess = $maybe->onJustSuccess('Matched');
-        $onFailure = $maybe->onFailure('Matched');
+        $onSome = $maybe->onSome(value('Matched'));
+        $onNone = $maybe->onNone(value('Matched'));
+        $onSuccess = $maybe->onSuccess(value('Matched'));
+        $onJustSuccess = $maybe->onJustSuccess(value('Matched'));
+        $onFailure = $maybe->onFailure(value('Matched'));
 
         self::assertEquals('Matched', $onSome->getOrElse('notMatched'));
         self::assertEquals('notMatched', $onNone->getOrElse('notMatched'));
@@ -208,11 +210,11 @@ final class OptionalOnTest extends TestCase
     {
         $maybe = None::create();
 
-        $onSome = $maybe->onSome('Matched');
-        $onNone = $maybe->onNone('Matched');
-        $onSuccess = $maybe->onSuccess('Matched');
-        $onJustSuccess = $maybe->onJustSuccess('Matched');
-        $onFailure = $maybe->onFailure('Matched');
+        $onSome = $maybe->onSome(value('Matched'));
+        $onNone = $maybe->onNone(value('Matched'));
+        $onSuccess = $maybe->onSuccess(value('Matched'));
+        $onJustSuccess = $maybe->onJustSuccess(value('Matched'));
+        $onFailure = $maybe->onFailure(value('Matched'));
 
         self::assertEquals('notMatched', $onSome->getOrElse('notMatched'));
         self::assertEquals('Matched', $onNone->getOrElse('notMatched'));
@@ -225,11 +227,11 @@ final class OptionalOnTest extends TestCase
     {
         $maybe = JustSuccess::create();
 
-        $onSome = $maybe->onSome('Matched');
-        $onNone = $maybe->onNone('Matched');
-        $onSuccess = $maybe->onSuccess('Matched');
-        $onJustSuccess = $maybe->onJustSuccess('Matched');
-        $onFailure = $maybe->onFailure('Matched');
+        $onSome = $maybe->onSome(value('Matched'));
+        $onNone = $maybe->onNone(value('Matched'));
+        $onSuccess = $maybe->onSuccess(value('Matched'));
+        $onJustSuccess = $maybe->onJustSuccess(value('Matched'));
+        $onFailure = $maybe->onFailure(value('Matched'));
 
         self::assertEquals('notMatched', $onSome->getOrElse('notMatched'));
         self::assertEquals('notMatched', $onNone->getOrElse('notMatched'));
@@ -242,11 +244,11 @@ final class OptionalOnTest extends TestCase
     {
         $maybe = Failure::create();
 
-        $onSome = $maybe->onSome('Matched');
-        $onNone = $maybe->onNone('Matched');
-        $onSuccess = $maybe->onSuccess('Matched');
-        $onJustSuccess = $maybe->onJustSuccess('Matched');
-        $onFailure = $maybe->onFailure('Matched');
+        $onSome = $maybe->onSome(value('Matched'));
+        $onNone = $maybe->onNone(value('Matched'));
+        $onSuccess = $maybe->onSuccess(value('Matched'));
+        $onJustSuccess = $maybe->onJustSuccess(value('Matched'));
+        $onFailure = $maybe->onFailure(value('Matched'));
 
         self::assertEquals('notMatched', $onSome->getOrElse('notMatched'));
         self::assertEquals('notMatched', $onNone->getOrElse('notMatched'));

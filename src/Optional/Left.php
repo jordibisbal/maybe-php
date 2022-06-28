@@ -15,17 +15,16 @@ trait Left
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function andThen($value): Optional
+    public function andThen(callable $value): Optional
     {
         return $this;
     }
 
     /**
-     * @param mixed $value;
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return Optional<T>
      */
-    public function orElse($value): Optional
+    public function orElse(callable $value): Optional
     {
         return self::do($value, $this);
     }

@@ -10,6 +10,7 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\functional\value;
 use function j45l\maybe\Optional\safeAll;
 
 /** @covers ::\j45l\maybe\Optional\safeAll */
@@ -26,8 +27,8 @@ class SafeAllTest extends TestCase
             'f42' => function () {
                 return Some::from(42);
             },
-            'null' => null,
-            '42' => 42,
+            'null' => value(null),
+            '42' => value(42),
             'exception' => function () use (&$called) {
                 $called = true;
 

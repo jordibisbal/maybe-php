@@ -7,6 +7,7 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertNone;
 use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
@@ -17,12 +18,12 @@ class SafeTest extends TestCase
 {
     public function testsOnNoneReturnsNone(): void
     {
-        assertNone(safe(None::create()));
+        assertNone(safe(value(None::create())));
     }
 
     public function testsOnNullReturnsNone(): void
     {
-        assertNone(safe(null));
+        assertNone(safe(value(null)));
     }
 
     public function testsOnFailingCallableReturnsFailure(): void
@@ -54,14 +55,14 @@ class SafeTest extends TestCase
 
     public function testsOnValueSomeReturnsSome(): void
     {
-        $some = safe(Some::from(42));
+        $some = safe(value(Some::from(42)));
 
         assertSomeEquals(42, $some);
     }
 
     public function testsOnValueReturnsSome(): void
     {
-        $some = safe(42);
+        $some = safe(value(42));
 
         assertSomeEquals(42, $some);
     }

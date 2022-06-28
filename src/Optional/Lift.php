@@ -25,13 +25,13 @@ function lift(callable $callable): Closure
             return $maybe instanceof Failure;
         };
 
-        $liftParameters = function ($parameters) {
+        $liftParameters = static function ($parameters) {
             return map($parameters, function ($parameter) {
-                return Optional::do($parameter);
+                return Optional::wrap($parameter);
             });
         };
 
-        $sinkParameters = function ($parameters) {
+        $sinkParameters = static function ($parameters) {
             return map($parameters, function (Some $parameter) {
                 return $parameter->get();
             });

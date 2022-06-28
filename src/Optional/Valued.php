@@ -56,7 +56,7 @@ trait Valued
      * @return T
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getOrRuntimeException(string $message = '')
+    public function getOrFail(string $message = '')
     {
         return $this->get();
     }

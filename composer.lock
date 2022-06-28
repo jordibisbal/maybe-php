@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "j45l/functional-php",
-            "version": "1.2.4.2",
+            "version": "1.2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordibisbal/functional-php.git",
-                "reference": "404df2be1e3f66cc8f9cbbc6a6e79882812b38d1"
+                "reference": "2583db2f0c29fa2dfade9fd1e5389b172db4c353"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/404df2be1e3f66cc8f9cbbc6a6e79882812b38d1",
-                "reference": "404df2be1e3f66cc8f9cbbc6a6e79882812b38d1",
+                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/2583db2f0c29fa2dfade9fd1e5389b172db4c353",
+                "reference": "2583db2f0c29fa2dfade9fd1e5389b172db4c353",
                 "shasum": ""
             },
             "require": {
@@ -40,6 +40,7 @@
                 "files": [
                     "src/Apply.php",
                     "src/Best.php",
+                    "src/ButLast.php",
                     "src/CartesianProduct.php",
                     "src/CrossCompareSet.php",
                     "src/Delay.php",
@@ -53,8 +54,10 @@
                     "src/Take.php",
                     "src/ToArray.php",
                     "src/ToIterable.php",
+                    "src/ToGenerator.php",
                     "src/TryOrThrow.php",
                     "src/Unindex.php",
+                    "src/Value.php",
                     "src/Worst.php",
                     "src/YieldIterable.php"
                 ],
@@ -78,9 +81,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jordibisbal/functional-php/issues",
-                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.4.2"
+                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.7.0"
             },
-            "time": "2022-05-22T07:52:14+00:00"
+            "time": "2022-06-28T13:49:05+00:00"
         },
         {
             "name": "lstrojny/functional-php",

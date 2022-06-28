@@ -13,6 +13,7 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertNone;
 use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
@@ -50,7 +51,7 @@ final class OptionalAndThenTest extends TestCase
 
     public function testNoneReturnsNoneValue(): void
     {
-        $maybe = None::create()->andThen(Some::from(42));
+        $maybe = None::create()->andThen(value(Some::from(42)));
 
         assertNone($maybe);
     }
@@ -60,7 +61,7 @@ final class OptionalAndThenTest extends TestCase
         $maybe =
             safe(static function (): Optional {
                 return Some::from(42);
-            })->andThen(None::create())
+            })->andThen(value(None::create()))
         ;
 
         assertNone($maybe);

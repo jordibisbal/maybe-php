@@ -16,6 +16,7 @@ use RuntimeException;
 
 use function Functional\map;
 use function j45l\functional\apply;
+use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
 use function j45l\maybe\Optional\PhpUnit\assertNone;
@@ -36,7 +37,7 @@ class OptionalExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
 
         $upsert =
-            Optional::do($this->insertCustomer($entityManager)($customer))
+            Optional::do(apply($this->insertCustomer($entityManager), $customer))
             ->orElse(apply($this->updateCustomer($entityManager), $customer))
         ;
 
@@ -114,7 +115,7 @@ class OptionalExamplesTest extends TestCase
     public function testMapArray(): void
     {
         $optionalArray = map([null, 0, 1, 2], function ($x) {
-            return safe($x);
+            return safe(value($x));
         });
 
         [$none, $failure, $one, $half] = map(
@@ -156,8 +157,8 @@ class OptionalExamplesTest extends TestCase
 
     public function testOrElse(): void
     {
-        $noneNext = None::create()->orElse(42);
-        $someNext = Some::from(1)->orElse(42);
+        $noneNext = None::create()->orElse(value(42));
+        $someNext = Some::from(1)->orElse(value(42));
 
         assertSomeEquals(42, $noneNext);
         assertSomeEquals(1, $someNext);

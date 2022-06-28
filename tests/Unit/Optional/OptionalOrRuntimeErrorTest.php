@@ -24,34 +24,34 @@ final class OptionalOrRuntimeErrorTest extends TestCase
 {
     public function testSomeReturnsItsValue(): void
     {
-        self::assertEquals(42, Some::from(42)->getOrRuntimeException());
+        self::assertEquals(42, Some::from(42)->getOrFail());
     }
 
     public function testNoneThrowsRuntimeError(): void
     {
         $this->expectExceptionObject(new RuntimeException('Ops'));
 
-        None::create()->getOrRuntimeException('Ops');
+        None::create()->getOrFail('Ops');
     }
 
     public function testJustSuccessThrowsRuntimeError(): void
     {
         $this->expectExceptionObject(new RuntimeException('Ops'));
 
-        JustSuccess::create()->getOrRuntimeException('Ops');
+        JustSuccess::create()->getOrFail('Ops');
     }
 
     public function testFailureThrowsRuntimeError(): void
     {
         $this->expectExceptionObject(new RuntimeException('Ops'));
 
-        Failure::create()->getOrRuntimeException('Ops');
+        Failure::create()->getOrFail('Ops');
     }
 
     public function testThrowableFailureThrowsRuntimeError(): void
     {
         try {
-            Failure::because(ThrowableReason::fromString('Inner Runtime'))->getOrRuntimeException('Ops');
+            Failure::because(ThrowableReason::fromString('Inner Runtime'))->getOrFail('Ops');
         } catch (Throwable $throwable) {
             $this->assertEquals(
                 new RuntimeException(
@@ -67,7 +67,7 @@ final class OptionalOrRuntimeErrorTest extends TestCase
     public function testThrowableFailureThrowsRuntimeErrorWithNoMessage(): void
     {
         try {
-            Failure::because(ThrowableReason::fromString('Runtime'))->getOrRuntimeException();
+            Failure::because(ThrowableReason::fromString('Runtime'))->getOrFail();
         } catch (Throwable $throwable) {
             $this->assertEquals(
                 new RuntimeException(
