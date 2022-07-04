@@ -35,6 +35,18 @@ class Reason
         return self::fromString(sprintf($format, ...$values));
     }
 
+    /**
+     * @param string $format Sprintf format
+     * @param mixed ...$values
+     */
+    public function withFormatted(string $format, ...$values): Reason
+    {
+        $self = clone $this;
+        $self->reason = sprintf($format, ...$values);
+
+        return $self;
+    }
+
     public function toString(): string
     {
         return $this->reason;
@@ -56,5 +68,10 @@ class Reason
     public function subject(): Optional
     {
         return $this->subject;
+    }
+
+    public function __toString(): string
+    {
+        return $this->toString();
     }
 }
