@@ -21,7 +21,7 @@ trait OptionalOn
     /**
      * @template T2
      * @param class-string|callable(Optional<T>):bool|bool $condition
-     * @param callable(Optional<mixed>):T2 $function
+     * @param callable(Optional<T>):T2 $function
      * @phpstan-return (T2 is Optional<mixed> ? T2 : Optional<T2>)|Optional<T>
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
@@ -41,7 +41,7 @@ trait OptionalOn
 
     /**
      * @template T2
-     * @param callable(Optional<T>):T2 $function
+     * @param callable(Optional<T>|Some<T>):T2 $function
      * @phpstan-return (Optional<T2>|Optional<T>)
      */
     public function onSome(callable $function): Optional
@@ -51,7 +51,7 @@ trait OptionalOn
 
     /**
      * @template T2
-     * @param callable(Optional<T>):T2 $function
+     * @param callable(Optional<T>|None<T>):T2 $function
      * @phpstan-return (Optional<T2>|Optional<T>)
      */
     public function onNone(callable $function): Optional
@@ -61,7 +61,7 @@ trait OptionalOn
 
     /**
      * @template T2
-     * @param callable(Optional<T>):T2 $function
+     * @param callable(Optional<T>|Success<T>):T2 $function
      * @phpstan-return (Optional<T2>|Optional<T>)
      */
     public function onSuccess(callable $function): Optional
@@ -71,7 +71,7 @@ trait OptionalOn
 
     /**
      * @template T2
-     * @param callable(Optional<T>):T2 $function
+     * @param callable(Optional<T>|JustSuccess<T>):T2 $function
      * @phpstan-return (Optional<T2>|Optional<T>)
      */
     public function onJustSuccess(callable $function): Optional
@@ -81,7 +81,7 @@ trait OptionalOn
 
     /**
      * @template T2
-     * @param callable(Optional<T>):T2 $function
+     * @param callable(Optional<T>|Failure<T>):T2 $function
      * @phpstan-return (Optional<T2>|Optional<T>)
      */
     public function onFailure(callable $function): Optional
