@@ -32,6 +32,22 @@ final class ReasonTest extends TestCase
         assertNone($reason->subject());
     }
 
+    public function testReasonStringCanBeChangedFromAFormat(): void
+    {
+        $reason = Reason::fromString('Original One');
+        $newReason = $reason->withFormatted('because %s and %s', 'one', 'another');
+
+        assertEquals('because one and another', $newReason->toString());
+        assertEquals('Original One', $reason->toString());
+        assertNone($reason->subject());
+        assertNotSame($reason, $newReason);
+    }
+
+    public function testReasonCanBeCastToString(): void
+    {
+        assertEquals('an string', (string)(Reason::fromString('an string')));
+    }
+
     public function testAReasonCanHaveASubject(): void
     {
         $subject = Some::from(42);
