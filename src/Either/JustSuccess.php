@@ -9,7 +9,9 @@ use j45l\maybe\Optional\NonValued;
 use j45l\maybe\Optional\Right;
 
 /**
- * @extends Either<mixed>
+ * @template T
+ * @extends Either<T>
+ * @implements Success<T>
  */
 final class JustSuccess extends Either implements Success
 {
@@ -22,6 +24,7 @@ final class JustSuccess extends Either implements Success
     {
     }
 
+    /** @return JustSuccess<T> */
     public static function create(): JustSuccess
     {
         return new self();
