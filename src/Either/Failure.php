@@ -10,7 +10,8 @@ use j45l\maybe\Optional\Optional;
 use RuntimeException;
 
 /**
- * @extends Either<mixed>
+ * @template T
+ * @extends Either<T>
  */
 final class Failure extends Either
 {
@@ -32,12 +33,13 @@ final class Failure extends Either
         $this->reason = $reason;
     }
 
+    /** @return Failure<T> */
     public static function create(): Failure
     {
         return new self(Reason::fromString('Unspecified reason'));
     }
 
-    /** @return Failure */
+    /** @return Failure<T> */
     public static function because(Reason $reason): Failure
     {
         return new self($reason);
@@ -50,6 +52,7 @@ final class Failure extends Either
 
     public function getOrFail(string $message = null)
     {
+        /** @phpstan-ignore-next-line  */
         $this->throwRuntimeException($message ?? $this->reason->toString(), $this->reason);
     }
 
