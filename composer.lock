@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1566943e090cb292b6abb1d40d503fbf",
+    "content-hash": "26672e593e3db0dde953c5120669ecc2",
     "packages": [
         {
             "name": "j45l/functional-php",
-            "version": "1.2.3.1",
+            "version": "1.2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordibisbal/functional-php.git",
-                "reference": "e667ebc23acec09e9500e838f40d9f51be4a2849"
+                "reference": "2583db2f0c29fa2dfade9fd1e5389b172db4c353"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/e667ebc23acec09e9500e838f40d9f51be4a2849",
-                "reference": "e667ebc23acec09e9500e838f40d9f51be4a2849",
+                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/2583db2f0c29fa2dfade9fd1e5389b172db4c353",
+                "reference": "2583db2f0c29fa2dfade9fd1e5389b172db4c353",
                 "shasum": ""
             },
             "require": {
@@ -38,7 +38,9 @@
             "type": "library",
             "autoload": {
                 "files": [
+                    "src/Apply.php",
                     "src/Best.php",
+                    "src/ButLast.php",
                     "src/CartesianProduct.php",
                     "src/CrossCompareSet.php",
                     "src/Delay.php",
@@ -52,8 +54,10 @@
                     "src/Take.php",
                     "src/ToArray.php",
                     "src/ToIterable.php",
+                    "src/ToGenerator.php",
                     "src/TryOrThrow.php",
                     "src/Unindex.php",
+                    "src/Value.php",
                     "src/Worst.php",
                     "src/YieldIterable.php"
                 ],
@@ -77,9 +81,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jordibisbal/functional-php/issues",
-                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.3.1"
+                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.7.0"
             },
-            "time": "2022-05-05T05:10:18+00:00"
+            "time": "2022-06-28T13:49:05+00:00"
         },
         {
             "name": "lstrojny/functional-php",
