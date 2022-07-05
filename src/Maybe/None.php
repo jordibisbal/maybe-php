@@ -8,15 +8,17 @@ use j45l\maybe\Optional\Left;
 use j45l\maybe\Optional\NonValued;
 
 /**
- * @extends Maybe<mixed>
+ * @template T
+ * @extends Maybe<T>
  */
 final class None extends Maybe
 {
-    /** @use NonValued<mixed> */
+    /** @use NonValued<T> */
     use NonValued;
-    /** @use Left<mixed> */
+    /** @use Left<T> */
     use Left;
 
+    /** @return None<T> */
     public static function create(): None
     {
         return new self();
