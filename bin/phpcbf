@@ -1,0 +1,2 @@
+#!/bin/sh
+docker-compose exec -ti app-medias-fpm env XDEBUG_MODE=off /app/vendor/bin/phpbcf --testsuite "Project Unitary Test Suite"

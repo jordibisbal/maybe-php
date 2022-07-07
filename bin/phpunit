@@ -1,2 +1,2 @@
 #!/bin/sh
-XDEBUG_MODE=off vendor/bin/phpunit
+docker-compose exec app-medias-fpm env XDEBUG_MODE=off /app/vendor/bin/phpunit --testsuite "Project Unitary Test Suite"
