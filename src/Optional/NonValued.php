@@ -24,7 +24,9 @@ trait NonValued
         return $defaultValue;
     }
 
-    /** @noinspection ReturnTypeCanBeDeclaredInspection */
+    /**
+     * @return T
+     */
     public function getOrFail(string $message = '')
     {
         throw new RuntimeException($message);
