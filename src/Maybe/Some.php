@@ -11,10 +11,12 @@ use j45l\maybe\Optional\Valued;
 /**
  * @template T
  * @extends Maybe<T>
+ * @implements Success<T>
  */
 final class Some extends Maybe implements Success
 {
     /** @use Valued<T> */
     use Valued;
+    /** @use Right<T> */
     use Right;
 }

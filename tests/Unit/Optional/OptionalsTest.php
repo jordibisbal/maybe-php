@@ -15,8 +15,14 @@ use j45l\maybe\Test\Unit\Optional\Fixtures\OptionalsFixtures;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function j45l\functional\value;
+use function j45l\maybe\Optional\PhpUnit\assertSuccess;
+use function j45l\maybe\Optional\safeAll;
+
 /**
  * @covers \j45l\maybe\Optional\Optionals
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 final class OptionalsTest extends TestCase
 {
@@ -164,5 +170,28 @@ final class OptionalsTest extends TestCase
     {
         $optional = Optionals::create([Some::from(42)]);
         $this->assertEquals(Some::from(42), $optional->head(Some::from(43)));
+    }
+
+    public function testAssertAllSucceed(): void
+    {
+        assertSuccess(
+            safeAll([
+                value(JustSuccess::create()),
+                value(Some::from(42))
+            ])->assertAllSucceed()
+        );
+    }
+
+    public function testOnSomeFailed(): void
+    {
+        $all = safeAll([
+            value(Failure::create()),
+            value(Some::from(42))
+        ]);
+
+        $failure = $all->assertAllSucceed();
+
+        self::assertInstanceOf(Failure::class, $failure);
+        self::assertSame($all, $failure->reason()->subject()->getOrElse(null));
     }
 }

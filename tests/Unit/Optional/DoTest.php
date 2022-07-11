@@ -3,12 +3,17 @@
 namespace j45l\maybe\Test\Unit\Optional;
 
 use j45l\maybe\Either\Either;
-use j45l\maybe\Either\Failure;
-use j45l\maybe\Either\Success;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertNotSuccess;
+use function j45l\maybe\Optional\PhpUnit\assertSome;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
+use function j45l\maybe\Optional\PhpUnit\assertSuccess;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -18,52 +23,49 @@ class DoTest extends TestCase
 {
     public function testValueReturningCallableResultsInASuccess(): void
     {
-        $success = Either::do(function (): int {
+        $success = Either::do(static function (): int {
             return 42;
         });
 
-        self::assertInstanceOf(Success::class, $success);
-        self::assertInstanceOf(Some::class, $success);
-        self::assertEquals(42, $success->get());
+        assertSomeEquals(42, $success);
     }
 
     public function testThrowingCallableResultInAFailure(): void
     {
-        $failure = Either::do(function (): void {
+        $failure = Either::do(static function (): void {
             throw new RuntimeException('Runtime exception');
         });
 
-        self::assertInstanceOf(Failure::class, $failure);
-        self::assertEquals('Runtime exception', $failure->reason()->toString());
+        assertFailureReasonString('Runtime exception', $failure);
     }
 
     public function testNoneReturningCallableResultsSomeIsSuccess(): void
     {
-        $some = Either::do(function (): Some {
+        $some = Either::do(static function (): Some {
             return Some::from(42);
         });
 
-        self::assertInstanceOf(Some::class, $some);
-        self::assertInstanceOf(Success::class, $some);
+        assertSome($some);
+        assertSuccess($some);
     }
 
     public function testNoneReturningCallableResultsNoneIsNotASuccess(): void
     {
-        $none = Either::do(function (): None {
+        $none = Either::do(static function (): None {
             return None::create();
         });
 
-        self::assertInstanceOf(None::class, $none);
-        self::assertNotInstanceOf(Success::class, $none);
+        assertNone($none);
+        assertNotSuccess($none);
     }
 
     public function testNoneReturningCallableResultsNullIsNotASuccess(): void
     {
-        $none = Either::do(function () {
+        $none = Either::do(static function () {
             return null;
         });
 
-        self::assertInstanceOf(None::class, $none);
-        self::assertNotInstanceOf(Success::class, $none);
+        assertNone($none);
+        assertNotSuccess($none);
     }
 }

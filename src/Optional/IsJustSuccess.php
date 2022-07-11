@@ -6,7 +6,9 @@ namespace j45l\maybe\Optional;
 
 use j45l\maybe\Either\JustSuccess;
 
-if (!function_exists(__NAMESPACE__ . '\isJustSuccess')) {
+use function function_exists as functionExists;
+
+if (!functionExists(__NAMESPACE__ . '\isJustSuccess')) {
     /**
      * @template T
      * @param Optional<T> $either

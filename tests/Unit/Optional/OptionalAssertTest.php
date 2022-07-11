@@ -6,30 +6,46 @@ namespace j45l\maybe\Test\Unit\Optional;
 
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
+use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
+
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function PHPUnit\Framework\assertEquals;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
  * @covers \j45l\maybe\Maybe\None
+ * @covers \j45l\maybe\Either\Failure
  * @covers \j45l\maybe\Maybe\Some
  */
 final class OptionalAssertTest extends TestCase
 {
-    public function testAssertingFailureReturnsFailure(): void
+    public function testAssertingNoneReturnsFailure(): void
     {
-        $maybe = Failure::create()->assert(false);
+        $maybe = None::create()->assert(false);
 
         self::assertInstanceOf(Failure::class, $maybe);
-        self::assertEquals('failed assertion', $maybe->reason()->toString());
+        assertFailureReasonString('failed assertion', $maybe);
+        assertNone($maybe->reason()->subject());
     }
 
-    public function testAssertingFailureReturnsFailureWithMessage(): void
+    public function testAssertingNoneReturnsFailureWithMessage(): void
     {
-        $maybe = Failure::create()->assert(false, 'Failed!');
+        $maybe = None::create()->assert(false, 'Failed!');
 
-        self::assertInstanceOf(Failure::class, $maybe);
-        self::assertEquals('Failed!', $maybe->reason()->toString());
+        assertFailureReasonString('Failed!', $maybe);
+    }
+
+    public function testAssertingFailureReturnsSame(): void
+    {
+        $failure = Failure::create();
+        $result = $failure->assert(false);
+
+        self::assertSame($failure, $result);
+        assertNone($failure->reason()->subject());
     }
 
     public function testAssertingFalseReturnsFailure(): void
@@ -38,7 +54,8 @@ final class OptionalAssertTest extends TestCase
             ->assert(false);
 
         self::assertInstanceOf(Failure::class, $maybe);
-        self::assertEquals('failed assertion', $maybe->reason()->toString());
+        assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(1, $maybe->reason()->subject()->getOrElse(null));
     }
 
     public function testAssertingFalseReturnsFailureWithMessage(): void
@@ -47,7 +64,22 @@ final class OptionalAssertTest extends TestCase
             ->assert(false, 'Failed!');
 
         self::assertInstanceOf(Failure::class, $maybe);
-        self::assertEquals('Failed!', $maybe->reason()->toString());
+        assertFailureReasonString('Failed!', $maybe);
+        assertEquals(1, $maybe->reason()->subject()->getOrElse(null));
+    }
+
+    public function testAssertingFailingClosureReturnsFailure(): void
+    {
+        $maybe = Some::from(1)
+            ->assert(
+                function () {
+                    throw new RuntimeException();
+                }
+            );
+
+        self::assertInstanceOf(Failure::class, $maybe);
+        assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(1, $maybe->reason()->subject()->getOrElse(null));
     }
 
     public function testAssertingTrueReturnsOriginalOptionalIfValued(): void
@@ -75,7 +107,8 @@ final class OptionalAssertTest extends TestCase
         });
 
         self::assertInstanceOf(Failure::class, $maybe);
-        self::assertEquals('failed assertion', $maybe->reason()->toString());
+        assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(42, $maybe->reason()->subject()->getOrElse(null));
     }
 
     public function testAssertingTrueReturnsFailureIfNotValued(): void
@@ -83,6 +116,7 @@ final class OptionalAssertTest extends TestCase
         $maybe = JustSuccess::create()->assert(true);
 
         self::assertInstanceOf(Failure::class, $maybe);
-        self::assertEquals('failed assertion', $maybe->reason()->toString());
+        assertFailureReasonString('failed assertion', $maybe);
+        assertEquals(42, $maybe->reason()->subject()->getOrElse(42));
     }
 }

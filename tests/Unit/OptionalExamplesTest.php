@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe\Test\Unit;
 
 use Closure;
-use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
-use j45l\maybe\Either\Success;
 use j45l\maybe\Optional\Optional;
 use j45l\maybe\Maybe\Maybe;
 use j45l\maybe\Maybe\None;
@@ -16,7 +14,15 @@ use j45l\maybe\Test\Unit\Fixtures\EntityManagerStub;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use function Functional\map;
 use function j45l\functional\apply;
+use function j45l\functional\value;
+use function j45l\maybe\Optional\PhpUnit\assertFailure;
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
+use function j45l\maybe\Optional\PhpUnit\assertSuccess;
+use function j45l\maybe\Optional\safe;
 use function j45l\maybe\Optional\safeAll;
 
 /**
@@ -30,15 +36,14 @@ class OptionalExamplesTest extends TestCase
         $customer = Some::from('customer');
         $entityManager = new EntityManagerStub();
 
-        $maybe =
-            Optional::do($this->insertCustomer($entityManager)($customer))
+        $upsert =
+            Optional::do(apply($this->insertCustomer($entityManager), $customer))
             ->orElse(apply($this->updateCustomer($entityManager), $customer))
         ;
 
-        $this->assertInstanceOf(Some::class, $entityManager->insertInvokedWith);
-        $this->assertInstanceOf(None::class, $entityManager->updateInvokedWith);
-        $this->assertEquals($customer, $entityManager->insertInvokedWith);
-        $this->assertInstanceOf(Success::class, $maybe);
+        self::assertEquals($customer, $entityManager->insertInvokedWith);
+        assertNone($entityManager->updateInvokedWith);
+        assertSuccess($upsert);
     }
 
     /** @param EntityManagerStub<string> $entityManager */
@@ -65,16 +70,14 @@ class OptionalExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
         $entityManager->insertWillFail = true;
 
-        $maybe =
+        $upsert =
             Optional::do($this->insertCustomer($entityManager), $customer)
                 ->orElse(apply($this->updateCustomer($entityManager), $customer))
         ;
 
-        $this->assertInstanceOf(Some::class, $entityManager->insertInvokedWith);
-        $this->assertInstanceOf(Some::class, $entityManager->updateInvokedWith);
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
         $this->assertEquals($customer, $entityManager->updateInvokedWith);
-        $this->assertInstanceOf(Success::class, $maybe);
+        assertSuccess($upsert);
     }
 
     public function testDoOrElseFails(): void
@@ -84,31 +87,50 @@ class OptionalExamplesTest extends TestCase
         $entityManager->insertWillFail = true;
         $entityManager->updateWillFail = true;
 
-        $maybe =
+        $upsert =
             Optional::do($this->insertCustomer($entityManager), $customer)
                 ->orElse(apply($this->updateCustomer($entityManager), $customer))
             ;
 
-        $this->assertInstanceOf(Some::class, $entityManager->insertInvokedWith);
-        $this->assertInstanceOf(Some::class, $entityManager->updateInvokedWith);
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
         $this->assertEquals($customer, $entityManager->updateInvokedWith);
-        $this->assertInstanceOf(Failure::class, $maybe);
+        assertFailure($upsert);
     }
 
     public function testMap(): void
     {
         $sideEffect = false;
-        $increment = function (Some $number) use (&$sideEffect): Some {
+        $increment = function ($number) use (&$sideEffect) {
             $sideEffect = true;
-            return Some::from($number->get() + 1);
+
+            return $number + 1;
         };
 
         $maybe = Some::from(41)->map($increment);
-        $this->assertTrue($sideEffect);
 
-        $this->assertInstanceOf(Some::class, $maybe);
-        $this->assertEquals(42, $maybe->get());
+        $this->assertTrue($sideEffect);
+        assertSomeEquals(42, $maybe);
+    }
+
+    public function testMapArray(): void
+    {
+        $optionalArray = map([null, 0, 1, 2], function ($x) {
+            return safe(value($x));
+        });
+
+        [$none, $failure, $one, $half] = map(
+            $optionalArray,
+            function (Optional $x) {
+                return $x->map(static function ($x) {
+                    return 1 / $x;
+                });
+            }
+        );
+
+        assertNone($none);
+        assertFailure($failure);
+        assertSomeEquals(1, $one);
+        assertSomeEquals(1 / 2, $half);
     }
 
     public function testSafeMap(): void
@@ -135,13 +157,11 @@ class OptionalExamplesTest extends TestCase
 
     public function testOrElse(): void
     {
-        $noneNext = None::create()->orElse(42);
-        $someNext = Some::from(1)->orElse(42);
+        $noneNext = None::create()->orElse(value(42));
+        $someNext = Some::from(1)->orElse(value(42));
 
-        $this->assertInstanceOf(Some::class, $noneNext);
-        $this->assertInstanceOf(Some::class, $someNext);
-        $this->assertEquals(42, $noneNext->get());
-        $this->assertEquals(1, $someNext->get());
+        assertSomeEquals(42, $noneNext);
+        assertSomeEquals(1, $someNext);
     }
 
     public function testAndThen(): void
@@ -152,8 +172,7 @@ class OptionalExamplesTest extends TestCase
 
         $pipe = Some::from(41)->andThen($increment)->andThen($increment);
 
-        $this->assertInstanceOf(Some::class, $pipe);
-        $this->assertEquals(43, $pipe->get());
+        assertSomeEquals(43, $pipe);
     }
 
     public function testAndThenFromNone(): void
@@ -168,7 +187,7 @@ class OptionalExamplesTest extends TestCase
 
         $pipe = Some::from(42)->andThen($failure)->andThen($increment)->andThen($increment);
 
-        $this->assertInstanceOf(Failure::class, $pipe);
+        assertFailure($pipe);
         $this->assertFalse($called);
     }
 
@@ -178,14 +197,13 @@ class OptionalExamplesTest extends TestCase
         $increment = function () use (&$called) {
             $called = true;
         };
-        $failure = function () {
+        $failure = static function () {
             throw new RuntimeException('42!');
         };
 
         $failure = Maybe::do($failure)->andThen($increment);
 
-        $this->assertInstanceOf(Failure::class, $failure);
-        $this->assertEquals('42!', $failure->reason()->toString());
+        assertFailureReasonString('42!', $failure);
         $this->assertFalse($called);
     }
 }

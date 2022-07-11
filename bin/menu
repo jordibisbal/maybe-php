@@ -35,7 +35,7 @@ function progressThenTail() {
 
 function testUnit() {
     echo -e "\nUnitary tests...\n"
-    execute "$home/.." "bin/phpunit"
+    execute "$home/.." "XDEBUG_MODE=off bin/phpunit"
 }
 
 function testUnitCoverage() {
@@ -76,10 +76,10 @@ function tests() {
 }
 
 function codeQuality() {
-    phpmd="echo -e '\\nPhpmd:\\n\\n'; vendor/bin/phpmd src ansi phpmdRules.xml"
-    phpcs="echo -e '\\nPhpcs:\\n\\n'; vendor/bin/phpcs -p --cache=build/cache/phpcs_cache --no-colors src tests"
-    phpstan="echo -e '\\nPhpstan:\\n\\n'; vendor/bin/phpstan analyze -c phpstan.neon"
-    phpmdTest="echo -e '\\nPhpmd tests:\\n\\n'; vendor/bin/phpmd tests ansi phpmdRulesTests.xml"
+    phpmd="echo -e '\\nPhpmd:\\n\\n'; XDEBUG_MODE=off vendor/bin/phpmd src ansi phpmdRules.xml"
+    phpcs="echo -e '\\nPhpcs:\\n\\n'; XDEBUG_MODE=off vendor/bin/phpcs -p --cache=build/cache/phpcs_cache --no-colors src tests"
+    phpstan="echo -e '\\nPhpstan:\\n\\n'; XDEBUG_MODE=off vendor/bin/phpstan analyze -c phpstan.neon"
+    phpmdTest="echo -e '\\nPhpmd tests:\\n\\n'; XDEBUG_MODE=off vendor/bin/phpmd tests ansi phpmdRulesTests.xml"
 
 	while true
 	do

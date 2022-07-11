@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function j45l\maybe\Optional\lift;
+use function j45l\maybe\Optional\PhpUnit\assertFailure;
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowable;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 
 /** @covers ::j45l\maybe\Optional\lift */
 class LiftTest extends TestCase
@@ -21,8 +26,7 @@ class LiftTest extends TestCase
         });
         $maybe = $lifted();
 
-        $this->assertInstanceOf(Some::class, $maybe);
-        $this->assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testInvokingALiftFunctionPassesParameters(): void
@@ -30,8 +34,7 @@ class LiftTest extends TestCase
         $lifted = lift($this->addFunction());
         $maybe = $lifted(40, 2);
 
-        $this->assertInstanceOf(Some::class, $maybe);
-        $this->assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     public function testInvokingALiftFunctionLowerSomeParametersBeforeInvoking(): void
@@ -39,8 +42,7 @@ class LiftTest extends TestCase
         $lifted = lift($this->addFunction());
         $maybe = $lifted(40, Some::from(2));
 
-        $this->assertInstanceOf(Some::class, $maybe);
-        $this->assertEquals(42, $maybe->get());
+        assertSomeEquals(42, $maybe);
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
@@ -51,8 +53,8 @@ class LiftTest extends TestCase
         });
         $maybe = $lifted(40, 2);
 
-        $this->assertInstanceOf(Failure::class, $maybe);
-        $this->assertEquals('An exception', $maybe->reason()->toString());
+        assertFailureReasonThrowable(RuntimeException::class, $maybe);
+        assertFailureReasonString('An exception', $maybe);
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
@@ -61,7 +63,7 @@ class LiftTest extends TestCase
         $lifted = lift($this->addFunction());
         $maybe = $lifted(42, None::create());
 
-        $this->assertInstanceOf(None::class, $maybe);
+        assertNone($maybe);
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
@@ -69,12 +71,12 @@ class LiftTest extends TestCase
     {
         $maybe = lift($this->addFunction())(42, Failure::create());
 
-        $this->assertInstanceOf(Failure::class, $maybe);
+        assertFailure($maybe);
     }
 
     private function addFunction(): Closure
     {
-        return function (int $first, int $second): int {
+        return static function (int $first, int $second): int {
             return $first + $second;
         };
     }

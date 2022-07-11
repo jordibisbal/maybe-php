@@ -1,2 +1,2 @@
 #!/bin/sh
-XDEBUG_MODE=off vendor/bin/phpunit
+XDEBUG_MODE=off vendor/bin/phpunit --testsuite "Project Unitary Test Suite"

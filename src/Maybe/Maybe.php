@@ -12,20 +12,4 @@ use j45l\maybe\Optional\Optional;
  */
 abstract class Maybe extends Optional
 {
-    /**
-     * @param T $value
-     * @return Optional<T>|None|Some<T>
-     */
-    protected static function someWrap($value): Optional
-    {
-        /** @infection-ignore-all */
-        switch (true) {
-            case $value instanceof Optional:
-                return $value;
-            case is_null($value):
-                return None::create();
-            default:
-                return Some::from($value);
-        }
-    }
 }

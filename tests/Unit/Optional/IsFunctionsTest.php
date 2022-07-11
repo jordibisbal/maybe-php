@@ -28,7 +28,7 @@ final class IsFunctionsTest extends TestCase
 {
     public function testIsFailure(): void
     {
-        $test = function (Optional $optional) {
+        $test = static function (Optional $optional) {
             return isFailure($optional);
         };
 
@@ -43,7 +43,7 @@ final class IsFunctionsTest extends TestCase
 
     public function testIsJustSuccess(): void
     {
-        $test = function (Optional $optional) {
+        $test = static function (Optional $optional) {
             return isJustSuccess($optional);
         };
 
@@ -58,7 +58,7 @@ final class IsFunctionsTest extends TestCase
 
     public function testIsNone(): void
     {
-        $test = function (Optional $optional) {
+        $test = static function (Optional $optional) {
             return isNone($optional);
         };
 
@@ -73,7 +73,7 @@ final class IsFunctionsTest extends TestCase
 
     public function testIsSome(): void
     {
-        $test = function (Optional $optional) {
+        $test = static function (Optional $optional) {
             return isSome($optional);
         };
 
@@ -88,7 +88,7 @@ final class IsFunctionsTest extends TestCase
 
     public function testIsSuccess(): void
     {
-        $test = function (Optional $optional) {
+        $test = static function (Optional $optional) {
             return isSuccess($optional);
         };
 

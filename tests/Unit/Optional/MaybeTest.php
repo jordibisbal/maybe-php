@@ -10,6 +10,10 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 
 use function j45l\maybe\Optional\lift;
+use function j45l\maybe\Optional\PhpUnit\assertFailure;
+use function j45l\maybe\Optional\PhpUnit\assertNone;
+use function j45l\maybe\Optional\PhpUnit\assertNotFailure;
+use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 
 /**
  * @covers \j45l\maybe\Optional\Optional
@@ -32,8 +36,7 @@ final class MaybeTest extends TestCase
 
         $some = lift($function)(Some::from(41), Some::from(1));
 
-        self::assertInstanceOf(Some::class, $some);
-        self::assertEquals(42, $some->get());
+        assertSomeEquals(42, $some);
     }
 
     public function testLiftedLiftParameters(): void
@@ -44,8 +47,7 @@ final class MaybeTest extends TestCase
 
         $some = lift($function)(41, Some::from(1));
 
-        self::assertInstanceOf(Some::class, $some);
-        self::assertEquals(42, $some->get());
+        assertSomeEquals(42, $some);
     }
 
     public function testLiftedReturnsNoneWhenSomeParametersAreNone(): void
@@ -56,8 +58,8 @@ final class MaybeTest extends TestCase
 
         $some = lift($function)(Some::from(41), None::create());
 
-        self::assertInstanceOf(None::class, $some);
-        self::assertNotInstanceOf(Failure::class, $some);
+        assertNone($some);
+        assertNotFailure($some);
     }
 
     public function testLiftedReturnsFailureWhenSomeParametersAreFailure(): void
@@ -66,9 +68,7 @@ final class MaybeTest extends TestCase
             return $one + $another;
         };
 
-        $some = lift($function)(Some::from(41), Failure::create());
-
-        self::assertInstanceOf(Failure::class, $some);
+        assertFailure(lift($function)(Some::from(41), Failure::create()));
     }
 
     public function testLiftedReturnsFailureWhenSomeParametersAreFailureNone(): void
@@ -77,9 +77,7 @@ final class MaybeTest extends TestCase
             return $one + $another;
         };
 
-        $some = lift($function)(None::create(), Failure::create());
-
-        self::assertInstanceOf(Failure::class, $some);
+        assertFailure(lift($function)(None::create(), Failure::create()));
     }
 
     public function testTakeOrElseReturnsDefault(): void
