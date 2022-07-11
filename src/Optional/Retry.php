@@ -17,8 +17,8 @@ use function j45l\functional\delay;
  */
 function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn = null): Optional
 {
-    $retry = static function ($maybe, Sequence $delaySequence, $triesLeft) use ($callable, $delayFn, &$retry) {
-        switch (/** @infection-ignore-all */ true) {
+    $retry = function ($maybe, Sequence $delaySequence, $triesLeft) use ($callable, $delayFn, &$retry) {
+        switch (true) {
             case (!$maybe instanceof Failure) || ($triesLeft < 1):
                 return $maybe;
             default:
