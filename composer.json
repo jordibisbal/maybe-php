@@ -33,6 +33,7 @@
             "j45l\\maybe\\": "src"
         },
         "files": [
+            "src/Optional/Also.php",
             "src/Optional/Guard.php",
             "src/Optional/IsFailure.php",
             "src/Optional/IsNone.php",

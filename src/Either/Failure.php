@@ -50,6 +50,11 @@ final class Failure extends Either
         return $this->reason;
     }
 
+    /**
+     * @return T
+     * @noinspection PhpInconsistentReturnPointsInspection
+     * @noinspection PhpReturnDocTypeMismatchInspection
+     */
     public function getOrFail(string $message = null)
     {
         /** @phpstan-ignore-next-line  */
