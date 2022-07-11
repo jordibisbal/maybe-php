@@ -38,8 +38,7 @@ function lift(callable $callable): Closure
         };
 
         $buildLifted = static function ($callable, ...$parameters) use ($isNone, $isFailure, $sinkParameters) {
-            /** @infection-ignore-all */
-            switch (true) {
+            switch (/** @infection-ignore-all */ true) {
                 case some($parameters, $isFailure):
                     return first($parameters, $isFailure);
                 case some($parameters, $isNone):
