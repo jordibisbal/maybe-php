@@ -12,20 +12,21 @@ final class ThrowableReason extends Reason
     /** @var Throwable */
     private $throwable;
 
-    public function __construct(string $reason, Throwable $throwable)
+    private static function upcast(self $reason, Throwable $throwable = null): ThrowableReason
     {
-        parent::__construct($reason);
-        $this->throwable = $throwable;
+        $reason->throwable = $throwable ?? (new RuntimeException($reason->toString()));
+
+        return $reason;
     }
 
     public static function fromString(string $reason): Reason
     {
-        return new self($reason, new RuntimeException($reason));
+        return self::upcast(parent::fromString($reason));
     }
 
     public static function fromThrowable(Throwable $throwable): ThrowableReason
     {
-        return new self($throwable->getMessage(), $throwable);
+        return self::upcast(parent::fromString($throwable->getMessage()), $throwable);
     }
 
     public function throwable(): Throwable

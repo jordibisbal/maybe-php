@@ -15,15 +15,16 @@ class Reason
     /** @var Optional<mixed> */
     private $subject;
 
-    public function __construct(string $reason)
+    final private function __construct(string $reason)
     {
         $this->subject = None::create();
         $this->reason = $reason;
     }
 
-    public static function fromString(string $reason): Reason
+    /** @return static */
+    public static function fromString(string $reason): self
     {
-        return new self($reason);
+        return new static($reason);
     }
 
     /**
@@ -32,7 +33,7 @@ class Reason
      */
     public static function fromFormatted(string $format, ...$values): Reason
     {
-        return self::fromString(sprintf($format, ...$values));
+        return static::fromString(sprintf($format, ...$values));
     }
 
     /**
