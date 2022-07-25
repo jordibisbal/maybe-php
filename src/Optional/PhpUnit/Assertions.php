@@ -16,7 +16,7 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertNotInstanceOf;
 
-if (!function_exists('j45l\maybe\Optional\assertNone')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertNone')) {
     /** @param mixed $actual */
     function assertNone($actual): void
     {
@@ -24,7 +24,7 @@ if (!function_exists('j45l\maybe\Optional\assertNone')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertFailure')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertFailure')) {
     /** @param mixed $actual */
     function assertFailure($actual): void
     {
@@ -32,7 +32,7 @@ if (!function_exists('j45l\maybe\Optional\assertFailure')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertSome')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertSome')) {
     /** @param mixed $actual */
     function assertSome($actual): void
     {
@@ -40,7 +40,7 @@ if (!function_exists('j45l\maybe\Optional\assertSome')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertSomeEquals')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertSomeEquals')) {
     /**
      * @param mixed $actual
      * @param mixed $expected
@@ -52,7 +52,7 @@ if (!function_exists('j45l\maybe\Optional\assertSomeEquals')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertSuccess')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertSuccess')) {
     /** @param mixed $actual */
     function assertSuccess($actual): void
     {
@@ -60,7 +60,7 @@ if (!function_exists('j45l\maybe\Optional\assertSuccess')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertNotSuccess')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertNotSuccess')) {
     /** @param mixed $actual */
     function assertNotSuccess($actual): void
     {
@@ -68,7 +68,7 @@ if (!function_exists('j45l\maybe\Optional\assertNotSuccess')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertNotFailure')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertNotFailure')) {
     /** @param mixed $actual */
     function assertNotFailure($actual): void
     {
@@ -76,7 +76,7 @@ if (!function_exists('j45l\maybe\Optional\assertNotFailure')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertJustSuccess')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertJustSuccess')) {
     /** @param mixed $actual */
     function assertJustSuccess($actual): void
     {
@@ -84,7 +84,7 @@ if (!function_exists('j45l\maybe\Optional\assertJustSuccess')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertFailureReasonString')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertFailureReasonString')) {
     /**
      * @param mixed $actual
      */
@@ -95,7 +95,7 @@ if (!function_exists('j45l\maybe\Optional\assertFailureReasonString')) {
     }
 }
 
-if (!function_exists('j45l\maybe\Optional\assertFailureReasonThrowable')) {
+if (!function_exists('j45l\maybe\Optional\Phpunit\assertFailureReasonThrowable')) {
     /**
      * @param class-string $expected
      * @param mixed $actual
