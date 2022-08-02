@@ -10,17 +10,15 @@ use j45l\maybe\Either\Success;
 use j45l\maybe\Either\ThrowableReason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
+use PHPUnit\Framework\Assert;
 
 use function function_exists;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertNotInstanceOf;
 
 if (!function_exists('j45l\maybe\Optional\Phpunit\assertNone')) {
     /** @param mixed $actual */
     function assertNone($actual): void
     {
-        assertInstanceOf(None::class, $actual);
+        Assert::assertInstanceOf(None::class, $actual);
     }
 }
 
@@ -28,7 +26,7 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertFailure')) {
     /** @param mixed $actual */
     function assertFailure($actual): void
     {
-        assertInstanceOf(Failure::class, $actual);
+        Assert::assertInstanceOf(Failure::class, $actual);
     }
 }
 
@@ -36,7 +34,7 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertSome')) {
     /** @param mixed $actual */
     function assertSome($actual): void
     {
-        assertInstanceOf(Some::class, $actual);
+        Assert::assertInstanceOf(Some::class, $actual);
     }
 }
 
@@ -47,8 +45,8 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertSomeEquals')) {
      */
     function assertSomeEquals($expected, $actual): void
     {
-        assertInstanceOf(Some::class, $actual);
-        assertEquals($expected, $actual->get());
+        Assert::assertInstanceOf(Some::class, $actual);
+        Assert::assertEquals($expected, $actual->get());
     }
 }
 
@@ -56,7 +54,7 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertSuccess')) {
     /** @param mixed $actual */
     function assertSuccess($actual): void
     {
-        assertInstanceOf(Success::class, $actual);
+        Assert::assertInstanceOf(Success::class, $actual);
     }
 }
 
@@ -64,7 +62,7 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertNotSuccess')) {
     /** @param mixed $actual */
     function assertNotSuccess($actual): void
     {
-        assertNotInstanceOf(Success::class, $actual);
+        Assert::assertNotInstanceOf(Success::class, $actual);
     }
 }
 
@@ -72,7 +70,7 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertNotFailure')) {
     /** @param mixed $actual */
     function assertNotFailure($actual): void
     {
-        assertNotInstanceOf(Failure::class, $actual);
+        Assert::assertNotInstanceOf(Failure::class, $actual);
     }
 }
 
@@ -80,7 +78,7 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertJustSuccess')) {
     /** @param mixed $actual */
     function assertJustSuccess($actual): void
     {
-        assertInstanceOf(JustSuccess::class, $actual);
+        Assert::assertInstanceOf(JustSuccess::class, $actual);
     }
 }
 
@@ -90,8 +88,8 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertFailureReasonString')) {
      */
     function assertFailureReasonString(string $expected, $actual): void
     {
-        assertInstanceOf(Failure::class, $actual);
-        assertEquals($expected, $actual->reason()->toString());
+        Assert::assertInstanceOf(Failure::class, $actual);
+        Assert::assertEquals($expected, $actual->reason()->toString());
     }
 }
 
@@ -102,8 +100,9 @@ if (!function_exists('j45l\maybe\Optional\Phpunit\assertFailureReasonThrowable')
      */
     function assertFailureReasonThrowable(string $expected, $actual): void
     {
-        assertInstanceOf(Failure::class, $actual);
-        assertInstanceOf(ThrowableReason::class, $actual->reason());
-        assertInstanceOf($expected, $actual->reason()->throwable());
+        Assert::assertInstanceOf(Failure::class, $actual);
+        Assert::assertInstanceOf(ThrowableReason::class, $actual->reason());
+        /** @noinspection UnnecessaryAssertionInspection */
+        Assert::assertInstanceOf($expected, $actual->reason()->throwable());
     }
 }

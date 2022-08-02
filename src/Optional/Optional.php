@@ -133,6 +133,14 @@ abstract class Optional implements Functor
     /** @return Optional<T> */
     abstract public function orFail(string $message, Throwable $throwable = null): Optional;
 
+    /**
+     * @return Optional<T>
+     */
+    public function anyway(callable $function): Optional
+    {
+        return self::do($function, $this);
+    }
+
     /** @return Either<T> */
     public function toEither(): Either
     {
