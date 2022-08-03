@@ -6,15 +6,14 @@ namespace j45l\maybe\Test\Unit\Optional;
 
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
-use j45l\maybe\Either\Reason;
-use j45l\maybe\Either\ThrowableReason;
-use j45l\maybe\Optional\Optionals;
+use j45l\maybe\Either\Reasons\FailureReason;
+use j45l\maybe\Either\Reasons\ThrowableReason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
+use j45l\maybe\Optional\Optionals;
 use j45l\maybe\Test\Unit\Optional\Fixtures\OptionalsFixtures;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-
 use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertSuccess;
 use function j45l\maybe\Optional\safeAll;
@@ -61,7 +60,7 @@ final class OptionalsTest extends TestCase
     {
         $this->assertEquals(
             [
-                'failure' => Failure::because(Reason::fromString('Failure')),
+                'failure' => Failure::because(FailureReason::fromString('Failure')),
                 'throwable failure' =>
                     Failure::because(
                         ThrowableReason::fromThrowable(
@@ -124,33 +123,33 @@ final class OptionalsTest extends TestCase
 
     public function testNewFailureCanBeAdded(): void
     {
-        $optionals = Optionals::create([Failure::because(Reason::fromString('Failure'))]);
-        $mergedOptionals = $optionals->mergeFailures(Failure::because(Reason::fromString('Another Failure')));
+        $optionals = Optionals::create([Failure::because(FailureReason::fromString('Failure'))]);
+        $mergedOptionals = $optionals->mergeFailures(Failure::because(FailureReason::fromString('Another Failure')));
 
         $this->assertCount(1, $optionals);
         $this->assertCount(2, $mergedOptionals);
-        $this->assertEquals($mergedOptionals->head(), Failure::because(Reason::fromString('Failure')));
+        $this->assertEquals($mergedOptionals->head(), Failure::because(FailureReason::fromString('Failure')));
         $this->assertEquals(
             $mergedOptionals->tail()->head(),
-            Failure::because(Reason::fromString('Another Failure'))
+            Failure::because(FailureReason::fromString('Another Failure'))
         );
     }
 
     public function testNewAddingFailuresOtherAreNotAdded(): void
     {
-        $optionals = Optionals::create([Failure::because(Reason::fromString('Failure'))]);
+        $optionals = Optionals::create([Failure::because(FailureReason::fromString('Failure'))]);
         $mergedOptionals = $optionals->mergeFailures(
             None::create(),
             Some::from(42),
-            Failure::because(Reason::fromString('Another Failure'))
+            Failure::because(FailureReason::fromString('Another Failure'))
         );
 
         $this->assertCount(1, $optionals);
         $this->assertCount(2, $mergedOptionals);
-        $this->assertEquals($mergedOptionals->head(), Failure::because(Reason::fromString('Failure')));
+        $this->assertEquals($mergedOptionals->head(), Failure::because(FailureReason::fromString('Failure')));
         $this->assertEquals(
             $mergedOptionals->tail()->head(),
-            Failure::because(Reason::fromString('Another Failure'))
+            Failure::because(FailureReason::fromString('Another Failure'))
         );
     }
 

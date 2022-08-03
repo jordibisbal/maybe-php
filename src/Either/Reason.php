@@ -1,78 +1,13 @@
 <?php
-
 declare(strict_types=1);
 
 namespace j45l\maybe\Either;
 
-use j45l\maybe\Maybe\None;
-use j45l\maybe\Optional\Optional;
+use j45l\maybe\Either\Reasons\FailureReason;
 
-class Reason
+interface Reason
 {
-    /** @var string */
-    private $reason;
+    public function toString(): string;
 
-    /** @var Optional<mixed> */
-    private $subject;
-
-    final private function __construct(string $reason)
-    {
-        $this->subject = None::create();
-        $this->reason = $reason;
-    }
-
-    /** @return static */
-    public static function fromString(string $reason): self
-    {
-        return new static($reason);
-    }
-
-    /**
-     * @param string $format Sprintf format
-     * @param mixed ...$values
-     */
-    public static function fromFormatted(string $format, ...$values): Reason
-    {
-        return static::fromString(sprintf($format, ...$values));
-    }
-
-    /**
-     * @param string $format Sprintf format
-     * @param mixed ...$values
-     */
-    public function withFormatted(string $format, ...$values): Reason
-    {
-        $self = clone $this;
-        $self->reason = sprintf($format, ...$values);
-
-        return $self;
-    }
-
-    public function toString(): string
-    {
-        return $this->reason;
-    }
-
-    /**
-     * @param Optional<mixed> $subject
-     * @return static
-     */
-    public function withSubject(Optional $subject): self
-    {
-        $new = clone $this;
-        $new->subject = $subject;
-
-        return $new;
-    }
-
-    /** @return Optional<mixed> */
-    public function subject(): Optional
-    {
-        return $this->subject;
-    }
-
-    public function __toString(): string
-    {
-        return $this->toString();
-    }
+    public function __toString(): string;
 }

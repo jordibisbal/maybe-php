@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Either;
 
+use j45l\maybe\Either\Reasons\FailureReason;
+use j45l\maybe\Either\Reasons\ThrowableReason;
 use j45l\maybe\Optional\Left;
 use j45l\maybe\Optional\NonValued;
 use j45l\maybe\Optional\Optional;
@@ -36,7 +38,7 @@ final class Failure extends Either
     /** @return Failure<T> */
     public static function create(): Failure
     {
-        return new self(Reason::fromString('Unspecified reason'));
+        return new self(FailureReason::fromString('Unspecified reason'));
     }
 
     /** @return Failure<T> */

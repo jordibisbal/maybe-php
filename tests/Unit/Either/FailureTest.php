@@ -6,7 +6,7 @@ namespace j45l\maybe\Test\Unit\Either;
 
 use Closure;
 use j45l\maybe\Either\Failure;
-use j45l\maybe\Either\Reason;
+use j45l\maybe\Either\Reasons\FailureReason;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 
@@ -15,14 +15,14 @@ final class FailureTest extends TestCase
 {
     public function testCanBeCreatedFromFailure(): void
     {
-        $failure = Failure::because(Reason::fromString('reason'));
+        $failure = Failure::because(FailureReason::fromString('reason'));
 
         self::assertEquals('reason', $failure->reason()->toString());
     }
 
     public function testFailureIsRecoverableInSink(): void
     {
-        $failure = Failure::because(Reason::fromString('reason'));
+        $failure = Failure::because(FailureReason::fromString('reason'));
         $recover = function () {
             return Some::from(42);
         };

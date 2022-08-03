@@ -6,14 +6,13 @@ namespace j45l\maybe\Test\Unit\Optional\PhpUnit;
 
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
-use j45l\maybe\Either\Reason;
-use j45l\maybe\Either\ThrowableReason;
+use j45l\maybe\Either\Reasons\FailureReason;
+use j45l\maybe\Either\Reasons\ThrowableReason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowable;
@@ -142,7 +141,7 @@ final class AssertionsTest extends TestCase
 
     public function testAssertFailureReasonStringIs(): void
     {
-        assertFailureReasonString('Failure reason', Failure::because(Reason::fromString('Failure reason')));
+        assertFailureReasonString('Failure reason', Failure::because(FailureReason::fromString('Failure reason')));
     }
 
     public function testAssertFailureReasonStringIsNo(): void
@@ -171,7 +170,7 @@ final class AssertionsTest extends TestCase
 
         assertFailureReasonThrowable(
             RuntimeException::class,
-            Failure::because(Reason::fromString('Reason'))
+            Failure::because(FailureReason::fromString('Reason'))
         );
     }
 }

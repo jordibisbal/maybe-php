@@ -6,10 +6,9 @@ namespace j45l\maybe\Optional;
 
 use Countable;
 use j45l\maybe\Either\Failure;
-use j45l\maybe\Either\Reason;
+use j45l\maybe\Either\Reasons\FailureReason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
-
 use function Functional\first;
 use function Functional\map;
 use function Functional\select;
@@ -163,7 +162,7 @@ final class Optionals implements Countable
             case $this->failures()->empty():
                 return Some::from($this);
             default:
-                return Failure::because(Reason::fromString('Some not Succeed')->withSubject(Some::from($this)));
+                return Failure::because(FailureReason::fromString('Some not Succeed')->withSubject(Some::from($this)));
         }
     }
 }

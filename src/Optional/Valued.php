@@ -6,8 +6,7 @@ namespace j45l\maybe\Optional;
 
 use j45l\functional\Functor;
 use j45l\maybe\Either\Failure;
-use j45l\maybe\Either\Reason;
-
+use j45l\maybe\Either\Reasons\FailureReason;
 use function is_callable as isCallable;
 use function j45l\functional\take;
 use function j45l\maybe\Optional\safe as safeWrap;
@@ -93,7 +92,7 @@ trait Valued
             default:
                 return $condition
                     ? $this :
-                    Failure::because(Reason::fromString($message ?? 'failed assertion')->withSubject($this));
+                    Failure::because(FailureReason::fromString($message ?? 'failed assertion')->withSubject($this));
         }
     }
 }

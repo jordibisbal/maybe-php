@@ -8,13 +8,12 @@ use j45l\functional\Functor;
 use j45l\maybe\Either\Either;
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\JustSuccess;
-use j45l\maybe\Either\Reason;
+use j45l\maybe\Either\Reasons\FailureReason;
+use j45l\maybe\Either\Reasons\ThrowableReason;
 use j45l\maybe\Either\Success;
-use j45l\maybe\Either\ThrowableReason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use Throwable;
-
 use function get_class as getClass;
 use function is_callable as isCallable;
 use function is_null as isNull;
@@ -109,7 +108,7 @@ abstract class Optional implements Functor
      */
     public function assert($condition, string $message = null): Optional
     {
-        return Failure::because(Reason::fromString($message ?? 'failed assertion')->withSubject($this));
+        return Failure::because(FailureReason::fromString($message ?? 'failed assertion')->withSubject($this));
     }
 
     //endregion
@@ -148,7 +147,7 @@ abstract class Optional implements Functor
             case $this instanceof Success:
                 return JustSuccess::create();
             default:
-                return Failure::because(Reason::fromString(sprintf('From %s', getClass($this)))->withSubject($this));
+                return Failure::because(FailureReason::fromString(sprintf('From %s', getClass($this)))->withSubject($this));
         }
     }
 
