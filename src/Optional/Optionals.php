@@ -9,6 +9,7 @@ use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\Reasons\FailureReason;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
+
 use function Functional\first;
 use function Functional\map;
 use function Functional\select;

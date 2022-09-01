@@ -14,6 +14,7 @@ use j45l\maybe\Optional\Optionals;
 use j45l\maybe\Test\Unit\Optional\Fixtures\OptionalsFixtures;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
 use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertSuccess;
 use function j45l\maybe\Optional\safeAll;
@@ -191,6 +192,8 @@ final class OptionalsTest extends TestCase
         $failure = $all->assertAllSucceed();
 
         self::assertInstanceOf(Failure::class, $failure);
-        self::assertSame($all, $failure->reason()->subject()->getOrElse(null));
+        $reason = $failure->reason();
+        self::assertInstanceOf(FailureReason::class, $reason);
+        self::assertSame($all, $reason->subject()->getOrElse(null));
     }
 }

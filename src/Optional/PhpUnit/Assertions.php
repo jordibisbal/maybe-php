@@ -11,6 +11,7 @@ use j45l\maybe\Either\Success;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\Assert;
+
 use function function_exists;
 
 if (!function_exists('j45l\maybe\Optional\Phpunit\assertNone')) {

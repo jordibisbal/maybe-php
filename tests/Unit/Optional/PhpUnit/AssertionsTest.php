@@ -13,6 +13,7 @@ use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowable;

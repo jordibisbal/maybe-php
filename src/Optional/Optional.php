@@ -14,6 +14,7 @@ use j45l\maybe\Either\Success;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use Throwable;
+
 use function get_class as getClass;
 use function is_callable as isCallable;
 use function is_null as isNull;
@@ -147,7 +148,9 @@ abstract class Optional implements Functor
             case $this instanceof Success:
                 return JustSuccess::create();
             default:
-                return Failure::because(FailureReason::fromString(sprintf('From %s', getClass($this)))->withSubject($this));
+                return Failure::because(
+                    FailureReason::fromString(sprintf('From %s', getClass($this)))->withSubject($this)
+                );
         }
     }
 

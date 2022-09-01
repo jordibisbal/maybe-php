@@ -7,6 +7,7 @@ namespace j45l\maybe\Test\Unit\Either\Reasons;
 use j45l\maybe\Either\Reasons\FailureReason;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
+
 use function j45l\maybe\Optional\PhpUnit\assertNone;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotSame;

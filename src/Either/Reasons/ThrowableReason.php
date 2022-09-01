@@ -34,7 +34,10 @@ final class ThrowableReason implements Reason
         return $this->throwable;
     }
 
-    /** @return self */
+    /**
+     * @param mixed $values
+     * @return ThrowableReason
+     */
     public static function fromFormatted(string $format, ...$values): ThrowableReason
     {
         return self::fromString(sprintf($format, ...$values));

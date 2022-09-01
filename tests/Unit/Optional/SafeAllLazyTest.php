@@ -9,6 +9,7 @@ use j45l\maybe\Maybe\Some;
 use j45l\maybe\Optional\Optionals;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
 use function j45l\maybe\Optional\safeAllLazy;
 
 /** @covers ::j45l\maybe\Optional\safeAllLazy */

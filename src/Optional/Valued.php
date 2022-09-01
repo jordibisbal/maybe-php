@@ -7,6 +7,7 @@ namespace j45l\maybe\Optional;
 use j45l\functional\Functor;
 use j45l\maybe\Either\Failure;
 use j45l\maybe\Either\Reasons\FailureReason;
+
 use function is_callable as isCallable;
 use function j45l\functional\take;
 use function j45l\maybe\Optional\safe as safeWrap;
@@ -68,7 +69,7 @@ trait Valued
     /**
      * @template R
      * @param callable(T):R $function
-     * @return Optional<R>
+     * @return Optional<mixed>
      */
     public function map(callable $function): Functor
     {
