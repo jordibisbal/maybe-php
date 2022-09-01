@@ -69,7 +69,7 @@ trait Valued
     /**
      * @template R
      * @param callable(T):R $function
-     * @return Optional<mixed>
+     * @return Optional<R>
      */
     public function map(callable $function): Functor
     {
@@ -92,8 +92,8 @@ trait Valued
                 );
             default:
                 return $condition
-                    ? $this :
-                    Failure::because(FailureReason::fromString($message ?? 'failed assertion')->withSubject($this));
+                    ? $this
+                    : Failure::because(FailureReason::fromString($message ?? 'failed assertion')->withSubject($this));
         }
     }
 }
