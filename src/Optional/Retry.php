@@ -7,6 +7,7 @@ namespace j45l\maybe\Optional;
 use j45l\functional\Sequences\Sequence;
 use j45l\maybe\Either\Failure;
 
+use function Functional\partial_right;
 use function j45l\functional\delay;
 
 /**
@@ -17,7 +18,7 @@ use function j45l\functional\delay;
  */
 function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn = null): Optional
 {
-    $retry = static function ($maybe, Sequence $delaySequence, $triesLeft) use ($callable, $delayFn, &$retry) {
+    $retry = static function ($maybe, Sequence $delaySequence, $triesLeft) use ($callable, $delayFn, &$retry, $tries) {
         switch (/** @infection-ignore-all */ true) {
             case (!$maybe instanceof Failure) || ($triesLeft < 1):
                 return $maybe;
@@ -25,8 +26,11 @@ function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn
                 return $retry(
                     delay(
                         $delaySequence->value(),
-                        function () use ($maybe, $callable) {
-                            return $maybe->orElse($callable);
+                        function () use ($maybe, $callable, $tries, $triesLeft) {
+                            /** @var int $triesLeft */
+                            return $maybe->orElse(
+                                partial_right($callable, [$tries - $triesLeft, $triesLeft === 0])
+                            );
                         },
                         $delayFn
                     ),
