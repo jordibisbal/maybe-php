@@ -18,10 +18,11 @@ class RetryTest extends TestCase
     public function testTriesAsManyTimesAsAskedFor(): void
     {
         $tries = 0;
+        $calls = [];
         $delaySequence = [];
 
         $failure = retry(
-            $this->alwaysFailing($tries),
+            $this->alwaysFailing($tries, $calls),
             3,
             ExponentialSequence::create(2, 5),
             $this->delay($delaySequence)
@@ -31,6 +32,7 @@ class RetryTest extends TestCase
         self::assertEquals('Runtime exception 3', $failure->reason()->toString());
         self::assertEquals(3, $tries);
         self::assertEquals([5.0, 10.0], $delaySequence);
+        self::assertEquals([[1, false],[2, false],[3, true]], $calls);
     }
 
     public function testTriesUntilNone(): void
@@ -68,14 +70,16 @@ class RetryTest extends TestCase
     /** @param array<int> $delaySequence */
     private function delay(array &$delaySequence): Closure
     {
-        return function ($delay) use (&$delaySequence) {
+        return static function ($delay) use (&$delaySequence) {
             $delaySequence[] = $delay;
         };
     }
 
-    private function alwaysFailing(int &$tries): Closure
+    /** @param Array<mixed> $calls */
+    private function alwaysFailing(int &$tries, array &$calls): Closure
     {
-        return function () use (&$tries): void {
+        return static function ($tryNumber, $last) use (&$tries, &$calls): void {
+            $calls[] = [$tryNumber, $last];
             $tries++;
             throw new RuntimeException('Runtime exception ' . $tries);
         };
@@ -83,9 +87,9 @@ class RetryTest extends TestCase
 
     private function failingTwiceThenNone(int &$tries): Closure
     {
-        return function () use (&$tries): void {
+        return static function () use (&$tries): void {
             $tries++;
-            if ($tries == 2) {
+            if ($tries === 2) {
                 return;
             }
             throw new RuntimeException('Runtime exception ' . $tries);
@@ -94,9 +98,9 @@ class RetryTest extends TestCase
 
     private function failingTwiceThenSome(int &$tries): Closure
     {
-        return function () use (&$tries): int {
+        return static function () use (&$tries): int {
             $tries++;
-            if ($tries == 2) {
+            if ($tries === 2) {
                 return 42;
             }
             throw new RuntimeException('Runtime exception ' . $tries);

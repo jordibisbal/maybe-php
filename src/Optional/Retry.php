@@ -7,12 +7,12 @@ namespace j45l\maybe\Optional;
 use j45l\functional\Sequences\Sequence;
 use j45l\maybe\Either\Failure;
 
-use function Functional\partial_right;
+use function Functional\partial_left as partial;
 use function j45l\functional\delay;
 
 /**
  * @template T
- * @param callable():T $callable
+ * @param callable(int, bool):T $callable
  * @phpstan-param  callable(Float $seconds): void $delayFn
  * @return Optional<T>
  */
@@ -28,8 +28,9 @@ function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn
                         $delaySequence->value(),
                         function () use ($maybe, $callable, $tries, $triesLeft) {
                             /** @var int $triesLeft */
+                            /** @noinspection PhpParamsInspection */
                             return $maybe->orElse(
-                                partial_right($callable, [$tries - $triesLeft, $triesLeft === 0])
+                                partial($callable, 1 + $tries - $triesLeft, $triesLeft === 1)
                             );
                         },
                         $delayFn
@@ -40,5 +41,6 @@ function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn
         }
     };
 
-    return $retry(safeLazy($callable)(), $delaySequence, $tries - 1);
+    /** @noinspection PhpParamsInspection */
+    return $retry(safeLazy(partial($callable, 1, $tries === 1))(), $delaySequence, $tries - 1);
 }
