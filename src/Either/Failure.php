@@ -8,7 +8,6 @@ use j45l\maybe\Either\Reasons\FailureReason;
 use j45l\maybe\Either\Reasons\ThrowableReason;
 use j45l\maybe\Optional\Left;
 use j45l\maybe\Optional\NonValued;
-use j45l\maybe\Optional\Optional;
 use RuntimeException;
 
 /**
@@ -28,7 +27,7 @@ final class Failure extends Either
     /**
      * @var Reason
      */
-    private $reason;
+    private Reason $reason;
 
     private function __construct(Reason $reason)
     {
@@ -71,11 +70,5 @@ final class Failure extends Either
             default:
                 $this->nonValuedGetOrRuntimeException($message);
         }
-    }
-
-    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    public function assert($condition, string $message = null): Optional
-    {
-        return $this;
     }
 }

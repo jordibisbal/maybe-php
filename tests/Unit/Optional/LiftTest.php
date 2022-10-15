@@ -12,7 +12,7 @@ use RuntimeException;
 use function j45l\maybe\Optional\lift;
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
-use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowable;
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowableOf;
 use function j45l\maybe\Optional\PhpUnit\assertNone;
 use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 
@@ -53,7 +53,7 @@ class LiftTest extends TestCase
         });
         $maybe = $lifted(40, 2);
 
-        assertFailureReasonThrowable(RuntimeException::class, $maybe);
+        assertFailureReasonThrowableOf(RuntimeException::class, $maybe);
         assertFailureReasonString('An exception', $maybe);
     }
 

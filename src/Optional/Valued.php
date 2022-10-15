@@ -5,34 +5,29 @@ declare(strict_types=1);
 namespace j45l\maybe\Optional;
 
 use j45l\functional\Functor;
-use j45l\maybe\Either\Failure;
-use j45l\maybe\Either\Reasons\FailureReason;
 
-use function is_callable as isCallable;
 use function j45l\functional\take;
-use function j45l\maybe\Optional\safe as safeWrap;
 
 /**
  * @template T
  */
 trait Valued
 {
-    /** @var mixed */
-    private $value;
+    /** @var T */
+    private mixed $value;
 
     /** @param T $value */
-    private function __construct($value)
+    private function __construct(mixed $value)
     {
         $this->value = $value;
     }
 
     /**
      * @param T $value
-     * @return static<T>
-     * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection ReturnTypeCanBeDeclaredInspection
+     * @return self<T>
+     * @noinspection PhpDocSignatureInspection
      */
-    public static function from($value)
+    public static function from(mixed $value): self
     {
         return new self($value);
     }
@@ -47,7 +42,7 @@ trait Valued
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return mixed
      */
-    public function getOrElse($defaultValue)
+    public function getOrElse($defaultValue): mixed
     {
         return $this->get();
     }
@@ -61,7 +56,13 @@ trait Valued
         return $this->get();
     }
 
-    public function takeOrElse($propertyName, $defaultValue)
+    /**
+     * @template D
+     * @param D $defaultValue
+     * @param string|int|array<string|int> $propertyName
+     * @return mixed|D
+     */
+    public function takeOrElse($propertyName, $defaultValue): mixed
     {
         return take($this->get(), $propertyName, $defaultValue);
     }
@@ -73,27 +74,6 @@ trait Valued
      */
     public function map(callable $function): Functor
     {
-        return static::do($function, $this->get());
-    }
-
-    /**
-     * @param bool|callable(mixed):bool $condition
-     * @return Optional<T>
-     */
-    public function assert($condition, string $message = null): Optional
-    {
-        switch (/** @infection-ignore-all */ true) {
-            case isCallable($condition):
-                return $this->assert(
-                    safeWrap(function () use ($condition) {
-                        return $condition($this);
-                    })->getOrElse(false),
-                    $message
-                );
-            default:
-                return $condition
-                    ? $this
-                    : Failure::because(FailureReason::fromString($message ?? 'failed assertion')->withSubject($this));
-        }
+        return static::try($function, $this->get());
     }
 }

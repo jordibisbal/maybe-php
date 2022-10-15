@@ -27,7 +27,7 @@ function lift(callable $callable): Closure
 
         $liftParameters = static function ($parameters) {
             return map($parameters, function ($parameter) {
-                return Optional::wrap($parameter);
+                return Optional::try(static fn () => $parameter);
             });
         };
 
@@ -38,15 +38,11 @@ function lift(callable $callable): Closure
         };
 
         $buildLifted = static function ($callable, ...$parameters) use ($isNone, $isFailure, $sinkParameters) {
-            switch (/** @infection-ignore-all */ true) {
-                case some($parameters, $isFailure):
-                    return first($parameters, $isFailure);
-                case some($parameters, $isNone):
-                    return None::create();
-                default:
-                    return Optional::do(partial_left($callable, ...($sinkParameters($parameters))))
-                ;
-            }
+            return match (true) {
+                some($parameters, $isFailure) => first($parameters, $isFailure),
+                some($parameters, $isNone) => None::create(),
+                default => Optional::try(partial_left($callable, ...($sinkParameters($parameters))))
+            };
         };
 
         return $buildLifted($callable, ...$liftParameters($parameters));

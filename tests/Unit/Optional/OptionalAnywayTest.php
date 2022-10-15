@@ -23,7 +23,7 @@ final class OptionalAnywayTest extends TestCase
     public function testSomeReturnsLastValue(): void
     {
         $optional = Some::from(0)
-            ->anyway(function (): Optional {
+            ->always(function (): Optional {
                 return Some::from(42);
             })
         ;
@@ -34,7 +34,7 @@ final class OptionalAnywayTest extends TestCase
     public function testSucceedReturnsLastValue(): void
     {
         $optional = JustSuccess::create()
-            ->anyway(function (): Optional {
+            ->always(function (): Optional {
                 return Some::from(42);
             })
         ;
@@ -45,7 +45,7 @@ final class OptionalAnywayTest extends TestCase
     public function testNoneReturnsLastValue(): void
     {
         $optional = None::create()
-            ->anyway(function (): Optional {
+            ->always(function (): Optional {
                 return Some::from(42);
             })
         ;
@@ -56,7 +56,7 @@ final class OptionalAnywayTest extends TestCase
     public function testFailureReturnsLastValue(): void
     {
         $optional = Failure::create()
-            ->anyway(function (): Optional {
+            ->always(function (): Optional {
                 return Some::from(42);
             })
         ;

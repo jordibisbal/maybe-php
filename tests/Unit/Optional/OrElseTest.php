@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
-use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowable;
+use function j45l\maybe\Optional\PhpUnit\assertFailureReasonThrowableOf;
 use function j45l\maybe\Optional\PhpUnit\assertNone;
 use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 
@@ -92,7 +92,7 @@ final class OrElseTest extends TestCase
         assertFailure($maybe);
         assertFailure($captured);
 
-        assertFailureReasonThrowable(RuntimeException::class, $captured);
+        assertFailureReasonThrowableOf(RuntimeException::class, $captured);
     }
 
     public function testSinkCanReturnNone(): void

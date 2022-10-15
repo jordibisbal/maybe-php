@@ -19,11 +19,11 @@ use function j45l\maybe\Optional\PhpUnit\assertSuccess;
  * @covers \j45l\maybe\Optional\Optional
  * @covers \j45l\maybe\Maybe\Maybe
  */
-class DoTest extends TestCase
+class TryTest extends TestCase
 {
     public function testValueReturningCallableResultsInASuccess(): void
     {
-        $success = Either::do(static function (): int {
+        $success = Either::try(static function (): int {
             return 42;
         });
 
@@ -32,7 +32,7 @@ class DoTest extends TestCase
 
     public function testThrowingCallableResultInAFailure(): void
     {
-        $failure = Either::do(static function (): void {
+        $failure = Either::try(static function (): void {
             throw new RuntimeException('Runtime exception');
         });
 
@@ -41,7 +41,7 @@ class DoTest extends TestCase
 
     public function testNoneReturningCallableResultsSomeIsSuccess(): void
     {
-        $some = Either::do(static function (): Some {
+        $some = Either::try(static function (): Some {
             return Some::from(42);
         });
 
@@ -51,7 +51,7 @@ class DoTest extends TestCase
 
     public function testNoneReturningCallableResultsNoneIsNotASuccess(): void
     {
-        $none = Either::do(static function (): None {
+        $none = Either::try(static function (): None {
             return None::create();
         });
 
@@ -61,7 +61,7 @@ class DoTest extends TestCase
 
     public function testNoneReturningCallableResultsNullIsNotASuccess(): void
     {
-        $none = Either::do(static function () {
+        $none = Either::try(static function () {
             return null;
         });
 

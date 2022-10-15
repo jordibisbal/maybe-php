@@ -17,9 +17,10 @@ trait NonValued
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @template D
+     * @return D
      */
-    public function getOrElse($defaultValue)
+    public function getOrElse(mixed $defaultValue): mixed
     {
         return $defaultValue;
     }
@@ -33,9 +34,13 @@ trait NonValued
     }
 
     /**
+     * @template D
+     * @param D $defaultValue
+     * @param string|int|array<string|int> $propertyName
+     * @return mixed|D
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function takeOrElse($propertyName, $defaultValue)
+    public function takeOrElse(string|int|array $propertyName, mixed $defaultValue): mixed
     {
         return $defaultValue;
     }

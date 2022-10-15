@@ -26,7 +26,7 @@ trait Left
      */
     public function orElse(callable $value): Optional
     {
-        return self::do($value, $this);
+        return self::try($value, $this);
     }
 
     /**

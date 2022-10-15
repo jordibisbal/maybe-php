@@ -23,7 +23,7 @@ trait Right
      */
     public function andThen(callable $value): Optional
     {
-        return self::do($value, $this);
+        return self::try($value, $this);
     }
 
     /**

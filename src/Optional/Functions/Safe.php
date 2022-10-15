@@ -12,5 +12,5 @@ namespace j45l\maybe\Optional;
  */
 function safe(callable $function, ...$parameters): Optional
 {
-    return Optional::do($function, ...$parameters);
+    return Optional::try($function, ...$parameters);
 }

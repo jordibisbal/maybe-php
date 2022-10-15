@@ -13,6 +13,7 @@ use j45l\maybe\Either\Reasons\ThrowableReason;
 use j45l\maybe\Either\Success;
 use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
+use RuntimeException;
 use Throwable;
 
 use function get_class as getClass;
@@ -21,51 +22,44 @@ use function is_null as isNull;
 
 /**
  * @template T
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Optional implements Functor
 {
-    /** @use OptionalOn<T> */
-    use OptionalOn;
-
     /**
-     * @SuppressWarnings(PHPMD.ShortMethodName)
      * @template C
      * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C) $function
      * @param mixed $parameters
      * @return Optional<C>
      */
-    public static function do(callable $function, ...$parameters): self
+    public static function try(callable $function, ...$parameters): self
     {
         return self::wrap($function, ...$parameters);
     }
 
     /**
-     * @SuppressWarnings(PHPMD.ShortMethodName)
      * @template C
      * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C)|C $value
      * @param mixed $parameters
      * @return Optional<C>|None|Some<C>
      */
-    public static function wrap($value, ...$parameters): self
+    private static function wrap(mixed $value, ...$parameters): self|None|Some
     {
-        switch (/** @infection-ignore-all */ true) {
-            case isCallable($value):
-                return self::callableDo($value, ...$parameters);
-            case $value instanceof self:
-                return $value;
-            case isNull($value):
-                return None::create();
-            default:
-                return Some::from($value);
-        }
+        return match (/** @infection-ignore-all */ true) {
+            isCallable($value) => self::tryTo($value, ...$parameters),
+            $value instanceof self => $value,
+            isNull($value) => None::create(),
+            default => Some::from($value)
+        };
     }
 
     /**
-     * @param callable $value
+     * @template C
+     * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C) $value
      * @param mixed[] $params
-     * @return Optional<mixed>
+     * @return Optional<C>
      */
-    private static function callableDo(callable $value, ...$params): Optional
+    private static function tryTo(callable $value, ...$params): Optional
     {
         try {
             return self::wrap($value(...$params));
@@ -84,33 +78,26 @@ abstract class Optional implements Functor
     abstract public function map(callable $function): Functor;
 
     /**
-     * @param mixed $defaultValue
-     * @return mixed
+     * @template D
+     * @param D $defaultValue
+     * @return T|D
      */
-    abstract public function getOrElse($defaultValue);
+    abstract public function getOrElse(mixed $defaultValue): mixed;
 
     /**
      * @param string $message
      * @return T
+     * @throws RuntimeException
      */
     abstract public function getOrFail(string $message = '');
 
     /**
-     * @param mixed $defaultValue
+     * @template D
+     * @param D $defaultValue
      * @param string|int|array<string|int> $propertyName
-     * @return mixed
+     * @return mixed|D
      */
-    abstract public function takeOrElse($propertyName, $defaultValue);
-
-    /**
-     * @param bool|callable(Optional<T>):bool $condition
-     * @return Optional<T>
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function assert($condition, string $message = null): Optional
-    {
-        return Failure::because(FailureReason::fromString($message ?? 'failed assertion')->withSubject($this));
-    }
+    abstract public function takeOrElse(string|int|array $propertyName, mixed $defaultValue): mixed;
 
     //endregion
 
@@ -136,22 +123,20 @@ abstract class Optional implements Functor
     /**
      * @return Optional<T>
      */
-    public function anyway(callable $function): Optional
+    public function always(callable $function): Optional
     {
-        return self::do($function, $this);
+        return self::try($function, $this);
     }
 
     /** @return Either<T> */
     public function toEither(): Either
     {
-        switch (/** @infection-ignore-all */ true) {
-            case $this instanceof Success:
-                return JustSuccess::create();
-            default:
-                return Failure::because(
-                    FailureReason::fromString(sprintf('From %s', getClass($this)))->withSubject($this)
-                );
-        }
+        return match (/** @infection-ignore-all */ true) {
+            $this instanceof Success => JustSuccess::create(),
+            default => Failure::because(
+                FailureReason::fromString(sprintf('From %s', getClass($this)))->withSubject($this)
+            )
+        };
     }
 
     //endregion

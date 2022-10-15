@@ -15,12 +15,23 @@ use function j45l\functional\delay;
  * @param callable(int, bool):T $callable
  * @phpstan-param  callable(Float $seconds): void $delayFn
  * @return Optional<T>
+ * @noinspection PhpParamsInspection
  */
 function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn = null): Optional
 {
-    $retry = static function ($maybe, Sequence $delaySequence, $triesLeft) use ($callable, $delayFn, &$retry, $tries) {
-        switch (/** @infection-ignore-all */ true) {
-            case (!$maybe instanceof Failure) || ($triesLeft < 1):
+    $retry = static function (
+        Optional $maybe,
+        Sequence $delaySequence,
+        $triesLeft
+    ) use (
+        $callable,
+        $delayFn,
+        &$retry,
+        $tries
+    ) {
+        /** @noinspection PhpSwitchCanBeReplacedWithMatchExpressionInspection */
+        switch (true) {
+            case !($maybe instanceof Failure) || ($triesLeft < 1):
                 return $maybe;
             default:
                 return $retry(
@@ -41,6 +52,5 @@ function retry(callable $callable, int $tries, Sequence $delaySequence, $delayFn
         }
     };
 
-    /** @noinspection PhpParamsInspection */
-    return $retry(safeLazy(partial($callable, 1, $tries === 1))(), $delaySequence, $tries - 1);
+    return $retry(safe(fn () => partial($callable, 1, $tries === 1)), $delaySequence, $tries - 1);
 }

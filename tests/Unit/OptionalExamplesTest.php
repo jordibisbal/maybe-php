@@ -37,7 +37,7 @@ class OptionalExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
 
         $upsert =
-            Optional::do(apply($this->insertCustomer($entityManager), $customer))
+            Optional::try(apply($this->insertCustomer($entityManager), $customer))
             ->orElse(apply($this->updateCustomer($entityManager), $customer))
         ;
 
@@ -71,7 +71,7 @@ class OptionalExamplesTest extends TestCase
         $entityManager->insertWillFail = true;
 
         $upsert =
-            Optional::do($this->insertCustomer($entityManager), $customer)
+            Optional::try($this->insertCustomer($entityManager), $customer)
                 ->orElse(apply($this->updateCustomer($entityManager), $customer))
         ;
 
@@ -88,7 +88,7 @@ class OptionalExamplesTest extends TestCase
         $entityManager->updateWillFail = true;
 
         $upsert =
-            Optional::do($this->insertCustomer($entityManager), $customer)
+            Optional::try($this->insertCustomer($entityManager), $customer)
                 ->orElse(apply($this->updateCustomer($entityManager), $customer))
             ;
 
@@ -201,7 +201,7 @@ class OptionalExamplesTest extends TestCase
             throw new RuntimeException('42!');
         };
 
-        $failure = Maybe::do($failure)->andThen($increment);
+        $failure = Maybe::try($failure)->andThen($increment);
 
         assertFailureReasonString('42!', $failure);
         $this->assertFalse($called);

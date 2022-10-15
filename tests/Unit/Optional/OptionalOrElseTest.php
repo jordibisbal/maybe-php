@@ -52,7 +52,7 @@ final class OptionalOrElseTest extends TestCase
             return Some::from(42);
         };
 
-        $maybe = Either::do($fortyTwo)->OrElse(value(None::create()));
+        $maybe = Either::try($fortyTwo)->OrElse(value(None::create()));
 
         assertSomeEquals(42, $maybe);
     }
@@ -99,7 +99,7 @@ final class OptionalOrElseTest extends TestCase
             return None::create();
         };
 
-        $maybe = Either::do($none)->OrElse(value(Some::from(42)));
+        $maybe = Either::try($none)->OrElse(value(Some::from(42)));
 
         assertSomeEquals(42, $maybe);
     }

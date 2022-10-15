@@ -33,20 +33,7 @@
             "j45l\\maybe\\": "src"
         },
         "files": [
-            "src/Optional/Also.php",
-            "src/Optional/Guard.php",
-            "src/Optional/IsFailure.php",
-            "src/Optional/IsNone.php",
-            "src/Optional/IsSome.php",
-            "src/Optional/IsSuccess.php",
-            "src/Optional/IsJustSuccess.php",
-            "src/Optional/Lift.php",
-            "src/Optional/Retry.php",
-            "src/Optional/Safe.php",
-            "src/Optional/SafeLazy.php",
-            "src/Optional/SafeAll.php",
-            "src/Optional/SafeAllLazy.php",
-            "src/Optional/PhpUnit/Assertions.php"
+            "src/Optional/Functions/Functions.php"
         ]
     },
     "autoload-dev": {
