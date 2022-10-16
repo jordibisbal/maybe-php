@@ -15,4 +15,10 @@ include_once(__DIR__ . '/Retry.php');
 include_once(__DIR__ . '/Safe.php');
 include_once(__DIR__ . '/SafeAll.php');
 
+include_once(__DIR__ . '/On/OnFailure.php');
+include_once(__DIR__ . '/On/OnJustSuccess.php');
+include_once(__DIR__ . '/On/OnNone.php');
+include_once(__DIR__ . '/On/OnSome.php');
+include_once(__DIR__ . '/On/OnSuccess.php');
+
 include_once(__DIR__ . '/PhpUnit/Assertions.php');

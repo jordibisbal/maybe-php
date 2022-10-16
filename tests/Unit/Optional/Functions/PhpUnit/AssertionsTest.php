@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace j45l\maybe\Test\Unit\Optional\PhpUnit;
+namespace j45l\maybe\Test\Unit\Optional\Functions\PhpUnit;
 
 use Exception;
 use j45l\maybe\Either\Failure;

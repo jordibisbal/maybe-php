@@ -20,7 +20,7 @@ use Throwable;
  * @covers \j45l\maybe\Either\Failure
  * @covers \j45l\maybe\Either\JustSuccess
  */
-final class OptionalOrRuntimeErrorTest extends TestCase
+final class OptionalGetOrFailTest extends TestCase
 {
     public function testSomeReturnsItsValue(): void
     {

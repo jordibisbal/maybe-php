@@ -1,6 +1,6 @@
 <?php
 
-namespace j45l\maybe\Test\Unit\Optional;
+namespace j45l\maybe\Test\Unit\Optional\Functions;
 
 use Closure;
 use j45l\maybe\Either\Failure;

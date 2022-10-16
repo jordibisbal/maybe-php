@@ -18,7 +18,7 @@ use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
  * @covers \j45l\maybe\Maybe\None
  * @covers \j45l\maybe\Maybe\Some
  */
-final class OptionalAnywayTest extends TestCase
+final class OptionalAlwaysTest extends TestCase
 {
     public function testSomeReturnsLastValue(): void
     {
