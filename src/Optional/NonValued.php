@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Optional;
 
-use j45l\functional\Functor;
 use RuntimeException;
 
 /**
@@ -48,10 +47,9 @@ trait NonValued
     /**
      * @template R
      * @param callable(T):R $function
-     * @return Optional<R>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function map(callable $function): Functor
+    public function map(callable $function): static
     {
         return $this;
     }

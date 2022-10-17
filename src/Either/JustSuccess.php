@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Either;
 
-use j45l\functional\Functor;
 use j45l\maybe\Optional\NonValued;
 use j45l\maybe\Optional\Right;
 
@@ -31,9 +30,10 @@ final class JustSuccess extends Either implements Success
     }
 
     /**
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function map(callable $function): Functor
+    public function map(callable $function): JustSuccess
     {
         return $this;
     }

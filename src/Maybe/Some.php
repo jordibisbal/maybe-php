@@ -8,6 +8,8 @@ use j45l\maybe\Either\Success;
 use j45l\maybe\Optional\Right;
 use j45l\maybe\Optional\Valued;
 
+use function j45l\functional\cloneWith;
+
 /**
  * @template T
  * @extends Maybe<T>
@@ -19,4 +21,14 @@ final class Some extends Maybe implements Success
     use Valued;
     /** @use Right<T> */
     use Right;
+
+    /**
+     * @template R
+     * @param callable(T):R $function
+     * @return Some<R>
+     */
+    public function map(callable $function): Some
+    {
+        return cloneWith($this, fn (self $new) => $new->value = $function($new->get()));
+    }
 }

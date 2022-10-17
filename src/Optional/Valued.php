@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Optional;
 
-use j45l\functional\Functor;
-
 use function j45l\functional\take;
 
 /**
@@ -72,8 +70,9 @@ trait Valued
      * @param callable(T):R $function
      * @return Optional<R>
      */
-    public function map(callable $function): Functor
+    public function bind(callable $function): Optional
     {
+        /** @phpstan-ignore-next-line  */
         return static::try($function, $this->get());
     }
 }

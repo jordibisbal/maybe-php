@@ -14,14 +14,6 @@ trait Left
 {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function andThen(callable $value): Optional
-    {
-        return $this;
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return Optional<T>
      */
     public function orElse(callable $value): Optional

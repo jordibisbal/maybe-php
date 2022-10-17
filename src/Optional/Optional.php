@@ -28,7 +28,7 @@ abstract class Optional implements Functor
 {
     /**
      * @template C
-     * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C) $function
+     * @param callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C $function
      * @param mixed $parameters
      * @return Optional<C>
      */
@@ -55,7 +55,7 @@ abstract class Optional implements Functor
 
     /**
      * @template C
-     * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C) $value
+     * @param callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C $value
      * @param mixed[] $params
      * @return Optional<C>
      */
@@ -75,7 +75,7 @@ abstract class Optional implements Functor
      * @param callable(T):R $function
      * @return Optional<R>
      */
-    abstract public function map(callable $function): Functor;
+    abstract public function map(callable $function): Optional;
 
     /**
      * @template D
@@ -104,11 +104,22 @@ abstract class Optional implements Functor
     //region Optional
 
     /**
-     * @param callable $value
      * @return Optional<T>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    abstract public function andThen(callable $value): Optional;
+    public function andThen(callable $value): Optional
+    {
+        return $this;
+    }
+
+    /**
+     * @return Optional<T>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function bind(callable $function): Optional
+    {
+        return $this;
+    }
 
     /**
      * @param callable $value;

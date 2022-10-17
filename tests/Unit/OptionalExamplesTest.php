@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function Functional\map;
-use function j45l\functional\apply;
+use function j45l\functional\with;
 use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
@@ -37,8 +37,8 @@ class OptionalExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
 
         $upsert =
-            Optional::try(apply($this->insertCustomer($entityManager), $customer))
-            ->orElse(apply($this->updateCustomer($entityManager), $customer))
+            Optional::try(with($this->insertCustomer($entityManager), $customer))
+            ->orElse(with($this->updateCustomer($entityManager), $customer))
         ;
 
         self::assertEquals($customer, $entityManager->insertInvokedWith);
@@ -72,7 +72,7 @@ class OptionalExamplesTest extends TestCase
 
         $upsert =
             Optional::try($this->insertCustomer($entityManager), $customer)
-                ->orElse(apply($this->updateCustomer($entityManager), $customer))
+                ->orElse(with($this->updateCustomer($entityManager), $customer))
         ;
 
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
@@ -89,7 +89,7 @@ class OptionalExamplesTest extends TestCase
 
         $upsert =
             Optional::try($this->insertCustomer($entityManager), $customer)
-                ->orElse(apply($this->updateCustomer($entityManager), $customer))
+                ->orElse(with($this->updateCustomer($entityManager), $customer))
             ;
 
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
@@ -121,7 +121,7 @@ class OptionalExamplesTest extends TestCase
         [$none, $failure, $one, $half] = map(
             $optionalArray,
             function (Optional $x) {
-                return $x->map(static function ($x) {
+                return $x->bind(static function ($x) {
                     return 1 / $x;
                 });
             }

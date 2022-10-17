@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1566943e090cb292b6abb1d40d503fbf",
+    "content-hash": "fc685357f985993cec2637132f10f61c",
     "packages": [
         {
             "name": "j45l/functional-php",
-            "version": "1.2.7.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordibisbal/functional-php.git",
-                "reference": "2583db2f0c29fa2dfade9fd1e5389b172db4c353"
+                "reference": "c157d734077d46b3b99da4343661d739350302da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/2583db2f0c29fa2dfade9fd1e5389b172db4c353",
-                "reference": "2583db2f0c29fa2dfade9fd1e5389b172db4c353",
+                "url": "https://api.github.com/repos/jordibisbal/functional-php/zipball/c157d734077d46b3b99da4343661d739350302da",
+                "reference": "c157d734077d46b3b99da4343661d739350302da",
                 "shasum": ""
             },
             "require": {
                 "lstrojny/functional-php": "^1.17",
-                "php": "^7.1|~8"
+                "php": "^8.1"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "~3.0",
@@ -38,28 +38,7 @@
             "type": "library",
             "autoload": {
                 "files": [
-                    "src/Apply.php",
-                    "src/Best.php",
-                    "src/ButLast.php",
-                    "src/CartesianProduct.php",
-                    "src/CrossCompareSet.php",
-                    "src/Delay.php",
-                    "src/Fold.php",
-                    "src/FoldRight.php",
-                    "src/Merge.php",
-                    "src/Pluck.php",
-                    "src/Reduce.php",
-                    "src/ReduceRight.php",
-                    "src/RepeatPipe.php",
-                    "src/Take.php",
-                    "src/ToArray.php",
-                    "src/ToIterable.php",
-                    "src/ToGenerator.php",
-                    "src/TryOrThrow.php",
-                    "src/Unindex.php",
-                    "src/Value.php",
-                    "src/Worst.php",
-                    "src/YieldIterable.php"
+                    "src/Functions.php"
                 ],
                 "psr-4": {
                     "j45l\\functional\\": "src"
@@ -81,9 +60,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jordibisbal/functional-php/issues",
-                "source": "https://github.com/jordibisbal/functional-php/tree/1.2.7.0"
+                "source": "https://github.com/jordibisbal/functional-php/tree/3.0.0"
             },
-            "time": "2022-06-28T13:49:05+00:00"
+            "time": "2022-10-17T05:52:07+00:00"
         },
         {
             "name": "lstrojny/functional-php",
