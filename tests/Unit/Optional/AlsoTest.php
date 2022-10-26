@@ -48,11 +48,12 @@ class AlsoTest extends TestCase
 
     public function testsCanChangeOptionalByFailing(): void
     {
-        $effect = static function () {
+        $effect = static function (): Optional {
             throw new RuntimeException('Failed');
         };
 
         $original = Some::from(41);
+        /** @phpstan-ignore-next-line */
         $error = $original->andThen(also($effect));
 
         assertSome($original);
