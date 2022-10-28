@@ -9,6 +9,7 @@ use j45l\maybe\Either\Reasons\ThrowableReason;
 use j45l\maybe\Optional\Left;
 use j45l\maybe\Optional\NonValued;
 use RuntimeException;
+use Throwable;
 
 /**
  * @template T
@@ -18,7 +19,7 @@ final class Failure extends Either
 {
     /** @use NonValued<mixed> */
     use NonValued {
-        getOrFail as nonValuedGetOrRuntimeException;
+        runtimeException as nonValuedRuntimeException;
     }
 
     /** @use Left<void> */
@@ -52,23 +53,21 @@ final class Failure extends Either
     }
 
     /**
-     * @return T
-     * @noinspection PhpInconsistentReturnPointsInspection
-     * @noinspection PhpReturnDocTypeMismatchInspection
+     * @throws Throwable
      */
-    public function getOrFail(string $message = null)
+    public function getOrFail(RuntimeException|string $message = null): void
     {
-        /** @phpstan-ignore-next-line  */
-        $this->throwRuntimeException($message ?? $this->reason->toString(), $this->reason);
+        throw match (/** @infection-ignore-all */ true) {
+            $message instanceof RuntimeException => $message,
+            default => $this->runtimeException($message ?? $this->reason->toString(), $this->reason)
+        };
     }
 
-    private function throwRuntimeException(string $message, Reason $reason): void
+    private function runtimeException(string $message, Reason $reason): RuntimeException
     {
-        switch (/** @infection-ignore-all */ true) {
-            case $reason instanceof ThrowableReason:
-                throw new RuntimeException($message, 0, $reason->throwable());
-            default:
-                $this->nonValuedGetOrRuntimeException($message);
-        }
+        return match (/** @infection-ignore-all */ true) {
+            $reason instanceof ThrowableReason => new RuntimeException($message, 0, $reason->throwable()),
+            default => $this->nonValuedRuntimeException($message)
+        };
     }
 }

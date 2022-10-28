@@ -16,7 +16,7 @@ use function Functional\some;
 
 function lift(callable $callable): Closure
 {
-    return static function (...$parameters) use ($callable) {
+    return static function (...$parameters) use ($callable): Optional {
         $isNone = static function (Optional $maybe) {
             return $maybe instanceof None;
         };

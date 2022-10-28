@@ -10,6 +10,7 @@ use j45l\maybe\Maybe\None;
 use j45l\maybe\Maybe\Some;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Throwable;
 
 use function j45l\maybe\Optional\PhpUnit\assertSomeEquals;
 use function j45l\maybe\Optional\PhpUnit\assertSuccess;
@@ -53,6 +54,7 @@ final class OptionalOrFailTest extends TestCase
         assertEquals(42, Some::from(42)->getOrFail('Fail'));
     }
 
+    /** @throws Throwable */
     public function testJustSuccessGetOrFailDoesFail(): void
     {
         $this->expectException(RuntimeException::class);
@@ -62,6 +64,7 @@ final class OptionalOrFailTest extends TestCase
         JustSuccess::create()->getOrFail('Fail');
     }
 
+    /** @throws Throwable */
     public function testNoneGetOrFailFails(): void
     {
         $this->expectException(RuntimeException::class);
@@ -71,6 +74,7 @@ final class OptionalOrFailTest extends TestCase
         None::create()->getOrFail('Fail');
     }
 
+    /** @throws Throwable */
     public function testFailureGetOrFailFails(): void
     {
         $this->expectException(RuntimeException::class);

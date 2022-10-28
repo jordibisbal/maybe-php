@@ -142,7 +142,7 @@ final class OrElseTest extends TestCase
     }
 
     /** @param mixed $captured */
-    private function capture(&$captured): Closure
+    private function capture(mixed &$captured): Closure
     {
         return static function (Optional $maybe) use (&$captured) {
             $captured = $maybe;

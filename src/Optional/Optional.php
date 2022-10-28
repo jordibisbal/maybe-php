@@ -28,7 +28,8 @@ abstract class Optional implements Functor
 {
     /**
      * @template C
-     * @param callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C $function
+     * phpcs:ignore
+     * @phpstan-param (callable():C | callable(mixed):C | callable(mixed,mixed):C | callable(mixed,mixed,mixed):C| callable(mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C) $function
      * @param mixed $parameters
      * @return Optional<C>
      */
@@ -39,7 +40,8 @@ abstract class Optional implements Functor
 
     /**
      * @template C
-     * @param (callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C)|C $value
+     * phpcs:ignore
+     * @phpstan-param C|(callable():C | callable(mixed):C | callable(mixed,mixed):C | callable(mixed,mixed,mixed):C| callable(mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C) $value
      * @param mixed $parameters
      * @return Optional<C>|None|Some<C>
      */
@@ -55,14 +57,15 @@ abstract class Optional implements Functor
 
     /**
      * @template C
-     * @param callable(mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=, mixed=):C $value
+     * phpcs:ignore
+     * @phpstan-param (callable():C | callable(mixed):C | callable(mixed,mixed):C | callable(mixed,mixed,mixed):C| callable(mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C) $function
      * @param mixed[] $params
      * @return Optional<C>
      */
-    private static function tryTo(callable $value, ...$params): Optional
+    private static function tryTo(callable $function, ...$params): Optional
     {
         try {
-            return self::wrap($value(...$params));
+            return self::wrap($function(...$params));
         } catch (Throwable $throwable) {
             return Failure::because(ThrowableReason::fromThrowable($throwable));
         }
@@ -84,12 +87,8 @@ abstract class Optional implements Functor
      */
     abstract public function getOrElse(mixed $defaultValue): mixed;
 
-    /**
-     * @param string $message
-     * @return T
-     * @throws RuntimeException
-     */
-    abstract public function getOrFail(string $message = '');
+    /** @return T */
+    abstract public function getOrFail(RuntimeException|string $message = null);
 
     /**
      * @template D

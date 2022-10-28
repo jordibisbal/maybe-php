@@ -24,7 +24,7 @@ final class Optionals implements Countable
     /**
      * @var Optional<T>[]
      */
-    private $optionals;
+    private array $optionals;
 
     /** @phpstan-param Optional<T>[] $optionals */
     private function __construct(array $optionals)
@@ -140,10 +140,10 @@ final class Optionals implements Countable
     }
 
     /**
-     * @param T $default
+     * @param T|null $default
      * @return Optional<T>
      */
-    public function head($default = null): Optional
+    public function head(mixed $default = null): Optional
     {
         return first($this->items()) ?? $default ?? None::create();
     }
@@ -159,11 +159,12 @@ final class Optionals implements Countable
      */
     public function assertAllSucceed(): Optional
     {
-        switch (/** @infection-ignore-all */ true) {
-            case $this->failures()->empty():
-                return Some::from($this);
-            default:
-                return Failure::because(FailureReason::fromString('Some not Succeed')->withSubject(Some::from($this)));
-        }
+
+        return match (/** @infection-ignore-all */ true) {
+            $this->failures()->empty() =>
+                Some::from($this),
+            default =>
+                Failure::because(FailureReason::fromString('Some not Succeed')->withSubject(Some::from($this))),
+        };
     }
 }

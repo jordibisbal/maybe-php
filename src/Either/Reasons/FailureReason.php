@@ -10,11 +10,10 @@ use j45l\maybe\Optional\Optional;
 
 final class FailureReason implements Reason
 {
-    /** @var string */
-    private $reason;
+    private string $reason;
 
     /** @var Optional<mixed> */
-    private $subject;
+    private Optional $subject;
 
     private function __construct(string $reason)
     {

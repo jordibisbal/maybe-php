@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace j45l\maybe\Optional;
 
 use RuntimeException;
+use Throwable;
 
 /**
  * @template T
@@ -24,12 +25,10 @@ trait NonValued
         return $defaultValue;
     }
 
-    /**
-     * @return T
-     */
-    public function getOrFail(string $message = '')
+    /** @throws Throwable */
+    public function getOrFail(RuntimeException|string $message = null): void
     {
-        throw new RuntimeException($message);
+        throw $this->runtimeException($message);
     }
 
     /**
@@ -52,5 +51,13 @@ trait NonValued
     public function map(callable $function): static
     {
         return $this;
+    }
+
+    private function runtimeException(string|RuntimeException|null $message): RuntimeException
+    {
+        return match (/** @infection-ignore-all */ true) {
+            $message instanceof RuntimeException => $message,
+            default => new RuntimeException($message ?? '')
+        };
     }
 }

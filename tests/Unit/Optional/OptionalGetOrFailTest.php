@@ -27,6 +27,7 @@ final class OptionalGetOrFailTest extends TestCase
         self::assertEquals(42, Some::from(42)->getOrFail());
     }
 
+    /** @throws Throwable */
     public function testNoneThrowsRuntimeError(): void
     {
         $this->expectExceptionObject(new RuntimeException('Ops'));
@@ -34,6 +35,7 @@ final class OptionalGetOrFailTest extends TestCase
         None::create()->getOrFail('Ops');
     }
 
+    /** @throws Throwable */
     public function testJustSuccessThrowsRuntimeError(): void
     {
         $this->expectExceptionObject(new RuntimeException('Ops'));
@@ -41,11 +43,28 @@ final class OptionalGetOrFailTest extends TestCase
         JustSuccess::create()->getOrFail('Ops');
     }
 
+    /** @throws Throwable */
     public function testFailureThrowsRuntimeError(): void
     {
         $this->expectExceptionObject(new RuntimeException('Ops'));
 
         Failure::create()->getOrFail('Ops');
+    }
+
+    /** @throws Throwable */
+    public function testFailureThrowsRuntimeErrorFromThrowable(): void
+    {
+        $this->expectExceptionObject(new RuntimeException('Ops'));
+
+        Failure::create()->getOrFail(new RuntimeException('Ops'));
+    }
+
+    /** @throws Throwable */
+    public function testNonValuedThrowsRuntimeErrorFromThrowable(): void
+    {
+        $this->expectExceptionObject(new RuntimeException('Ops'));
+
+        None::create()->getOrFail(new RuntimeException('Ops'));
     }
 
     public function testThrowableFailureThrowsRuntimeError(): void

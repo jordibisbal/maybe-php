@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace j45l\maybe\Optional;
 
+use RuntimeException;
+
 use function j45l\functional\take;
 
 /**
@@ -49,7 +51,7 @@ trait Valued
      * @return T
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getOrFail(string $message = '')
+    public function getOrFail(RuntimeException|string $message = null)
     {
         return $this->get();
     }

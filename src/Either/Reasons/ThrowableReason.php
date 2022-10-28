@@ -10,8 +10,7 @@ use Throwable;
 
 final class ThrowableReason implements Reason
 {
-    /** @var Throwable */
-    private $throwable;
+    private Throwable $throwable;
 
     private function __construct(Throwable $throwable)
     {

@@ -13,14 +13,12 @@ use RuntimeException;
 class EntityManagerStub
 {
     /** @var Optional<T> */
-    public $insertInvokedWith;
+    public Optional $insertInvokedWith;
     /** @var Optional<T> */
-    public $updateInvokedWith;
+    public Optional $updateInvokedWith;
 
-    /** @var bool */
-    public $insertWillFail;
-    /** @var bool */
-    public $updateWillFail;
+    public bool $insertWillFail;
+    public bool $updateWillFail;
 
     public function __construct()
     {

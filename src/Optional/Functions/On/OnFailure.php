@@ -8,10 +8,10 @@ use Closure;
 use j45l\maybe\Either\Failure;
 
 /**
- * @template T
  * @template T2
- * @param Closure(Failure<T>):Optional<T2> $callback
- * @return Closure(Optional<T>=:Optional<T|T2>
+ * @param (Closure():T2)|(Closure(Failure<mixed>):T2) $callback
+ * @return Closure(Optional<mixed>):(T2|Optional<mixed>)
+ * @noinspection PhpDocDuplicateTypeInspection
  */
 function onFailure(Closure $callback): Closure
 {

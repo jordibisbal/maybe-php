@@ -8,10 +8,10 @@ use Closure;
 use j45l\maybe\Maybe\Some;
 
 /**
- * @template T
  * @template T2
- * @param Closure(Some<T>):Optional<T2> $callback
- * @return Closure(Optional<T>=):Optional<T|T2>
+ * @param (Closure():T2)|(Closure(Some<mixed>):T2) $callback
+ * @return Closure(Optional<mixed>):(T2|Optional<mixed>)
+ * @noinspection PhpDocDuplicateTypeInspection
  */
 function onSome(Closure $callback): Closure
 {

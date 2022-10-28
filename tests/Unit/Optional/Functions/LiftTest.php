@@ -48,9 +48,7 @@ class LiftTest extends TestCase
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
     public function testInvokingAFailingLiftFunctionReturnsAFailure(): void
     {
-        $lifted = lift(function (int $first, int $second): int {
-            throw new RuntimeException('An exception');
-        });
+        $lifted = lift(static fn () => throw new RuntimeException('An exception'));
         $maybe = $lifted(40, 2);
 
         assertFailureReasonThrowableOf(RuntimeException::class, $maybe);

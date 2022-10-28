@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function Functional\map;
-use function j45l\functional\with;
 use function j45l\functional\value;
 use function j45l\maybe\Optional\PhpUnit\assertFailure;
 use function j45l\maybe\Optional\PhpUnit\assertFailureReasonString;
@@ -37,8 +36,8 @@ class OptionalExamplesTest extends TestCase
         $entityManager = new EntityManagerStub();
 
         $upsert =
-            Optional::try(with($this->insertCustomer($entityManager), $customer))
-            ->orElse(with($this->updateCustomer($entityManager), $customer))
+            Optional::try(fn () => $this->insertCustomer($entityManager)($customer))
+                ->orElse(fn () => $this->updateCustomer($entityManager)($customer))
         ;
 
         self::assertEquals($customer, $entityManager->insertInvokedWith);
@@ -46,7 +45,10 @@ class OptionalExamplesTest extends TestCase
         assertSuccess($upsert);
     }
 
-    /** @param EntityManagerStub<string> $entityManager */
+    /**
+     * @param EntityManagerStub<string> $entityManager
+     * @return (Closure(mixed):JustSuccess<mixed>)
+     */
     private function insertCustomer(EntityManagerStub $entityManager): Closure
     {
         return static function ($customer) use ($entityManager): JustSuccess {
@@ -71,8 +73,8 @@ class OptionalExamplesTest extends TestCase
         $entityManager->insertWillFail = true;
 
         $upsert =
-            Optional::try($this->insertCustomer($entityManager), $customer)
-                ->orElse(with($this->updateCustomer($entityManager), $customer))
+            Optional::try(fn () => $this->insertCustomer($entityManager)($customer))
+                ->orElse(fn () => $this->updateCustomer($entityManager)($customer))
         ;
 
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
@@ -88,8 +90,8 @@ class OptionalExamplesTest extends TestCase
         $entityManager->updateWillFail = true;
 
         $upsert =
-            Optional::try($this->insertCustomer($entityManager), $customer)
-                ->orElse(with($this->updateCustomer($entityManager), $customer))
+            Optional::try(fn () => $this->insertCustomer($entityManager)($customer))
+                ->orElse(fn () => $this->updateCustomer($entityManager)($customer))
             ;
 
         $this->assertEquals($customer, $entityManager->insertInvokedWith);
