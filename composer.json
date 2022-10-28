@@ -33,7 +33,7 @@
             "j45l\\maybe\\": "src"
         },
         "files": [
-            "src/Optional/Functions/Functions.php"
+            "src/Optional/Functions.php"
         ]
     },
     "autoload-dev": {
