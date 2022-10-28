@@ -28,27 +28,13 @@ abstract class Optional implements Functor
 {
     /**
      * @template C
-     * phpcs:ignore
-     * @phpstan-param (callable():C | callable(mixed):C | callable(mixed,mixed):C | callable(mixed,mixed,mixed):C| callable(mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C) $function
-     * @param mixed $parameters
-     * @return Optional<C>
-     */
-    public static function try(callable $function, ...$parameters): self
-    {
-        return self::wrap($function, ...$parameters);
-    }
-
-    /**
-     * @template C
-     * phpcs:ignore
-     * @phpstan-param C|(callable():C | callable(mixed):C | callable(mixed,mixed):C | callable(mixed,mixed,mixed):C| callable(mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C) $value
-     * @param mixed $parameters
+     * @phpstan-param C|(callable():C) $value
      * @return Optional<C>|None|Some<C>
      */
-    private static function wrap(mixed $value, ...$parameters): self|None|Some
+    public static function try(mixed $value): self|None|Some
     {
         return match (/** @infection-ignore-all */ true) {
-            isCallable($value) => self::tryTo($value, ...$parameters),
+            isCallable($value) => self::tryTo($value),
             $value instanceof self => $value,
             isNull($value) => None::create(),
             default => Some::from($value)
@@ -57,15 +43,13 @@ abstract class Optional implements Functor
 
     /**
      * @template C
-     * phpcs:ignore
-     * @phpstan-param (callable():C | callable(mixed):C | callable(mixed,mixed):C | callable(mixed,mixed,mixed):C| callable(mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C | callable(mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed,mixed):C) $function
-     * @param mixed[] $params
+     * @phpstan-param callable():C $function
      * @return Optional<C>
      */
-    private static function tryTo(callable $function, ...$params): Optional
+    private static function tryTo(callable $function): Optional
     {
         try {
-            return self::wrap($function(...$params));
+            return self::try($function());
         } catch (Throwable $throwable) {
             return Failure::because(ThrowableReason::fromThrowable($throwable));
         }
@@ -131,11 +115,13 @@ abstract class Optional implements Functor
     abstract public function orFail(string $message, Throwable $throwable = null): Optional;
 
     /**
-     * @return Optional<T>
+     * @template C
+     * @phpstan-param (callable():C | callable($this): C) $function
+     * @return Optional<C>
      */
     public function always(callable $function): Optional
     {
-        return self::try($function, $this);
+        return self::try(fn () => $function($this));
     }
 
     /** @return Either<T> */

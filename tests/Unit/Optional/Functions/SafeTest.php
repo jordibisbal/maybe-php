@@ -46,7 +46,7 @@ class SafeTest extends TestCase
 
     public function testsOnValueReturningCallableReturnsNone(): void
     {
-        $valueReturning = function () {
+        $valueReturning = function (): int {
             return 42;
         };
 
@@ -70,11 +70,7 @@ class SafeTest extends TestCase
     public function testsParametersArePassedOn(): void
     {
         $some = safe(
-            static function ($x, $y): int {
-                return $x + $y;
-            },
-            41,
-            1
+            fn (): int => (static fn ($x, $y): int => $x + $y)(41, 1)
         );
 
         assertSomeEquals(42, $some);

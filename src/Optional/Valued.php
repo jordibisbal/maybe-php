@@ -75,6 +75,6 @@ trait Valued
     public function bind(callable $function): Optional
     {
         /** @phpstan-ignore-next-line  */
-        return static::try($function, $this->get());
+        return static::try(fn () => $function($this->get()));
     }
 }

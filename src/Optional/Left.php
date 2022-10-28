@@ -18,7 +18,7 @@ trait Left
      */
     public function orElse(callable $value): Optional
     {
-        return self::try($value, $this);
+        return self::try(fn () => $value($this));
     }
 
     /**
